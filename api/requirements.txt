@@ -1,0 +1,11 @@
+Django
+psycopg2
+djangorestframework
+djangorestframework-jwt
+django-cors-headers
+asgiref
+gunicorn
+python-dotenv
+pytz
+sqlparse
+flake8

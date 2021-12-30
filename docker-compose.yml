@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:11
+    ports:
+      - ${DB_OPEN_PORT}:${DB_PORT}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  api:
+    build:
+      context: ./api
+      args:
+        API_GID: ${API_GID}
+        API_UID: ${API_UID}
+        API_UNAME: ${API_UNAME}
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:${API_OPEN_PORT}
+    volumes:
+      - ./api/src:/code
+      - static_volume:${API_STATIC_DIRECTORY}
+    expose:
+      - ${API_OPEN_PORT}
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - static_volume:${NGINX_STATIC_DIRECTORY}
+    ports:
+      - ${NGINX_OPEN_PORT}:${NGINX_PORT}
+    env_file:
+      - .env
+    depends_on:
+      - api
+
+  front:
+    build:
+      context: ./front
+    volumes:
+      - ./front/:/usr/src/app
+    command: sh -c "cd react-sample && yarn start"
+    ports:
+      - ${FRONT_OPEN_PORT}:${FRONT_PORT}
+    env_file:
+      - .env
+    depends_on:
+      - nginx
+
+volumes:
+  dbdata:
+  static_volume:
