@@ -45,7 +45,7 @@ services:
       context: ./front
     volumes:
       - ./front/:/usr/src/app
-    command: sh -c "cd react-sample && yarn start"
+    command: sh -c "yarn start"
     ports:
       - ${FRONT_OPEN_PORT}:${FRONT_PORT}
     env_file:
