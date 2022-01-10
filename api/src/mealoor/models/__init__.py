@@ -1,2 +1,2 @@
-from mealoor.models.AccountManager import AccountManager
-from mealoor.models.Account import Account
+from mealoor.models.accountManager import AccountManager
+from mealoor.models.account import Account
