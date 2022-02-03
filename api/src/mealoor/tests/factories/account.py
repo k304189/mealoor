@@ -10,3 +10,4 @@ class AccountFactory(factory.django.DjangoModelFactory):
 
     email = 'test_account@test.com'
     username = 'test account'
+    password = 'test_password01'
