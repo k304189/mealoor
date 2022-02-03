@@ -101,8 +101,13 @@ class AccountTests(APITestCase):
         token = Token.objects.filter(user=create_account)
         self.assertEqual(
             len(token),
-            0,
+            1,
             'トークンが作成されている'
+        )
+        self.assertEqual(
+            token.first().key,
+            response_data["token"],
+            '作成されたトークンがレスポンスに存在している'
         )
 
     def test_create_account_api_exists(self):
