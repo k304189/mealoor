@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
+from rest_framework.test import force_authenticate
 from rest_framework.authtoken.models import Token
 
 from mealoor.models.account import Account
@@ -252,59 +253,204 @@ class AccountTests(APITestCase):
             'ユーザーが存在しない'
         )
 
+    def test_update_account_api(self):
+        """
+        ユーザー更新テスト
+        """
+        before_update_email = 'before_update_email@test.com'
+        update_user_email = 'test_update_account_api@test.com'
+        update_username = 'test_update_account_api'
+        update_first_name = 'test_update'
+        update_last_name = 'update_account_api'
+        update_profile = '更新後プロフィール'
+        update_password = 'password02'
 
-    # def test_create_token_api(self):
-    #     """
-    #     トークン作成（ログイン）テスト
-    #     """
-    #     token_user_email = 'test_token_account_api@test.com'
-    #     token_username = 'test_token_user'
-    #     token_user_password = 'test_token_password01'
-    #
-    #     user = AccountFactory(
-    #         email=token_user_email,
-    #         username=token_username,
-    #         password=token_user_password
-    #     )
-    #
-    #     u = Account.objects.filter(email=token_user_email)
-    #     self.assertEqual(len(u), 1, 'テストユーザー作成')
-    #
-    #     login_json = {
-    #         'email': token_user_email,
-    #         'password': token_user_password,
-    #     }
-    #
-    #     factory = APIRequestFactory()
-    #     token_create_view = views.CreateTokenView.as_view()
-    #
-    #     request = factory.post(
-    #         '/api/account/token',
-    #         data=login_json
-    #     )
-    #     response = token_create_view(request)
-    #     print(response)
-    #     self.assertEqual(
-    #         response.status_code,
-    #         status.HTTP_201_CREATED,
-    #         'トークンが作成されている'
-    #     )
+        user_json = {
+            'email': update_user_email,
+            'username': update_username,
+            'first_name': update_first_name,
+            'last_name': update_last_name,
+            'profile': update_profile,
+            'password': update_password,
+            'is_active': False,
+            'is_staff': True,
+            'is_superuser': True,
+        }
 
+        test_user = AccountFactory(email=before_update_email)
+        test_user_token = Token.objects.get(user=test_user)
+        test_user_created_at = test_user.created_at
+        test_user_updated_at = test_user.updated_at
 
+        factory = APIRequestFactory()
+        account_update_view = views.ManageAccountView.as_view()
 
-    # def test_update_account_api(self):
-    #     update_user_email = 'test_update_account_api@test.com'
-    #     update_username = 'test_update_account_api'
-    #     update_first_name = 'test_update'
-    #     update_last_name = 'update_account_api'
-    #     update_profile = '更新後プロフィール'
-    #     update_password = 'password02'
-    #
-    #     test_user = AccountFactory()
-    #
-    #     factory = APIRequestFactory()
-    #     account_update_view = views.ManageAccountView.as_view()
-    #
-    #     request = factory.patch('/api/account/update', data=user_json)
-    #     response = account_update_view(request)
-    #     response_data = response.data
+        request = factory.patch(
+            '/api/account/update',
+            data=user_json,
+        )
+        force_authenticate(request, test_user, test_user_token)
+        response = account_update_view(request)
+
+        # レスポンスの確認
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK,
+            'HTTPステータス200であること'
+        )
+
+        # データの更新の確認
+        self.assertNotEqual(
+            test_user.email,
+            before_update_email,
+            'メールアドレスが更新前のアドレスではない'
+        )
+
+        self.assertEqual(
+            test_user.email,
+            update_user_email,
+            'メールアドレスがリクエストと同じ'
+        )
+
+        self.assertTrue(
+            test_user.check_password(update_password),
+            'パスワードがリクエストと同じ'
+        )
+
+        self.assertEqual(
+            test_user.username,
+            update_username,
+            'ユーザー名がリクエストと同じ'
+        )
+
+        self.assertEqual(
+            test_user.first_name,
+            update_first_name,
+            'ユーザー名（姓）がリクエストと同じ'
+        )
+
+        self.assertEqual(
+            test_user.last_name,
+            update_last_name,
+            'ユーザー名（名）がリクエストと同じ'
+        )
+
+        self.assertEqual(
+            test_user.profile,
+            update_profile,
+            'プロフィールがリクエストと同じ'
+        )
+
+        self.assertTrue(
+            test_user.is_active,
+            '有効フラグは更新されない'
+        )
+
+        self.assertFalse(
+            test_user.is_staff,
+            'スタッフフラグは更新されない'
+        )
+
+        self.assertFalse(
+            test_user.is_superuser,
+            'スーパーユーザーフラグは更新されない'
+        )
+
+        self.assertEqual(
+            test_user.created_at,
+            test_user_created_at,
+            '作成日は更新されない'
+        )
+
+        self.assertNotEqual(
+            test_user.updated_at,
+            test_user_updated_at,
+            '更新日は更新される'
+        )
+
+    def test_update_account_api_no_login(self):
+        """
+        未ログインによる更新エラー
+        """
+        no_login_username = 'no_login_username'
+
+        user_json = {
+            'username': no_login_username,
+        }
+
+        test_user = AccountFactory()
+        test_user_updated_at = test_user.updated_at
+
+        factory = APIRequestFactory()
+        account_update_view = views.ManageAccountView.as_view()
+
+        request = factory.patch(
+            '/api/account/update',
+            data=user_json,
+        )
+        response = account_update_view(request)
+
+        # レスポンスの確認
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_401_UNAUTHORIZED,
+            'HTTPステータス401であること'
+        )
+
+        # データの更新の確認
+        self.assertNotEqual(
+            test_user.username,
+            no_login_username,
+            'ユーザー名が更新されていない'
+        )
+
+        self.assertEqual(
+            test_user.updated_at,
+            test_user_updated_at,
+            '更新日が更新されてない'
+        )
+
+    def test_update_account_api_exists_email(self):
+        """
+        すでに存在するメールアドレスの更新エラー
+        """
+        exists_email = 'exists_email@test.com'
+
+        exists_user = AccountFactory(email=exists_email)
+        update_user = AccountFactory()
+        update_user_token = Token.objects.get(user=update_user)
+        update_user_updated_at = update_user.updated_at
+
+        user_json = {
+            'email': exists_email,
+        }
+
+        account_update_view = views.ManageAccountView.as_view()
+        factory = APIRequestFactory()
+
+        request = factory.patch(
+            '/api/account/update',
+            data=user_json,
+        )
+        force_authenticate(request, update_user, update_user_token)
+        response = account_update_view(request)
+
+        # レスポンスの確認
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST,
+            'HTTPステータス400であること'
+        )
+
+        # データの更新の確認
+        self.assertNotEqual(
+            update_user.email,
+            exists_email,
+            'メールアドレスが更新されていない'
+        )
+
+        self.assertEqual(
+            update_user.updated_at,
+            update_user_updated_at,
+            '更新日が更新されてない'
+        )
