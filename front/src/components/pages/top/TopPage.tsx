@@ -1,6 +1,8 @@
 import { memo, VFC } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { HeaderLayout } from "../../templates/HeaderLayout";
+
 export const TopPage: VFC = memo(() => {
   const navigate = useNavigate();
 
@@ -9,9 +11,11 @@ export const TopPage: VFC = memo(() => {
   }
 
   return (
-    <>
-      <p>Topページです</p>
-      <button onClick={ onClickDashboardButton }>ダッシュボード</button>
-    </>
+    <HeaderLayout>
+      <div>
+        <p>Topページです</p>
+        <button onClick={ onClickDashboardButton }>ダッシュボード</button>
+      </div>
+    </HeaderLayout>
   )
 });
