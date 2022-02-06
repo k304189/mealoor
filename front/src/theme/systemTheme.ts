@@ -9,24 +9,24 @@ const systemTheme = extendTheme({
     global: {
       body: {
         backgroundColor: baseColor,
-        color: mainColor
+        color: mainColor,
       },
       button: {
         backgroundColor: mainColor,
-        color: textColor
+        color: textColor,
       },
       ".systemHeader": {
         backgroundColor: mainColor,
         height: "48px",
-        color: textColor
+        color: textColor,
       },
       ".systemHeaderButton": {
         _hover: {
           cursor: "pointer",
           backgroundColor: "#E2E8F0",
-          height: "100%"
-        }
-      }
+          height: "100%",
+        },
+      },
     },
   },
 });

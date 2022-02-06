@@ -1,7 +1,7 @@
-import { VFC } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { VFC } from "react";
+import { BrowserRouter } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
-import { Router } from './router/Router';
+import { Router } from "./router/Router";
 import systemTheme from "./theme/systemTheme";
 
 const App: VFC = () => {

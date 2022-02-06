@@ -10,5 +10,5 @@ export const Router: VFC = memo(() => {
       <Route path="/" element={<TopPage />} />
       <Route path="dashboard" element={<DashboardPage />} />
     </Routes>
-  )
+  );
 });

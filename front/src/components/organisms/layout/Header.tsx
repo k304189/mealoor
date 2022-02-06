@@ -11,17 +11,17 @@ export const Header: VFC = memo(() => {
       align="center"
       justify="space-between"
     >
-      <HeaderButton px={2} onClick={ () => { console.log("logo Click!")}}>
+      <HeaderButton px={2} onClick={() => { console.log("logo Click!"); }}>
         システムロゴ
       </HeaderButton>
       <Flex h="100%">
-        <HeaderButton px={2} onClick={ () => { console.log("Sign In Click!")}}>
+        <HeaderButton px={2} onClick={ () => { console.log("Sign In Click!"); } }>
           サインアップ
         </HeaderButton>
-        <HeaderButton px={2} onClick={ () => { console.log("sign Up Click!")}}>
+        <HeaderButton px={2} onClick={ () => { console.log("sign Up Click!"); } }>
           サインイン
         </HeaderButton>
       </Flex>
     </Flex>
-  )
+  );
 });
