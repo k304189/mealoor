@@ -14,6 +14,13 @@ const systemTheme = extendTheme({
       button: {
         backgroundColor: mainColor,
         color: textColor,
+        _hover: {
+          opacity: "0.9",
+        },
+      },
+      "button.primary": {
+        backgroundColor: "#FF6D62",
+        color: mainColor,
       },
       ".systemHeader": {
         backgroundColor: mainColor,
