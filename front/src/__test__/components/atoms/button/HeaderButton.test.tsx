@@ -18,7 +18,7 @@ describe("Rendering", () => {
         <p data-testid={elementTestId}>{elementText}</p>
       </HeaderButton>
     );
-    const renderTestElement = screen.queryByTestId(elementTestId);
+    const renderTestElement = screen.queryByTestId(elementTestId) as HTMLInputElement;
     // 子要素が表示されていることを確認
     expect(renderTestElement).not.toBeNull();
 
@@ -48,7 +48,7 @@ describe("Rendering", () => {
         <p data-testid={elementTestId}>{elementText}</p>
       </HeaderButton>
     );
-    const renderTestElement = screen.queryByTestId(elementTestId);
+    const renderTestElement = screen.queryByTestId(elementTestId) as HTMLInputElement;
     // 子要素が表示されていることを確認
     expect(renderTestElement).not.toBeNull();
 
