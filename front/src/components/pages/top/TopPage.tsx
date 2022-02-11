@@ -1,8 +1,10 @@
 import { memo, VFC } from "react";
 import { useNavigate } from "react-router-dom";
+import { Box } from "@chakra-ui/react";
 
 import { DefaultButton } from "../../atoms/button/DefaultButton";
 import { HeaderLayout } from "../../templates/HeaderLayout";
+import { mainColor, textColor } from "../../../theme/systemTheme";
 
 export const TopPage: VFC = memo(() => {
   const navigate = useNavigate();
@@ -13,9 +15,9 @@ export const TopPage: VFC = memo(() => {
 
   return (
     <HeaderLayout>
-      <div>
+      <Box my={2} py={1} bg={mainColor} color={textColor}>
         <p>Topページです</p>
-      </div>
+      </Box>
       <DefaultButton
         onClick={onClickDashboardButton}
         className="primary"

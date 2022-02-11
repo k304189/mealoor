@@ -1,10 +1,10 @@
 import { extendTheme } from "@chakra-ui/react";
 
-const baseColor = "navy";
-const mainColor = "white";
-const textColor = "black";
+export const baseColor = "navy";
+export const mainColor = "white";
+export const textColor = "black";
 
-const systemTheme = extendTheme({
+export const systemTheme = extendTheme({
   styles: {
     global: {
       body: {
@@ -37,4 +37,4 @@ const systemTheme = extendTheme({
     },
   },
 });
-export default systemTheme;
+// export default systemTheme;
