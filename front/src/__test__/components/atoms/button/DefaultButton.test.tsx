@@ -52,7 +52,7 @@ describe("Rendering", () => {
     // 子要素が表示されていることを確認
     expect(renderTestElement).not.toBeNull();
 
-    // ホバーすると、ホバーテキストが表示されることを確認
+    // ホバーすると、ホバーテキストが表示されないことを確認
     useEvent.hover(renderTestElement);
     let hoverElement = screen.queryByText(hoverText);
     expect(hoverElement).toBeNull();

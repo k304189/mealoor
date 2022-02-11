@@ -1,8 +1,10 @@
 import { ChangeEvent, memo, VFC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import { DefaultButton } from "../../atoms/button/DefaultButton";
+import { DefaultIconButton } from "../../atoms/button/DefaultIconButton";
 import { DefaultTextInput } from "../../atoms/form/DefaultTextInput";
 import { ReadOnlyInput } from "../../atoms/form/ReadOnlyInput";
 import { HeaderLayout } from "../../templates/HeaderLayout";
@@ -11,6 +13,7 @@ import { mainColor, textColor } from "../../../theme/systemTheme";
 export const TopPage: VFC = memo(() => {
   const navigate = useNavigate();
   const [inputText, setInputText] = useState("");
+  const [isView, setIsView] = useState(false);
 
   const onChangeInputText = (e: ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
@@ -43,6 +46,14 @@ export const TopPage: VFC = memo(() => {
       >
         <p>ダッシュボード</p>
       </DefaultButton>
+      <DefaultButton
+        onClick={() => { setIsView(!isView); }}
+        className="primary"
+        hoverText="アイコンテスト"
+      >
+        { (isView ? <ViewOffIcon /> : <ViewIcon />) }
+      </DefaultButton>
+      <DefaultIconButton hoverText="アイコンボタン" aria-label="View Icon" icon={<ViewIcon />} />
     </HeaderLayout>
   );
 });
