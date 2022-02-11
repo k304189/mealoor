@@ -34,6 +34,9 @@ export const systemTheme = extendTheme({
           height: "100%",
         },
       },
+      "input.readOnly": {
+        backgroundColor: "#A0AEC0",
+      },
     },
   },
 });

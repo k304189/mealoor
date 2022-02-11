@@ -1,9 +1,10 @@
 import { ChangeEvent, memo, VFC, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 
 import { DefaultButton } from "../../atoms/button/DefaultButton";
 import { DefaultTextInput } from "../../atoms/form/DefaultTextInput";
+import { ReadOnlyInput } from "../../atoms/form/ReadOnlyInput";
 import { HeaderLayout } from "../../templates/HeaderLayout";
 import { mainColor, textColor } from "../../../theme/systemTheme";
 
@@ -31,6 +32,9 @@ export const TopPage: VFC = memo(() => {
           value={inputText}
           onChange={onChangeInputText}
         />
+        <ReadOnlyInput value={100} />
+        <ReadOnlyInput value="読み取り専用" />
+        <Button color="#FFFFFF" bg="gray.500">無効ボタン</Button>
       </Box>
       <DefaultButton
         onClick={onClickDashboardButton}
