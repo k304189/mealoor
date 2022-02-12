@@ -1,7 +1,7 @@
 import { memo, VFC } from "react";
 import { Flex } from "@chakra-ui/react";
 
-import { HeaderButton } from "../../atoms/button/HeaderButton";
+import { HeaderButton } from "../../../atoms/button/HeaderButton";
 
 export const Header: VFC = memo(() => {
   return (

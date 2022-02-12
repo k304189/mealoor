@@ -1,7 +1,7 @@
 import { memo, ReactNode, VFC } from "react";
 import { Box } from "@chakra-ui/react";
 
-import { Header } from "../organisms/layout/Header";
+import { Header } from "../organisms/parts/layout/Header";
 
 type Props = {
   title?: string;
