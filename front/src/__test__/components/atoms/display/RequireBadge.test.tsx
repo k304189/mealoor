@@ -12,7 +12,7 @@ describe("Rendering", () => {
       <RequireBadge />
     );
     // 要素が表示されていることを確認
-    const renderTestElement = screen.queryByText("必須") as HTMLInputElement;
+    const renderTestElement = screen.queryByText("必須");
     expect(renderTestElement).not.toBeNull();
   });
 });
