@@ -11,6 +11,7 @@ import { DefaultTextInput } from "../../atoms/form/DefaultTextInput";
 import { ReadOnlyInput } from "../../atoms/form/ReadOnlyInput";
 import { ToggleViewButton } from "../../molecules/button/ToggleViewButton";
 import { PasswordInput } from "../../molecules/form/PasswordInput";
+import { FormArea } from "../../molecules/form/FormArea";
 import { HeaderLayout } from "../../templates/HeaderLayout";
 import { mainColor, textColor } from "../../../theme/systemTheme";
 
@@ -67,6 +68,19 @@ export const TopPage: VFC = memo(() => {
           <OptionalBadge fontSize="sm" />
           <OptionalBadge fontSize="lg" />
         </Box>
+        <FormArea
+          label="テスト用フォームエリア"
+          helperText="ヘルパーテキスト"
+          errorText="エラーテキスト"
+          isReadOnly
+        >
+          <DefaultTextInput
+            type="text"
+            placeholder="テスト用フォームエリア"
+            value={inputText}
+            onChange={onChangeInputText}
+          />
+        </FormArea>
       </Box>
       <DefaultButton
         onClick={onClickDashboardButton}
