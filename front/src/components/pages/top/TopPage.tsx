@@ -8,10 +8,11 @@ import { OptionalBadge } from "../../atoms/display/OptionalBadge";
 import { DefaultButton } from "../../atoms/button/DefaultButton";
 import { DefaultIconButton } from "../../atoms/button/DefaultIconButton";
 import { DefaultTextInput } from "../../atoms/form/DefaultTextInput";
-import { ReadOnlyInput } from "../../atoms/form/ReadOnlyInput";
 import { ToggleViewButton } from "../../molecules/button/ToggleViewButton";
 import { PasswordInput } from "../../molecules/form/PasswordInput";
+import { ReadOnlyInput } from "../../molecules/form/ReadOnlyInput";
 import { FormArea } from "../../molecules/form/FormArea";
+import { TextInputForm } from "../../organisms/parts/form/TextInputForm";
 import { HeaderLayout } from "../../templates/HeaderLayout";
 import { mainColor, textColor } from "../../../theme/systemTheme";
 
@@ -49,8 +50,6 @@ export const TopPage: VFC = memo(() => {
           value={inputText}
           onChange={onChangeInputText}
         />
-        <ReadOnlyInput value={100} />
-        <ReadOnlyInput value="読み取り専用" />
         <Button color="#FFFFFF" bg="gray.500">無効ボタン</Button>
         <PasswordInput
           password={password}
@@ -58,6 +57,7 @@ export const TopPage: VFC = memo(() => {
           onChange={onChangePassword}
           onBlur={onBlurPassword}
         />
+        <ReadOnlyInput value={100} leftAddon="https://" rightAddon="%" />
         <Box>
           <RequireBadge />
           <RequireBadge fontSize="xs" />
@@ -81,6 +81,16 @@ export const TopPage: VFC = memo(() => {
             onChange={onChangeInputText}
           />
         </FormArea>
+        <TextInputForm
+          label="TextInputForm"
+          value={inputText}
+          onChange={onChangeInputText}
+          helperText="ヘルパーTextInputForm"
+          leftAddon="+81"
+          rightAddon="%"
+          errorText="エラーTextInputForm"
+          isReadOnly
+        />
       </Box>
       <DefaultButton
         onClick={onClickDashboardButton}
