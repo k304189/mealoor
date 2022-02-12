@@ -13,6 +13,7 @@ import { PasswordInput } from "../../molecules/form/PasswordInput";
 import { ReadOnlyInput } from "../../molecules/form/ReadOnlyInput";
 import { FormArea } from "../../molecules/form/FormArea";
 import { TextInputForm } from "../../organisms/parts/form/TextInputForm";
+import { PasswordForm } from "../../organisms/parts/form/PasswordForm";
 import { HeaderLayout } from "../../templates/HeaderLayout";
 import { mainColor, textColor } from "../../../theme/systemTheme";
 
@@ -89,6 +90,16 @@ export const TopPage: VFC = memo(() => {
           leftAddon="+81"
           rightAddon="%"
           errorText="エラーTextInputForm"
+          isReadOnly
+        />
+        <PasswordForm
+          label="パスワード確認用"
+          require="optional"
+          password={inputText}
+          onChange={onChangeInputText}
+          onBlur={onBlurPassword}
+          helperText="PasswordFormヘルパー"
+          errorText="PasswordFormエラーテキスト"
           isReadOnly
         />
       </Box>
