@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
+import { RequireBadge } from "../../atoms/display/RequireBadge";
+import { OptionalBadge } from "../../atoms/display/OptionalBadge";
 import { DefaultButton } from "../../atoms/button/DefaultButton";
 import { DefaultIconButton } from "../../atoms/button/DefaultIconButton";
 import { DefaultTextInput } from "../../atoms/form/DefaultTextInput";
@@ -55,6 +57,16 @@ export const TopPage: VFC = memo(() => {
           onChange={onChangePassword}
           onBlur={onBlurPassword}
         />
+        <Box>
+          <RequireBadge />
+          <RequireBadge fontSize="xs" />
+          <RequireBadge fontSize="sm" />
+          <RequireBadge fontSize="lg" />
+          <OptionalBadge />
+          <OptionalBadge fontSize="xs" />
+          <OptionalBadge fontSize="sm" />
+          <OptionalBadge fontSize="lg" />
+        </Box>
       </Box>
       <DefaultButton
         onClick={onClickDashboardButton}
