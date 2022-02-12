@@ -7,16 +7,27 @@ import { DefaultButton } from "../../atoms/button/DefaultButton";
 import { DefaultIconButton } from "../../atoms/button/DefaultIconButton";
 import { DefaultTextInput } from "../../atoms/form/DefaultTextInput";
 import { ReadOnlyInput } from "../../atoms/form/ReadOnlyInput";
+import { ToggleViewButton } from "../../molecules/button/ToggleViewButton";
+import { PasswordInput } from "../../molecules/form/PasswordInput";
 import { HeaderLayout } from "../../templates/HeaderLayout";
 import { mainColor, textColor } from "../../../theme/systemTheme";
 
 export const TopPage: VFC = memo(() => {
   const navigate = useNavigate();
   const [inputText, setInputText] = useState("");
+  const [password, setPassword] = useState("");
   const [isView, setIsView] = useState(false);
 
   const onChangeInputText = (e: ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
+  };
+
+  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const onBlurPassword = () => {
+    console.log("onBlurPassword Called!");
   };
 
   const onClickDashboardButton = () => {
@@ -38,6 +49,12 @@ export const TopPage: VFC = memo(() => {
         <ReadOnlyInput value={100} />
         <ReadOnlyInput value="読み取り専用" />
         <Button color="#FFFFFF" bg="gray.500">無効ボタン</Button>
+        <PasswordInput
+          password={password}
+          placeholder="パスワード"
+          onChange={onChangePassword}
+          onBlur={onBlurPassword}
+        />
       </Box>
       <DefaultButton
         onClick={onClickDashboardButton}
@@ -54,6 +71,7 @@ export const TopPage: VFC = memo(() => {
         { (isView ? <ViewOffIcon /> : <ViewIcon />) }
       </DefaultButton>
       <DefaultIconButton hoverText="アイコンボタン" aria-label="View Icon" icon={<ViewIcon />} />
+      <ToggleViewButton isView={isView} setIsView={setIsView} />
     </HeaderLayout>
   );
 });
