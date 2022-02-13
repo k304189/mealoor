@@ -2,11 +2,11 @@ import React from "react";
 import useEvent from "@testing-library/user-event";
 import { render, screen, cleanup } from "@testing-library/react";
 
-import { TextInputForm } from "../../../../../components/organisms/parts/form/TextInputForm";
+import { TextForm } from "../../../../../components/organisms/parts/form/TextForm";
 
 afterEach(() => cleanup());
 
-describe("Rendering", () => {
+describe("Rendering TextForm", () => {
   const testValue = "testValue";
   const onChangeFunction = jest.fn();
   const onBlurFunction = jest.fn();
@@ -19,7 +19,7 @@ describe("Rendering", () => {
 
   it("Render Only Require Element", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         label={testLabel}
@@ -79,7 +79,7 @@ describe("Rendering", () => {
 
   it("Render Set Type Email", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         type="email"
         onChange={onChangeFunction}
@@ -93,7 +93,7 @@ describe("Rendering", () => {
 
   it("Render Set OnBlur", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         onBlur={onBlurFunction}
@@ -110,7 +110,7 @@ describe("Rendering", () => {
 
   it("Render Set Left Addon When IsReadOnly is False", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         label={testLabel}
@@ -124,7 +124,7 @@ describe("Rendering", () => {
 
   it("Render Set Left Addon When IsReadOnly is True", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         label={testLabel}
@@ -139,7 +139,7 @@ describe("Rendering", () => {
 
   it("Render Set Right Addon When IsReadOnly is False", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         label={testLabel}
@@ -153,7 +153,7 @@ describe("Rendering", () => {
 
   it("Render Set Right Addon When IsReadOnly is True", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         label={testLabel}
@@ -168,7 +168,7 @@ describe("Rendering", () => {
 
   it("Render Set Require Attribute is require", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         label={testLabel}
@@ -186,7 +186,7 @@ describe("Rendering", () => {
 
   it("Render Set Require Attribute is optional", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         label={testLabel}
@@ -204,7 +204,7 @@ describe("Rendering", () => {
 
   it("Render Set Helper Text", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         label={testLabel}
@@ -218,7 +218,7 @@ describe("Rendering", () => {
 
   it("Render Set Error Text When IsInvalid is False", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         label={testLabel}
@@ -232,7 +232,7 @@ describe("Rendering", () => {
 
   it("Render Set Error Text When IsInvalid is True", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         label={testLabel}
@@ -247,7 +247,7 @@ describe("Rendering", () => {
 
   it("Render IsDisabled is True", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         onBlur={onBlurFunction}
@@ -279,7 +279,7 @@ describe("Rendering", () => {
 
   it("Render IsReadOnly is True", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         onBlur={onBlurFunction}
@@ -311,7 +311,7 @@ describe("Rendering", () => {
 
   it("Render IsInvalid is True", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         onBlur={onBlurFunction}
@@ -337,7 +337,7 @@ describe("Rendering", () => {
 
   it("Render setPlaceholder is False", () => {
     render(
-      <TextInputForm
+      <TextForm
         value={testValue}
         onChange={onChangeFunction}
         onBlur={onBlurFunction}

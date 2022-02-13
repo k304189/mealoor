@@ -12,8 +12,9 @@ import { ToggleViewButton } from "../../molecules/button/ToggleViewButton";
 import { PasswordInput } from "../../molecules/form/PasswordInput";
 import { ReadOnlyInput } from "../../molecules/form/ReadOnlyInput";
 import { FormArea } from "../../molecules/form/FormArea";
-import { TextInputForm } from "../../organisms/parts/form/TextInputForm";
+import { TextForm } from "../../organisms/parts/form/TextForm";
 import { PasswordForm } from "../../organisms/parts/form/PasswordForm";
+import { SignForm } from "../../organisms/pages/account/SignForm";
 import { HeaderLayout } from "../../templates/HeaderLayout";
 import { mainColor, textColor } from "../../../theme/systemTheme";
 
@@ -82,14 +83,14 @@ export const TopPage: VFC = memo(() => {
             onChange={onChangeInputText}
           />
         </FormArea>
-        <TextInputForm
-          label="TextInputForm"
+        <TextForm
+          label="TextForm"
           value={inputText}
           onChange={onChangeInputText}
-          helperText="ヘルパーTextInputForm"
+          helperText="ヘルパーTextForm"
           leftAddon="+81"
           rightAddon="%"
-          errorText="エラーTextInputForm"
+          errorText="エラーTextForm"
           isReadOnly
         />
         <PasswordForm
@@ -101,6 +102,19 @@ export const TopPage: VFC = memo(() => {
           helperText="PasswordFormヘルパー"
           errorText="PasswordFormエラーテキスト"
           isReadOnly
+        />
+        <SignForm
+          email={inputText}
+          onChangeEmail={onChangeInputText}
+          onBlurEmail={onBlurPassword}
+          errorTextEmail="エラーメッセージ：メール"
+          invalidEmail={false}
+          password={inputText}
+          onChangePassword={onChangeInputText}
+          onBlurPassword={onBlurPassword}
+          errorTextPassword="エラーメッセージ：パスワード"
+          invalidPassword={false}
+          isSignIn
         />
       </Box>
       <DefaultButton

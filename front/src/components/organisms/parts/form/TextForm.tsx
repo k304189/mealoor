@@ -22,7 +22,7 @@ type Props = {
   setPlaceholder?: boolean;
 };
 
-export const TextInputForm: VFC<Props> = memo((props) => {
+export const TextForm: VFC<Props> = memo((props) => {
   const {
     value,
     type = "text",
