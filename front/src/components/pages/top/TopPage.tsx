@@ -1,7 +1,7 @@
 import { ChangeEvent, memo, VFC, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button } from "@chakra-ui/react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { Box, Button, useDisclosure } from "@chakra-ui/react";
+import { ViewIcon } from "@chakra-ui/icons";
 
 import { RequireBadge } from "../../atoms/display/RequireBadge";
 import { OptionalBadge } from "../../atoms/display/OptionalBadge";
@@ -12,6 +12,7 @@ import { ToggleViewButton } from "../../molecules/button/ToggleViewButton";
 import { PasswordInput } from "../../molecules/form/PasswordInput";
 import { ReadOnlyInput } from "../../molecules/form/ReadOnlyInput";
 import { FormArea } from "../../molecules/form/FormArea";
+import { DefaultModal } from "../../molecules/layout/DefaultModal";
 import { TextForm } from "../../organisms/parts/form/TextForm";
 import { PasswordForm } from "../../organisms/parts/form/PasswordForm";
 import { SignForm } from "../../organisms/pages/account/SignForm";
@@ -23,6 +24,7 @@ export const TopPage: VFC = memo(() => {
   const [inputText, setInputText] = useState("");
   const [password, setPassword] = useState("");
   const [isView, setIsView] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onChangeInputText = (e: ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
@@ -103,18 +105,31 @@ export const TopPage: VFC = memo(() => {
           errorText="PasswordFormエラーテキスト"
           isReadOnly
         />
-        <SignForm
-          email={inputText}
-          onChangeEmail={onChangeInputText}
-          onBlurEmail={onBlurPassword}
-          errorTextEmail="エラーメッセージ：メール"
-          invalidEmail={false}
-          password={inputText}
-          onChangePassword={onChangeInputText}
-          onBlurPassword={onBlurPassword}
-          errorTextPassword="エラーメッセージ：パスワード"
-          invalidPassword={false}
-          isSignIn
+        <DefaultModal
+          isOpen={isOpen}
+          onClose={onClose}
+          size="2xl"
+          modalBody={(
+            <Box color="black">
+              <SignForm
+                email={inputText}
+                onChangeEmail={onChangeInputText}
+                onBlurEmail={onBlurPassword}
+                errorTextEmail="エラーメッセージ：メール"
+                invalidEmail
+                password={inputText}
+                onChangePassword={onChangeInputText}
+                onBlurPassword={onBlurPassword}
+                errorTextPassword="エラーメッセージ：パスワード"
+                invalidPassword={false}
+                isSignIn
+              />
+            </Box>
+          )}
+          modalHeader="モーダルヘッダー"
+          modalFooter={(
+            <ToggleViewButton isView={isView} setIsView={setIsView} />
+          )}
         />
       </Box>
       <DefaultButton
@@ -125,14 +140,15 @@ export const TopPage: VFC = memo(() => {
         <p>ダッシュボード</p>
       </DefaultButton>
       <DefaultButton
-        onClick={() => { setIsView(!isView); }}
+        onClick={onOpen}
         className="primary"
-        hoverText="アイコンテスト"
+        hoverText="モーダルオープン"
       >
-        { (isView ? <ViewOffIcon /> : <ViewIcon />) }
+        モーダルオープン
       </DefaultButton>
       <DefaultIconButton hoverText="アイコンボタン" aria-label="View Icon" icon={<ViewIcon />} />
       <ToggleViewButton isView={isView} setIsView={setIsView} />
+      <p>文字確認</p>
     </HeaderLayout>
   );
 });
