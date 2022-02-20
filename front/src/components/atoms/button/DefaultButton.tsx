@@ -10,6 +10,7 @@ type Props = {
   loading?: boolean;
   size?: "sm" | "md" | "lg" | "xs";
   variant?: "solid" | "outline" | "ghost" | "link";
+  dataTestid?: string;
 };
 
 export const DefaultButton: VFC<Props> = memo((props) => {
@@ -22,6 +23,7 @@ export const DefaultButton: VFC<Props> = memo((props) => {
     loading = false,
     size = "md",
     variant = "soild",
+    dataTestid = "",
   } = props;
 
   return (
@@ -33,6 +35,7 @@ export const DefaultButton: VFC<Props> = memo((props) => {
         isLoading={loading}
         size={size}
         variant={variant}
+        data-testid={dataTestid}
       >
         {children}
       </Button>

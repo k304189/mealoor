@@ -12,10 +12,9 @@ import { ToggleViewButton } from "../../molecules/button/ToggleViewButton";
 import { PasswordInput } from "../../molecules/form/PasswordInput";
 import { ReadOnlyInput } from "../../molecules/form/ReadOnlyInput";
 import { FormArea } from "../../molecules/form/FormArea";
-import { DefaultModal } from "../../molecules/layout/DefaultModal";
 import { TextForm } from "../../organisms/parts/form/TextForm";
+import { SignModal } from "../../organisms/pages/account/SignModal";
 import { PasswordForm } from "../../organisms/parts/form/PasswordForm";
-import { SignForm } from "../../organisms/pages/account/SignForm";
 import { HeaderLayout } from "../../templates/HeaderLayout";
 import { mainColor, textColor } from "../../../theme/systemTheme";
 
@@ -105,31 +104,9 @@ export const TopPage: VFC = memo(() => {
           errorText="PasswordFormエラーテキスト"
           isReadOnly
         />
-        <DefaultModal
+        <SignModal
           isOpen={isOpen}
           onClose={onClose}
-          size="2xl"
-          modalBody={(
-            <Box color="black">
-              <SignForm
-                email={inputText}
-                onChangeEmail={onChangeInputText}
-                onBlurEmail={onBlurPassword}
-                errorTextEmail="エラーメッセージ：メール"
-                invalidEmail
-                password={inputText}
-                onChangePassword={onChangeInputText}
-                onBlurPassword={onBlurPassword}
-                errorTextPassword="エラーメッセージ：パスワード"
-                invalidPassword={false}
-                isSignIn
-              />
-            </Box>
-          )}
-          modalHeader="モーダルヘッダー"
-          modalFooter={(
-            <ToggleViewButton isView={isView} setIsView={setIsView} />
-          )}
         />
       </Box>
       <DefaultButton

@@ -32,6 +32,16 @@ class CreateTokenView(ObtainAuthToken):
     """Create a new auth token for account, restrict who can see Todo"""
     serializer_class = AuthTokenSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'username': user.username
+        })
 
 class ManageAccountView(generics.RetrieveUpdateAPIView):
     """Manage the authenticated account"""

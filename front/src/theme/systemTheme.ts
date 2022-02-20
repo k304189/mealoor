@@ -9,11 +9,9 @@ export const systemTheme = extendTheme({
     global: {
       body: {
         backgroundColor: baseColor,
-        color: mainColor,
+        color: textColor,
       },
       button: {
-        backgroundColor: mainColor,
-        color: textColor,
         _hover: {
           opacity: "0.9",
         },
