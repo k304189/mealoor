@@ -29,12 +29,12 @@ class CreateAccountView(APIView):
             )
 
 class CreateTokenView(ObtainAuthToken):
-    """Create a new auth token for account, restrict who can see Todo"""
+    """Create a new auth token for account"""
     serializer_class = AuthTokenSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
+                                           context={'request': request })
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
@@ -42,6 +42,15 @@ class CreateTokenView(ObtainAuthToken):
             'token': token.key,
             'username': user.username
         })
+
+class DeleteTokenView(APIView):
+    """Delete auth token for sign in account"""
+    serializer_class = AccountSerializer
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    def delete(self, request, format=None):
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class ManageAccountView(generics.RetrieveUpdateAPIView):
     """Manage the authenticated account"""

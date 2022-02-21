@@ -6,24 +6,31 @@ import { SignModal } from "../../pages/account/SignModal";
 import { HeaderButton } from "../../../atoms/button/HeaderButton";
 import { HeaderAccountMenu } from "../../../molecules/layout/HeaderAccountMenu";
 import { useRequestHeader } from "../../../../hooks/common/auth/useRequestHeader";
+import { useAuthApi } from "../../../../hooks/common/auth/useAuthApi";
 import { useMessage } from "../../../../hooks/common/layout/useMessage";
 
 export const Header: VFC = memo(() => {
   const navigate = useNavigate();
   const [isSignIn, setIsSignIn] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { hasRequestHeader, clearRequestHeader } = useRequestHeader();
-  const { successToast } = useMessage();
+  const { hasRequestHeader } = useRequestHeader();
+  const { signOut } = useAuthApi();
+  const { successToast, errorToast } = useMessage();
 
   const openSignModal = (signin:boolean) => {
     setIsSignIn(signin);
     onOpen();
   };
 
-  const signOut = () => {
-    clearRequestHeader();
-    successToast("サインアウトしました");
-    navigate("/");
+  const callSignOutApi = () => {
+    signOut()
+      .then(() => {
+        successToast("サインアウトしました");
+        navigate("/");
+      })
+      .catch(() => {
+        errorToast("サインアウトに失敗しました");
+      });
   };
 
   const onClickLogo = () => {
@@ -45,7 +52,7 @@ export const Header: VFC = memo(() => {
       </HeaderButton>
       { hasRequestHeader() ? (
         <Flex h="100%">
-          <HeaderAccountMenu signOut={signOut} />
+          <HeaderAccountMenu signOut={callSignOutApi} />
         </Flex>
       ) : (
         <Flex h="100%">
