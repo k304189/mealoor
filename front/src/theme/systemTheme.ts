@@ -3,6 +3,7 @@ import { extendTheme } from "@chakra-ui/react";
 export const baseColor = "orange.300";
 export const mainColor = "white";
 export const textColor = "black";
+export const avatarColor = "blue.800";
 
 export const systemTheme = extendTheme({
   styles: {

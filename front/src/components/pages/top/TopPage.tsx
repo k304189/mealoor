@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import { ViewIcon } from "@chakra-ui/icons";
 
+import { DefaultAvatar } from "../../atoms/display/DefaultAvatar";
 import { RequireBadge } from "../../atoms/display/RequireBadge";
 import { OptionalBadge } from "../../atoms/display/OptionalBadge";
 import { DefaultButton } from "../../atoms/button/DefaultButton";
@@ -12,6 +13,7 @@ import { ToggleViewButton } from "../../molecules/button/ToggleViewButton";
 import { PasswordInput } from "../../molecules/form/PasswordInput";
 import { ReadOnlyInput } from "../../molecules/form/ReadOnlyInput";
 import { FormArea } from "../../molecules/form/FormArea";
+import { AvatarUsername } from "../../molecules/layout/AvatarUsername";
 import { TextForm } from "../../organisms/parts/form/TextForm";
 import { SignModal } from "../../organisms/pages/account/SignModal";
 import { PasswordForm } from "../../organisms/parts/form/PasswordForm";
@@ -43,8 +45,9 @@ export const TopPage: VFC = memo(() => {
 
   return (
     <HeaderLayout>
-      <Box my={2} py={1} bg={mainColor} color={textColor}>
-        <p>Topページです</p>
+      <Box align="left" my={2} py={1} bg={mainColor} color={textColor}>
+        <DefaultAvatar />
+        Topページです
       </Box>
       <Box py={5} my={6} bg={mainColor} color={textColor}>
         <DefaultTextInput
@@ -123,6 +126,7 @@ export const TopPage: VFC = memo(() => {
       >
         モーダルオープン
       </DefaultButton>
+      <AvatarUsername />
       <DefaultIconButton hoverText="アイコンボタン" aria-label="View Icon" icon={<ViewIcon />} />
       <ToggleViewButton isView={isView} setIsView={setIsView} />
       <p>文字確認</p>
