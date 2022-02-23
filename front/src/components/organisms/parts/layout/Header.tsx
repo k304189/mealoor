@@ -1,9 +1,11 @@
 import { memo, useState, VFC } from "react";
 import { useNavigate } from "react-router-dom";
-import { Flex, useDisclosure } from "@chakra-ui/react";
+import { Center, Flex, useDisclosure } from "@chakra-ui/react";
 
+import { MenuDrawer } from "./MenuDrawer";
 import { SignModal } from "../../pages/account/SignModal";
 import { HeaderButton } from "../../../atoms/button/HeaderButton";
+import { HamburgerButton } from "../../../molecules/button/HamburgerButton";
 import { HeaderAccountMenu } from "../../../molecules/layout/HeaderAccountMenu";
 import { useRequestHeader } from "../../../../hooks/common/auth/useRequestHeader";
 import { useAuthApi } from "../../../../hooks/common/auth/useAuthApi";
@@ -12,14 +14,23 @@ import { useMessage } from "../../../../hooks/common/layout/useMessage";
 export const Header: VFC = memo(() => {
   const navigate = useNavigate();
   const [isSignIn, setIsSignIn] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: signIsOpen,
+    onOpen: signOnOpen,
+    onClose: signOnClose,
+  } = useDisclosure();
+  const {
+    isOpen: menuIsOpen,
+    onOpen: menuOnOpen,
+    onClose: menuOnClose,
+  } = useDisclosure();
   const { hasRequestHeader } = useRequestHeader();
   const { signOut } = useAuthApi();
   const { successToast, errorToast } = useMessage();
 
   const openSignModal = (signin:boolean) => {
     setIsSignIn(signin);
-    onOpen();
+    signOnOpen();
   };
 
   const callSignOutApi = () => {
@@ -47,9 +58,18 @@ export const Header: VFC = memo(() => {
       align="center"
       justify="space-between"
     >
-      <HeaderButton px={2} onClick={onClickLogo}>
-        システムロゴ
-      </HeaderButton>
+      <Flex h="100%">
+        <Center ml={1}>
+          <HamburgerButton
+            bg="transparent"
+            aria-label="メニューボタン"
+            onClick={menuOnOpen}
+          />
+        </Center>
+        <HeaderButton px={2} onClick={onClickLogo}>
+          システムロゴ
+        </HeaderButton>
+      </Flex>
       { hasRequestHeader() ? (
         <Flex h="100%">
           <HeaderAccountMenu signOut={callSignOutApi} />
@@ -63,12 +83,13 @@ export const Header: VFC = memo(() => {
             サインイン
           </HeaderButton>
           <SignModal
-            isOpen={isOpen}
-            onClose={onClose}
+            isOpen={signIsOpen}
+            onClose={signOnClose}
             isSignIn={isSignIn}
           />
         </Flex>
       )}
+      <MenuDrawer isOpen={menuIsOpen} onClose={menuOnClose} />
     </Flex>
   );
 });

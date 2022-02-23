@@ -5,6 +5,17 @@ export const mainColor = "white";
 export const textColor = "black";
 export const avatarColor = "blue.800";
 
+const systemButtonHover = {
+  cursor: "pointer",
+  backgroundColor: "#E2E8F0",
+  height: "100%",
+};
+
+const menuSection = {
+  paddingTop: "8px",
+  paddingBottom: "8px",
+};
+
 export const systemTheme = extendTheme({
   styles: {
     global: {
@@ -27,11 +38,15 @@ export const systemTheme = extendTheme({
         color: textColor,
       },
       ".systemHeaderButton": {
-        _hover: {
-          cursor: "pointer",
-          backgroundColor: "#E2E8F0",
-          height: "100%",
-        },
+        _hover: systemButtonHover,
+      },
+      ".menuSection": {
+        ...menuSection,
+      },
+      ".menuButton": {
+        ...menuSection,
+        paddingLeft: "12px",
+        _hover: systemButtonHover,
       },
       "input.readOnly": {
         backgroundColor: "#A0AEC0",

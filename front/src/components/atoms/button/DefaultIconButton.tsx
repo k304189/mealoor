@@ -1,7 +1,7 @@
 import { memo, VFC } from "react";
 import { forwardRef, IconButton, IconButtonProps, Tooltip } from "@chakra-ui/react";
 
-type Props = IconButtonProps & {
+export type Props = IconButtonProps & {
   hoverText?: String;
 };
 
