@@ -17,7 +17,7 @@ class CreateAccountView(APIView):
             create_user = serializer.save()
             create_user_token = Token.objects.get(user=create_user)
             return_data = {
-                'account': serializer.data,
+                'username': create_user.username,
                 'token': create_user_token.key
             }
             return Response(

@@ -34,7 +34,7 @@ describe("useAuthApi Test", () => {
   const signUpUser = {
     email: testEmail,
     password: testPassword,
-    username: signUpResponse.account.username,
+    username: signUpResponse.username,
     passwordConf: testPassword,
   };
   const callCheckFunction = jest.fn();
@@ -93,7 +93,7 @@ describe("useAuthApi Test", () => {
   it("call signUp, API Result is OK", async () => {
     const { result } = renderHook(() => useAuthApi());
     const signUpToken = signUpResponse.token;
-    const signUpUsername = signUpResponse.account.username;
+    const signUpUsername = signUpResponse.username;
 
     // 実行前はlocalStrageに値が存在しないことを確認
     expect(localStorage.getItem("auth_token")).toBeNull();

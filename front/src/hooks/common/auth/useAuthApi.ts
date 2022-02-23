@@ -27,10 +27,7 @@ export const useAuthApi = (): T => {
 
   const signUp = useCallback(async (signUpUser: TSignUp) => {
     const response = await axios.post(URL_SIGN_UP, signUpUser);
-    setRequestHeader({
-      username: response.data.account.username,
-      token: response.data.token,
-    });
+    setRequestHeader(response.data);
     return response.status;
   }, []);
 
