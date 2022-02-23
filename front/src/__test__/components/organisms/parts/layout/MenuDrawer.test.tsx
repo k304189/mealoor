@@ -3,6 +3,7 @@ import { render, screen, cleanup } from "@testing-library/react";
 
 import { MenuDrawer } from "../../../../../components/organisms/parts/layout/MenuDrawer";
 
+beforeEach(() => localStorage.clear());
 afterEach(() => cleanup());
 
 const mockedNavigate = jest.fn().mockImplementation(() => ({}));
@@ -13,14 +14,20 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("Rendering MenuDrawer", () => {
+  const signInUsername = "signInUsername";
+  const signInToken = "signInToken";
   const onCloseFunction = jest.fn();
   const menuSectionTestId = "menuSection";
   const menuButtonTestId = "menuButton";
 
-  const menuSectionNames = ["データ", "mealoor"];
-  const menuButtonConfig = [
-    { btnName: "ダッシュボード", link: "/dashboard" },
-    { btnName: "Top", link: "/" },
+  const menuSections = [
+    { secName: "データ", isSignIn: true },
+    { secName: "mealoor", isSignIn: false },
+  ];
+  const menuButtons = [
+    { btnName: signInUsername, link: "/account", isSignIn: true },
+    { btnName: "ダッシュボード", link: "/dashboard", isSignIn: true },
+    { btnName: "Top", link: "/", isSignIn: false },
   ];
 
   it("Render MenuDrawer When isOpen is True", () => {
@@ -41,14 +48,6 @@ describe("Rendering MenuDrawer", () => {
     // ドロワーのクローズボタンをクリックするとonCloseが呼び出されることを確認
     useEvent.click(closeButtonElement);
     expect(onCloseFunction).toHaveBeenCalledTimes(1);
-
-    // メニューセクションの数をチェック
-    const menuSectionElements = screen.queryAllByTestId(menuSectionTestId);
-    expect(menuSectionElements.length).toBe(menuSectionNames.length);
-
-    // メニューボタンの数をチェック
-    const menuButtonElements = screen.queryAllByTestId(menuButtonTestId);
-    expect(menuButtonElements.length).toBe(menuButtonConfig.length);
   });
 
   it("Render MenuDrawer When isOpen is False", () => {
@@ -75,39 +74,113 @@ describe("Rendering MenuDrawer", () => {
     expect(menuButtonElements.length).toBe(0);
   });
 
-  it("Check Display MenuSection in MenuDrawer", () => {
+  it("Check Display MenuSection in MenuDrawer When signIn", () => {
+    localStorage.setItem("auth_token", signInToken);
+    localStorage.setItem("username", signInUsername);
     render(
       <MenuDrawer
         isOpen
         onClose={onCloseFunction}
       />
     );
+
+    // メニューセクションの数をチェック
+    const menuSectionElements = screen.queryAllByTestId(menuSectionTestId);
+    expect(menuSectionElements.length).toBe(menuSections.length);
+
     // メニューセクションの項目名チェック
-    menuSectionNames.forEach(sec => {
-      const checkSectionElement = screen.queryByText(sec);
+    menuSections.forEach(sec => {
+      const secName = sec.secName;
+      const checkSectionElement = screen.queryByText(secName);
       let innerHtml = "";
       if (checkSectionElement) {
         innerHtml = checkSectionElement.innerHTML;
       }
-      expect(innerHtml).toBe(sec);
+      expect(innerHtml).toBe(secName);
     });
   });
 
-  it("Check Display MenuButton in MenuDrawer", () => {
+  it("Check Display MenuButton in MenuDrawer When signIn", () => {
+    localStorage.setItem("auth_token", signInToken);
+    localStorage.setItem("username", signInUsername);
     render(
       <MenuDrawer
         isOpen
         onClose={onCloseFunction}
       />
     );
+
+    // メニューボタンの数をチェック
+    const menuButtonElements = screen.queryAllByTestId(menuButtonTestId);
+    expect(menuButtonElements.length).toBe(menuButtons.length);
+
     // メニューボタンの項目名チェック
-    menuButtonConfig.forEach(btn => {
-      const menuButton = screen.queryByText(btn.btnName) as HTMLInputElement;
+    menuButtons.forEach(btn => {
+      const btnName = btn.btnName;
+      const menuButton = screen.queryByText(btnName) as HTMLInputElement;
       let innerHtml = "";
       if (menuButton) {
         innerHtml = menuButton.innerHTML
       }
-      expect(innerHtml).toBe(btn.btnName);
+      expect(innerHtml).toBe(btnName);
+    });
+  });
+
+  it("Check Display MenuSection in MenuDrawer When Not signIn", () => {
+    render(
+      <MenuDrawer
+        isOpen
+        onClose={onCloseFunction}
+      />
+    );
+
+    // サインインしていない時に表示されるセクション一覧を取得
+    const noSigninMenuSections = menuSections.filter(sec => {
+      return !sec.isSignIn;
+    });
+
+    // メニューセクションの数をチェック
+    const menuSectionElements = screen.queryAllByTestId(menuSectionTestId);
+    expect(menuSectionElements.length).toBe(noSigninMenuSections.length);
+
+    // メニューセクションの項目名チェック
+    noSigninMenuSections.forEach(sec => {
+      const secName = sec.secName;
+      const checkSectionElement = screen.queryByText(secName);
+      let innerHtml = "";
+      if (checkSectionElement) {
+        innerHtml = checkSectionElement.innerHTML;
+      }
+      expect(innerHtml).toBe(secName);
+    });
+  });
+
+  it("Check Display MenuButton in MenuDrawer When Not signIn", () => {
+    render(
+      <MenuDrawer
+        isOpen
+        onClose={onCloseFunction}
+      />
+    );
+
+    // サインインしていない時に表示されるセクション一覧を取得
+    const noSigninMenuButtons = menuButtons.filter(sec => {
+      return !sec.isSignIn;
+    });
+
+    // メニューボタンの数をチェック
+    const menuButtonElements = screen.queryAllByTestId(menuButtonTestId);
+    expect(menuButtonElements.length).toBe(noSigninMenuButtons.length);
+
+    // メニューボタンの項目名チェック
+    noSigninMenuButtons.forEach(btn => {
+      const btnName = btn.btnName;
+      const menuButton = screen.queryByText(btnName) as HTMLInputElement;
+      let innerHtml = "";
+      if (menuButton) {
+        innerHtml = menuButton.innerHTML
+      }
+      expect(innerHtml).toBe(btnName);
     });
   });
 });

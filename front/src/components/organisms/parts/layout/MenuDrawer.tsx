@@ -3,6 +3,8 @@ import { Box } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 import { DefaultDrawer } from "../../../molecules/layout/DefaultDrawer";
+import { AvatarUsername } from "../../../molecules/layout/AvatarUsername";
+import { useRequestHeader } from "../../../../hooks/common/auth/useRequestHeader";
 
 type Props = {
   isOpen: boolean;
@@ -10,6 +12,7 @@ type Props = {
 };
 
 export const MenuDrawer: VFC<Props> = memo((props) => {
+  const { hasRequestHeader } = useRequestHeader();
   const navigate = useNavigate();
   const {
     isOpen,
@@ -18,16 +21,29 @@ export const MenuDrawer: VFC<Props> = memo((props) => {
 
   const drawerBody = (
     <Box>
-      <Box className="menuSection" data-testid="menuSection">
-        データ
-      </Box>
-      <Box
-        className="menuButton"
-        data-testid="menuButton"
-        onClick={() => { navigate("/dashboard"); }}
-      >
-        ダッシュボード
-      </Box>
+      { hasRequestHeader() ? (
+        <>
+          <Box
+            className="menuButton"
+            data-testid="menuButton"
+            onClick={() => { navigate("/account"); }}
+          >
+            <AvatarUsername />
+          </Box>
+          <Box className="menuSection" data-testid="menuSection">
+            データ
+          </Box>
+          <Box
+            className="menuButton"
+            data-testid="menuButton"
+            onClick={() => { navigate("/dashboard"); }}
+          >
+            ダッシュボード
+          </Box>
+        </>
+      ) : (
+        <Box />
+      )}
       <Box className="menuSection" data-testid="menuSection">
         mealoor
       </Box>
