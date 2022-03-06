@@ -1,3 +1,4 @@
 __pycache__
 front/node_modules/
 api/src/*/migrations
+*.log
