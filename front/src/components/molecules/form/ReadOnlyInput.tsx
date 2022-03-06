@@ -32,6 +32,7 @@ export const ReadOnlyInput: VFC<Props> = memo((props) => {
         data-testid={dataTestid}
         variant="filled"
         isDisabled
+        isReadOnly
       />
       {rightAddon === ""
         ? (<Box />)

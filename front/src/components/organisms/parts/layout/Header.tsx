@@ -1,6 +1,6 @@
 import { memo, useState, VFC } from "react";
 import { useNavigate } from "react-router-dom";
-import { Center, Flex, useDisclosure } from "@chakra-ui/react";
+import { Center, Flex, Image, useDisclosure } from "@chakra-ui/react";
 
 import { MenuDrawer } from "./MenuDrawer";
 import { SignModal } from "../../pages/account/SignModal";
@@ -10,6 +10,7 @@ import { HeaderAccountMenu } from "../../../molecules/layout/HeaderAccountMenu";
 import { useRequestHeader } from "../../../../hooks/common/auth/useRequestHeader";
 import { useAuthApi } from "../../../../hooks/common/auth/useAuthApi";
 import { useMessage } from "../../../../hooks/common/layout/useMessage";
+import logo from "../../../../assets/mealoorIcon.png";
 
 export const Header: VFC = memo(() => {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ export const Header: VFC = memo(() => {
           />
         </Center>
         <HeaderButton px={2} onClick={onClickLogo}>
-          システムロゴ
+          <Image src={logo} className="logo" alt="ヘッダーアイコン" />
         </HeaderButton>
       </Flex>
       { hasRequestHeader() ? (

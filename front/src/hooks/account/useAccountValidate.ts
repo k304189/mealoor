@@ -6,6 +6,9 @@ export type T = {
   validateEmail: (email: string) => TValidateReturn;
   validatePassword: (password: string) => TValidateReturn;
   validateUsername: (username: string) => TValidateReturn;
+  validateFirstName: (firstName: string) => TValidateReturn;
+  validateLastName: (lastName: string) => TValidateReturn;
+  validateProfile: (profile: string) => TValidateReturn;
 };
 
 export const useAccountValidate = (): T => {
@@ -21,10 +24,7 @@ export const useAccountValidate = (): T => {
       invalid = true;
       errorText = `メールアドレスは${maxLength}文字以下にしてください`;
     }
-    return {
-      invalid,
-      errorText,
-    };
+    return { invalid, errorText };
   }, []);
 
   const validatePassword = useCallback((password) => {
@@ -39,10 +39,7 @@ export const useAccountValidate = (): T => {
       invalid = true;
       errorText = `パスワードは${maxLength}文字以下にしてください`;
     }
-    return {
-      invalid,
-      errorText,
-    };
+    return { invalid, errorText };
   }, []);
 
   const validateUsername = useCallback((username) => {
@@ -57,15 +54,48 @@ export const useAccountValidate = (): T => {
       invalid = true;
       errorText = `名前は${maxLength}文字以下にしてください`;
     }
-    return {
-      invalid,
-      errorText,
-    };
+    return { invalid, errorText };
+  }, []);
+
+  const validateFirstName = useCallback((firstName) => {
+    const maxLength = 30;
+    let invalid = false;
+    let errorText = "";
+    if (firstName.length > maxLength) {
+      invalid = true;
+      errorText = `名前（姓）は${maxLength}文字以下にしてください`;
+    }
+    return { invalid, errorText };
+  }, []);
+
+  const validateLastName = useCallback((lastName) => {
+    const maxLength = 30;
+    let invalid = false;
+    let errorText = "";
+    if (lastName.length > maxLength) {
+      invalid = true;
+      errorText = `名前（名）は${maxLength}文字以下にしてください`;
+    }
+    return { invalid, errorText };
+  }, []);
+
+  const validateProfile = useCallback((profile) => {
+    const maxLength = 500;
+    let invalid = false;
+    let errorText = "";
+    if (profile.length > maxLength) {
+      invalid = true;
+      errorText = `プロフィールは${maxLength}文字以下にしてください`;
+    }
+    return { invalid, errorText };
   }, []);
 
   return {
     validateEmail,
     validatePassword,
     validateUsername,
+    validateFirstName,
+    validateLastName,
+    validateProfile,
   };
 };

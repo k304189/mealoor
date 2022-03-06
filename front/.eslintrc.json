@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "jest/globals": true
     },
     "extends": [
         "plugin:react/recommended",
@@ -17,7 +18,8 @@
     },
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "jest"
     ],
     "settings": {
       "import/resolver": {
@@ -57,6 +59,7 @@
       "react/prop-types": "off",
       "react/jsx-props-no-spreading": "off",
       "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": ["error"]
+      "@typescript-eslint/no-unused-vars": ["error"],
+      "dot-notation": [2, {"allowPattern": "^[a-z]+(_[a-z]+)+$"}]
     }
 }

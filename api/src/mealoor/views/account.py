@@ -8,7 +8,19 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 from rest_framework.response import Response
 
+from mealoor.models import Account
 from mealoor.serializers import AccountSerializer, AuthTokenSerializer
+
+class ShowAccountView(generics.ListAPIView):
+    """Show Authentication Account"""
+    serializer_class = AccountSerializer
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        """Return Authentication User"""
+        user = self.request.user
+        return Account.objects.filter(id=user.id)
 
 class CreateAccountView(APIView):
     def post(self, request):
@@ -61,3 +73,17 @@ class ManageAccountView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         """Retrieve and return authentication user"""
         return self.request.user
+
+class WithdrawAccountView(APIView):
+    """
+        Withdraw sign in account
+        Update is_active False
+    """
+    serializer_class = AccountSerializer
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    def delete(self, request, format=None):
+        request.user.is_active = False
+        request.user.save()
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

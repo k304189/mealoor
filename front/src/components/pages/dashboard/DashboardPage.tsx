@@ -1,20 +1,15 @@
 import { memo, VFC } from "react";
-// import { useNavigate } from "react-router-dom";
+import { Box, Text } from "@chakra-ui/react";
 
 import { HeaderLayout } from "../../templates/HeaderLayout";
 
 export const DashboardPage: VFC = memo(() => {
-  // const navigate = useNavigate();
-
-  // const onClickTopButton = () => {
-  //   navigate("/");
-  // }
-
   return (
     <HeaderLayout>
-      <div>
+      <Box h="100%" className="bgMain">
         <p>Dashboardページです</p>
-      </div>
+        <Text size="xl" color="#FFAA00">mealoor</Text>
+      </Box>
     </HeaderLayout>
   );
 });

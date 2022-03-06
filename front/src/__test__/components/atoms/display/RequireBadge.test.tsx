@@ -1,5 +1,3 @@
-import React from "react";
-import useEvent from "@testing-library/user-event";
 import { render, screen, cleanup } from "@testing-library/react";
 
 import { RequireBadge } from "../../../../components/atoms/display/RequireBadge";

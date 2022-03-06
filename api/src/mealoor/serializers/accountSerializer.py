@@ -13,7 +13,10 @@ class AccountSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'profile',
+            'is_active',
+            'is_superuser',
         )
+        read_only_fields = ['is_active', 'is_superuser']
         extra_kwargs = {'password' : {'write_only': True, 'min_length': 8}}
 
     def create(self, validated_data):
