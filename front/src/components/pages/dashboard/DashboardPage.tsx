@@ -1,6 +1,7 @@
 import { memo, VFC } from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
+import { BodyIconButton } from "../../molecules/button/BodyIconButton";
 import { HeaderLayout } from "../../templates/HeaderLayout";
 
 export const DashboardPage: VFC = memo(() => {
@@ -8,7 +9,7 @@ export const DashboardPage: VFC = memo(() => {
     <HeaderLayout>
       <Box h="100%" className="bgMain">
         <p>Dashboardページです</p>
-        <Text size="xl" color="#FFAA00">mealoor</Text>
+        <BodyIconButton onClick={() => {}} />
       </Box>
     </HeaderLayout>
   );

@@ -13,6 +13,7 @@ export const noButtonColor = "#F5F5F4";
 
 export const appAccountBgColor = "#2A4365";
 export const appAccountBorderColor = "#C4F1F9";
+export const appBodyBgColor = "#51BC37";
 
 const systemHeaderHeight = "48px";
 const systemMainHeight = `calc(100% - ${systemHeaderHeight})`;
@@ -78,6 +79,10 @@ export const systemTheme = extendTheme({
       "button.no": {
         backgroundColor: noButtonColor,
         color: "black",
+      },
+      "button.body": {
+        backgroundColor: appBodyBgColor,
+        color: "white",
       },
       ".systemHeader": {
         backgroundColor: mainColor,
