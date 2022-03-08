@@ -9,6 +9,7 @@ import {
 
 type Props = {
   value: string | number;
+  type?: string;
   dataTestid?: string;
   leftAddon?: string;
   rightAddon?: string;
@@ -17,6 +18,7 @@ type Props = {
 export const ReadOnlyInput: VFC<Props> = memo((props) => {
   const {
     value,
+    type = "text",
     dataTestid = "",
     leftAddon = "",
     rightAddon = "",
@@ -28,6 +30,7 @@ export const ReadOnlyInput: VFC<Props> = memo((props) => {
         : (<InputLeftAddon>{leftAddon}</InputLeftAddon>)}
       <Input
         value={value}
+        type={type}
         className="readOnly"
         data-testid={dataTestid}
         variant="filled"

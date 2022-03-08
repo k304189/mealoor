@@ -68,6 +68,9 @@ export const systemTheme = extendTheme({
           opacity: "0.9",
         },
       },
+      "input[type='number']": {
+        textAlign: "right",
+      },
       "button.primary": {
         backgroundColor: primaryButtonColor,
         color: "white",

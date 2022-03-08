@@ -1,7 +1,7 @@
 import { memo, VFC } from "react";
 import { Box } from "@chakra-ui/react";
 
-import { BodyIconButton } from "../../molecules/button/BodyIconButton";
+import { BodyModalButton } from "../../organisms/pages/body/BodyModalButton";
 import { HeaderLayout } from "../../templates/HeaderLayout";
 
 export const DashboardPage: VFC = memo(() => {
@@ -9,7 +9,7 @@ export const DashboardPage: VFC = memo(() => {
     <HeaderLayout>
       <Box h="100%" className="bgMain">
         <p>Dashboardページです</p>
-        <BodyIconButton onClick={() => {}} />
+        <BodyModalButton />
       </Box>
     </HeaderLayout>
   );

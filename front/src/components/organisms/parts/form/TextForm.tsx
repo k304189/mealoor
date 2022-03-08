@@ -47,6 +47,7 @@ export const TextForm: VFC<Props> = memo((props) => {
   if (isReadOnly) {
     children = (
       <ReadOnlyInput
+        type={type}
         value={value}
         leftAddon={leftAddon}
         rightAddon={rightAddon}
