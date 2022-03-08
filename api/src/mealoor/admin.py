@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext as _
 from mealoor.models import Account
+from mealoor.models import Body
 
 class AccountAdmin(BaseUserAdmin):
     ordering = ['id']
@@ -15,4 +16,9 @@ class AccountAdmin(BaseUserAdmin):
         )
     )
 
+class BodyAdmin(admin.ModelAdmin):
+    list_display = ['account', 'date', 'weight', 'fat_rate']
+    fields = ['account', 'date', 'weight', 'fat_rate', 'fat_weight']
+
 admin.site.register(Account, AccountAdmin)
+admin.site.register(Body, BodyAdmin)
