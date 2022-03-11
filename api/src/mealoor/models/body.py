@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator
+from django.core.validators import MinValueValidator
 
 class Body(models.Model):
     account = models.ForeignKey(
@@ -50,5 +52,7 @@ class Body(models.Model):
         return self.account.username + ' ' + str(self.date)
 
     def save(self, *args, **kwargs):
+        if self.weight < 0.0 or self.fat_rate < 0.0:
+            raise ValidationError("A field must value bigger than 0")
         self.fat_weight = self.weight * (self.fat_rate / 100)
         super().save(*args, **kwargs)
