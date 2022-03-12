@@ -4,3 +4,7 @@ from mealoor.views.account import CreateTokenView
 from mealoor.views.account import DeleteTokenView
 from mealoor.views.account import ManageAccountView
 from mealoor.views.account import WithdrawAccountView
+from mealoor.views.body import ShowBodyView
+from mealoor.views.body import CreateBodyView
+from mealoor.views.body import UpdateBodyView
+from mealoor.views.body import DeleteBodyView
