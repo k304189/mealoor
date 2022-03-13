@@ -20,6 +20,7 @@ type Props = {
   isReadOnly?: boolean;
   isInvalid?: boolean;
   setPlaceholder?: boolean;
+  dataTestid?: string;
 };
 
 export const TextForm: VFC<Props> = memo((props) => {
@@ -39,6 +40,7 @@ export const TextForm: VFC<Props> = memo((props) => {
     isReadOnly = false,
     isInvalid = false,
     setPlaceholder = true,
+    dataTestid = "",
   } = props;
 
   const placeholder = setPlaceholder ? label : "";
@@ -51,6 +53,7 @@ export const TextForm: VFC<Props> = memo((props) => {
         value={value}
         leftAddon={leftAddon}
         rightAddon={rightAddon}
+        dataTestid={dataTestid}
       />
     );
   } else {
@@ -61,6 +64,7 @@ export const TextForm: VFC<Props> = memo((props) => {
         placeholder={placeholder}
         onChange={onChange}
         onBlur={onBlur}
+        data-testid={dataTestid}
       />
     );
   }

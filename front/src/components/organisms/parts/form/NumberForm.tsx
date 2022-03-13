@@ -22,6 +22,7 @@ type Props = {
   labelSize?: string;
   require?: "require" | "optional" | "";
   helperText?: string;
+  dataTestid?: string;
 };
 
 export const NumberForm: VFC<Props> = memo((props) => {
@@ -37,6 +38,7 @@ export const NumberForm: VFC<Props> = memo((props) => {
     labelSize = "md",
     require = "",
     helperText = "",
+    dataTestid = "",
   } = props;
 
   return (
@@ -58,7 +60,7 @@ export const NumberForm: VFC<Props> = memo((props) => {
           focusBorderColor={accentColor}
           variant="flushed"
         >
-          <NumberInputField type="number" />
+          <NumberInputField type="number" data-testid={dataTestid} />
         </NumberInput>
         { unit ? (<InputRightAddon>{unit}</InputRightAddon>) : (<Box />)}
       </InputGroup>

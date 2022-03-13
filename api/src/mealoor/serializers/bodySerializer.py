@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from mealoor.models.body import Body
-from .accountSerializer import AccountSerializer
 
 class BodySerializer(serializers.ModelSerializer):
     """Serializer for body object"""
