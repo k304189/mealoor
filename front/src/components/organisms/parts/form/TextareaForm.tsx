@@ -2,7 +2,7 @@ import { ChangeEvent, memo, VFC } from "react";
 import { Textarea } from "@chakra-ui/react";
 
 import { FormArea } from "../../../molecules/form/FormArea";
-import { baseColor } from "../../../../theme/systemTheme";
+import { accentColor } from "../../../../theme/systemTheme";
 
 type Props = {
   value: string;
@@ -61,7 +61,7 @@ export const TextareaForm: VFC<Props> = memo((props) => {
         placeholder={placeholder}
         onChange={onChange}
         onBlur={onBlur}
-        focusBorderColor={baseColor}
+        focusBorderColor={accentColor}
       />
     </FormArea>
   );

@@ -23,6 +23,7 @@ class ShowAccountView(generics.ListAPIView):
         return Account.objects.filter(id=user.id)
 
 class CreateAccountView(APIView):
+    permission_classes = (permissions.AllowAny,)
     def post(self, request):
         serializer = AccountSerializer(data=request.data)
         if serializer.is_valid():
@@ -44,6 +45,7 @@ class CreateTokenView(ObtainAuthToken):
     """Create a new auth token for account"""
     serializer_class = AuthTokenSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    permission_classes = (permissions.AllowAny,)
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request })

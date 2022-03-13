@@ -4,3 +4,7 @@ export const URL_SIGN_OUT = `${process.env.REACT_APP_API_V1_URL}/account/signout
 export const URL_ACCOUNT_GET = `${process.env.REACT_APP_API_V1_URL}/account/`;
 export const URL_ACCOUNT_UPDATE = `${process.env.REACT_APP_API_V1_URL}/account/update/`;
 export const URL_ACCOUNT_WITHDRAW = `${process.env.REACT_APP_API_V1_URL}/account/withdraw/`;
+export const URL_BODY_GET = `${process.env.REACT_APP_API_V1_URL}/body/`;
+export const URL_BODY_CREATE = `${process.env.REACT_APP_API_V1_URL}/body/create/`;
+export const URL_BODY_UPDATE = `${process.env.REACT_APP_API_V1_URL}/body/update/`;
+export const URL_BODY_DELETE = `${process.env.REACT_APP_API_V1_URL}/body/delete/`;

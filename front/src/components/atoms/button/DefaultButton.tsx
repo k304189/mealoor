@@ -1,8 +1,8 @@
 import { memo, ReactNode, VFC } from "react";
 import { Button, Tooltip } from "@chakra-ui/react";
 
-type Props = {
-  children: ReactNode;
+export type Props = {
+  children?: ReactNode;
   onClick: () => void;
   className?: string;
   disabled?: boolean;
