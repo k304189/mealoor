@@ -1,4 +1,12 @@
-import { ChangeEvent, Dispatch, SetStateAction, memo, VFC, useEffect } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  memo,
+  VFC,
+  useEffect,
+  useState,
+} from "react";
 import { Table, Tbody, Tfoot, Thead, Tr, Th, Td } from "@chakra-ui/react";
 
 import { DefaultTextInput } from "../../../atoms/form/DefaultTextInput";
@@ -15,6 +23,7 @@ type Props = {
 
 export const FoodCategoryTable: VFC<Props> = memo((props) => {
   const { foodCategories, setFoodCategories } = props;
+  const [categoryId, setCategoryId] = useState(0);
 
   const onChangeCategory = (e: ChangeEvent<HTMLSelectElement>, index: number) => {
     const tmpFoodCategories = [...foodCategories];
@@ -50,8 +59,17 @@ export const FoodCategoryTable: VFC<Props> = memo((props) => {
   };
 
   const addNewFoodCategory = () => {
-    setFoodCategories([...foodCategories, getNewFoodCategory(foodCategories.length + 1)]);
-    console.log(foodCategories);
+    setFoodCategories([...foodCategories, getNewFoodCategory(categoryId)]);
+    setCategoryId(categoryId + 1);
+  };
+
+  const deleteFoodCategory = (index: number) => {
+    if (foodCategories.length > 1) {
+      foodCategories.splice(index, 1);
+      setFoodCategories([...foodCategories]);
+    } else {
+      setFoodCategories([getNewFoodCategory(1)]);
+    }
   };
 
   useEffect(() => {
@@ -96,7 +114,14 @@ export const FoodCategoryTable: VFC<Props> = memo((props) => {
                   value={fc.unit}
                 />
               </Td>
-              <Td><CloseButton size="xs" aria-label="deleteCategory" /></Td>
+              <Td>
+                <CloseButton
+                  size="xs"
+                  aria-label="deleteCategory"
+                  onClick={() => { deleteFoodCategory(index); }}
+                  hoverText="カテゴリ削除"
+                />
+              </Td>
             </Tr>
           );
         })}
