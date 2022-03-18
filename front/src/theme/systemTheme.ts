@@ -135,7 +135,7 @@ export const systemTheme = extendTheme({
         paddingLeft: "12px",
         _hover: systemButtonHover,
       },
-      "input.readOnly,textarea.readOnly": {
+      "input.readOnly,textarea.readOnly, select.readOnly": {
         backgroundColor: readOnlyColor,
       },
       ".overlayDark": {

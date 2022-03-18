@@ -7,7 +7,15 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Table, Tbody, Tfoot, Thead, Tr, Th, Td } from "@chakra-ui/react";
+import {
+  Table,
+  Tbody,
+  Tfoot,
+  Thead,
+  Tr,
+  Th,
+  Td,
+} from "@chakra-ui/react";
 
 import { DefaultTextInput } from "../../../atoms/form/DefaultTextInput";
 import { FoodCategorySelect } from "../../../molecules/form/FoodCategorySelect";
@@ -19,11 +27,20 @@ import { TFoodCategory } from "../../../../types/api/TFoodCategory";
 type Props = {
   foodCategories: Array<TFoodCategory>;
   setFoodCategories: Dispatch<SetStateAction<Array<TFoodCategory>>>;
+  allDisabled: boolean;
+  categoryDisabled: boolean;
 };
 
 export const FoodCategoryTable: VFC<Props> = memo((props) => {
-  const { foodCategories, setFoodCategories } = props;
+  const {
+    foodCategories,
+    setFoodCategories,
+    allDisabled,
+    categoryDisabled,
+  } = props;
   const [categoryId, setCategoryId] = useState(0);
+  const [categoryClassName, setCategoryClassName] = useState("");
+  const [commonClassName, setCommonClassName] = useState("");
 
   const onChangeCategory = (e: ChangeEvent<HTMLSelectElement>, index: number) => {
     const tmpFoodCategories = [...foodCategories];
@@ -68,7 +85,7 @@ export const FoodCategoryTable: VFC<Props> = memo((props) => {
       foodCategories.splice(index, 1);
       setFoodCategories([...foodCategories]);
     } else {
-      setFoodCategories([getNewFoodCategory(1)]);
+      setFoodCategories([getNewFoodCategory(categoryId)]);
     }
   };
 
@@ -77,6 +94,19 @@ export const FoodCategoryTable: VFC<Props> = memo((props) => {
       addNewFoodCategory();
     }
   }, []);
+
+  useEffect(() => {
+    let categoryClass = "";
+    let commonClass = "";
+    if (categoryDisabled && allDisabled) {
+      categoryClass = "readOnly";
+    }
+    if (allDisabled) {
+      commonClass = "readOnly";
+    }
+    setCategoryClassName(categoryClass);
+    setCommonClassName(commonClass);
+  }, [allDisabled, categoryDisabled]);
 
   return (
     <Table size="sm" w="100%">
@@ -94,32 +124,40 @@ export const FoodCategoryTable: VFC<Props> = memo((props) => {
             <Tr key={fc.id}>
               <Td>
                 <FoodCategorySelect
+                  className={categoryClassName}
                   size="xs"
                   onChange={(e) => { onChangeCategory(e, index); }}
                   value={fc.category}
+                  isDisabled={categoryDisabled && allDisabled}
                 />
               </Td>
               <Td>
                 <DefaultTextInput
+                  className={commonClassName}
                   size="xs"
                   type="number"
                   onChange={(e) => { onChangeAmount(e, index); }}
                   value={fc.amount}
+                  isDisabled={allDisabled}
                 />
               </Td>
               <Td>
                 <FoodUnitSelect
+                  className={commonClassName}
                   size="xs"
                   onChange={(e) => { onChangeUnit(e, index); }}
                   value={fc.unit}
+                  isDisabled={allDisabled}
                 />
               </Td>
               <Td>
                 <CloseButton
                   size="xs"
+                  className="transparent"
                   aria-label="deleteCategory"
                   onClick={() => { deleteFoodCategory(index); }}
                   hoverText="カテゴリ削除"
+                  disabled={allDisabled}
                 />
               </Td>
             </Tr>
@@ -134,6 +172,7 @@ export const FoodCategoryTable: VFC<Props> = memo((props) => {
               className="transparent"
               size="sm"
               onClick={addNewFoodCategory}
+              disabled={allDisabled}
             />
             カテゴリー追加
           </Td>
