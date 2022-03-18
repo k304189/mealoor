@@ -1,10 +1,11 @@
 import { ChangeEvent, Dispatch, SetStateAction, memo, VFC, useEffect } from "react";
-import { Table, Tbody, Thead, Tr, Th, Td } from "@chakra-ui/react";
+import { Table, Tbody, Tfoot, Thead, Tr, Th, Td } from "@chakra-ui/react";
 
 import { DefaultTextInput } from "../../../atoms/form/DefaultTextInput";
 import { FoodCategorySelect } from "../../../molecules/form/FoodCategorySelect";
 import { FoodUnitSelect } from "../../../molecules/form/FoodUnitSelect";
 import { CloseButton } from "../../../molecules/button/CloseButton";
+import { AddButton } from "../../../molecules/button/AddButton";
 import { TFoodCategory } from "../../../../types/api/TFoodCategory";
 
 type Props = {
@@ -13,7 +14,6 @@ type Props = {
 };
 
 export const FoodCategoryTable: VFC<Props> = memo((props) => {
-  let trIndex = 0;
   const { foodCategories, setFoodCategories } = props;
 
   const onChangeCategory = (e: ChangeEvent<HTMLSelectElement>, index: number) => {
@@ -40,15 +40,23 @@ export const FoodCategoryTable: VFC<Props> = memo((props) => {
     setFoodCategories(tmpFoodCategories);
   };
 
+  const getNewFoodCategory = (id: number) => {
+    return {
+      id,
+      category: "",
+      amount: 0,
+      unit: "",
+    };
+  };
+
+  const addNewFoodCategory = () => {
+    setFoodCategories([...foodCategories, getNewFoodCategory(foodCategories.length + 1)]);
+    console.log(foodCategories);
+  };
+
   useEffect(() => {
     if (foodCategories.length <= 0) {
-      setFoodCategories([{
-        id: trIndex,
-        category: "",
-        amount: 0,
-        unit: "",
-      }]);
-      trIndex += 1;
+      addNewFoodCategory();
     }
   }, []);
 
@@ -93,6 +101,19 @@ export const FoodCategoryTable: VFC<Props> = memo((props) => {
           );
         })}
       </Tbody>
+      <Tfoot>
+        <Tr>
+          <Td alignItems="center" colSpan={4}>
+            <AddButton
+              aria-label="addCategory"
+              className="transparent"
+              size="sm"
+              onClick={addNewFoodCategory}
+            />
+            カテゴリー追加
+          </Td>
+        </Tr>
+      </Tfoot>
     </Table>
   );
 });
