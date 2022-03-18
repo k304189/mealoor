@@ -62,7 +62,7 @@ export const Header: VFC = memo(() => {
       <Flex h="100%">
         <Center ml={1}>
           <HamburgerButton
-            bg="transparent"
+            className="transparent"
             aria-label="メニューボタン"
             onClick={menuOnOpen}
           />
