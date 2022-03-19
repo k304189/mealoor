@@ -21,7 +21,7 @@ export const ToggleViewButton: VFC<Props> = memo((props) => {
 
   return (
     <DefaultIconButton
-      bg="transparent"
+      className="transparent"
       onClick={toggleIsView}
       aria-label={ariaLabel}
       data-testid={dataTestid}
