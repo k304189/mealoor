@@ -93,7 +93,7 @@ export const FoodCategoryTable: VFC<Props> = memo((props) => {
     if (foodCategories.length <= 0) {
       addNewFoodCategory();
     }
-  }, []);
+  }, [foodCategories]);
 
   useEffect(() => {
     let categoryClass = "";

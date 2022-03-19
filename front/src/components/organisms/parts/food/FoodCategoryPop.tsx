@@ -12,9 +12,13 @@ import {
 } from "@chakra-ui/react";
 
 import { FoodCategoryTable } from "./FoodCategoryTable";
+import { useFoodCategoryValidate } from "../../../../hooks/food/useFoodCategoryValidate";
 import { TFoodCategory } from "../../../../types/api/TFoodCategory";
 
 type Props = {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
   foodCategories: Array<TFoodCategory>;
   setFoodCategories: Dispatch<SetStateAction<Array<TFoodCategory>>>;
   foodType: "食材" | "料理";
@@ -22,10 +26,25 @@ type Props = {
 };
 
 export const FoodCategoryPop: VFC<Props> = memo((props) => {
-  const { foodCategories, setFoodCategories, foodType, eatType = "" } = props;
+  const { isOpen, onOpen, onClose, foodCategories, setFoodCategories, foodType, eatType = "" } = props;
+  const { validateFoodCategory } = useFoodCategoryValidate();
   const [allDisabled, setAllDisabled] = useState(false);
   const [categoryDisabled, setCategoryDisabled] = useState(false);
   const [editMessage, setEditMessage] = useState("");
+  const [categoryErrorText, setcategoryErrorText] = useState("");
+
+  const onClosePop = () => {
+    let outputMsg = "";
+    const existInvalid = foodCategories.some((fc) => {
+      const { invalid, errorText } = validateFoodCategory(fc, allDisabled, categoryDisabled);
+      outputMsg = errorText;
+      return invalid;
+    });
+    setcategoryErrorText(outputMsg);
+    if (!existInvalid) {
+      onClose();
+    }
+  };
 
   useEffect(() => {
     const adflg = !(foodType === "料理" && ["外食", "中食"].includes(eatType));
@@ -46,7 +65,7 @@ export const FoodCategoryPop: VFC<Props> = memo((props) => {
   }, [foodType, eatType]);
 
   return (
-    <Popover>
+    <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClosePop}>
       <PopoverTrigger>
         <Button variant="link">ポップ</Button>
       </PopoverTrigger>
@@ -55,6 +74,7 @@ export const FoodCategoryPop: VFC<Props> = memo((props) => {
         <PopoverCloseButton />
         <PopoverHeader>カテゴリー選択</PopoverHeader>
         <PopoverBody>
+          <Text fontSize="sm" color="red">{categoryErrorText}</Text>
           <Text fontSize="xs">{editMessage}</Text>
           <FoodCategoryTable
             foodCategories={foodCategories}
