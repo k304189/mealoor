@@ -1,4 +1,4 @@
-export type TSelectOption = {
+export type TFormAttribute = {
   value: string;
   displayValue?: string;
 };

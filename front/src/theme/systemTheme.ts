@@ -8,6 +8,7 @@ export const systemComponentColor = "blue.800";
 export const readOnlyColor = "#A0AEC0";
 
 export const primaryButtonColor = "#FF6D62";
+export const secondaryButtonColor = "#D07D59";
 export const withdrawButtonColor = "#829CBA";
 export const noButtonColor = "#F5F5F4";
 
@@ -89,6 +90,17 @@ export const systemTheme = extendTheme({
       "button.body": {
         backgroundColor: appBodyBgColor,
         color: "white",
+      },
+      "div.radioButton": {
+        borderColor: secondaryButtonColor,
+        color: secondaryButtonColor,
+        _hover: {
+          cursor: "pointer",
+        },
+        _checked: {
+          bg: secondaryButtonColor,
+          color: "white",
+        },
       },
       ".systemHeader": {
         backgroundColor: mainColor,
