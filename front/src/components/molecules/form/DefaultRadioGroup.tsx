@@ -12,12 +12,15 @@ import { TFormAttribute } from "../../../types/components/TFormAttribute";
 
 type RadioButtonProps = RadioProps & {
   size?: "lg" | "md" | "sm" | "xs";
+  isDisabled?: boolean;
+  className?: string;
 };
 
 const RadioButton: VFC<RadioButtonProps> = memo((props) => {
-  const { size = "md" } = props;
+  const { size = "md", className = "defaultRadioButton" } = props;
   const radioProps = { ...props };
   delete radioProps.size;
+  delete radioProps.className;
   const { getInputProps, getCheckboxProps } = useRadio(radioProps);
 
   const input = getInputProps();
@@ -28,7 +31,7 @@ const RadioButton: VFC<RadioButtonProps> = memo((props) => {
       <input {...input} />
       <Button
         as="div"
-        className="radioButton"
+        className={className}
         size={size}
         variant="outline"
         {...checkbox}
@@ -45,10 +48,18 @@ type Props = {
   value: string;
   onChange: (nextValue: string) => void;
   size?: "lg" | "md" | "sm" | "xs";
+  className?: string;
 };
 
 export const DefaultRadioGroup: VFC<Props> = memo((props) => {
-  const { items, groupName, value, onChange, size = "md" } = props;
+  const {
+    items,
+    groupName,
+    value,
+    onChange,
+    size = "md",
+    className = "defaultRadioButton",
+  } = props;
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: groupName,
     defaultValue: value,
@@ -63,6 +74,8 @@ export const DefaultRadioGroup: VFC<Props> = memo((props) => {
           <RadioButton
             key={item.value}
             size={size}
+            isDisabled={item.disabled || false}
+            className={className}
             {...getRadioProps({ value: item.value })}
           >
             {item.displayValue || item.value}

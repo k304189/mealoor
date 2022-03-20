@@ -91,7 +91,7 @@ export const systemTheme = extendTheme({
         backgroundColor: appBodyBgColor,
         color: "white",
       },
-      "div.radioButton": {
+      "div.defaultRadioButton": {
         borderColor: secondaryButtonColor,
         color: secondaryButtonColor,
         _hover: {

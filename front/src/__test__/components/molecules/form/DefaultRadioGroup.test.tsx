@@ -29,6 +29,7 @@ describe("Rendering DefaultRadioGroup", () => {
       const radioButtonElement = screen.queryByText(value) as HTMLInputElement;
 
       expect(radioButtonElement).not.toBeNull();
+      expect(radioButtonElement.getAttribute("class")).toMatch(/defaultRadioButton/);
       useEvent.click(radioButtonElement);
     }
     expect(onChangeFunction).toHaveBeenCalledTimes(items.length - 1);
@@ -58,5 +59,51 @@ describe("Rendering DefaultRadioGroup", () => {
       expect(valueElement).toBeNull();
       expect(displayValueElement).not.toBeNull();
     }
+  });
+
+  it("Nomal Render when set className", () => {
+    const items = itemValues.map((iv) => {
+      return { value: iv }
+    });
+    render(
+      <DefaultRadioGroup
+        items={items}
+        groupName="testName"
+        value=""
+        onChange={onChangeFunction}
+        className="testClassName"
+      />
+    );
+
+    for (let i = 0; i < items.length; i++) {
+      const value = items[i].value;
+
+      const radioButtonElement = screen.queryByText(value) as HTMLInputElement;
+      expect(radioButtonElement.getAttribute("class")).toMatch(/testClassName/);
+      expect(radioButtonElement.getAttribute("class")).not.toMatch(/defaultRadioButton/);
+    }
+  });
+
+  it("Nomal Render when set items disabled", () => {
+    const items = [
+      { value: "value1" },
+      { value: "value2", disabled: true },
+    ];
+    render(
+      <DefaultRadioGroup
+        items={items}
+        groupName="testName"
+        value=""
+        onChange={onChangeFunction}
+      />
+    );
+
+    for (let i = 0; i < items.length; i++) {
+      const value = items[i].value;
+
+      const radioButtonElement = screen.queryByText(value) as HTMLInputElement;
+      useEvent.click(radioButtonElement)
+    }
+    expect(onChangeFunction).toHaveBeenCalledTimes(1);
   });
 });
