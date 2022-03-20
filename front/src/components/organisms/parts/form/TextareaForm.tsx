@@ -17,6 +17,7 @@ type Props = {
   isReadOnly?: boolean;
   isInvalid?: boolean;
   setPlaceholder?: boolean;
+  size?: "xs" | "sm" | "md" | "lg";
 };
 
 export const TextareaForm: VFC<Props> = memo((props) => {
@@ -33,6 +34,7 @@ export const TextareaForm: VFC<Props> = memo((props) => {
     isReadOnly = false,
     isInvalid = false,
     setPlaceholder = true,
+    size = "md",
   } = props;
 
   const placeholder = setPlaceholder ? label : "";
@@ -62,6 +64,7 @@ export const TextareaForm: VFC<Props> = memo((props) => {
         onChange={onChange}
         onBlur={onBlur}
         focusBorderColor={accentColor}
+        size={size}
       />
     </FormArea>
   );

@@ -47,6 +47,7 @@ type Props = {
   groupName: string;
   value: string;
   onChange: (nextValue: string) => void;
+  isGroupDisabled?: boolean;
   size?: "lg" | "md" | "sm" | "xs";
   className?: string;
 };
@@ -57,6 +58,7 @@ export const DefaultRadioGroup: VFC<Props> = memo((props) => {
     groupName,
     value,
     onChange,
+    isGroupDisabled = false,
     size = "md",
     className = "defaultRadioButton",
   } = props;
@@ -74,7 +76,7 @@ export const DefaultRadioGroup: VFC<Props> = memo((props) => {
           <RadioButton
             key={item.value}
             size={size}
-            isDisabled={item.disabled || false}
+            isDisabled={isGroupDisabled || (item.disabled || false)}
             className={className}
             {...getRadioProps({ value: item.value })}
           >

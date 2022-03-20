@@ -106,4 +106,28 @@ describe("Rendering DefaultRadioGroup", () => {
     }
     expect(onChangeFunction).toHaveBeenCalledTimes(1);
   });
+
+  it("Nomal Render when isGroupDisabled is True", () => {
+    const items = itemValues.map((iv) => {
+      return { value: iv }
+    });
+    render(
+      <DefaultRadioGroup
+        items={items}
+        groupName="testName"
+        value={itemValues[0]}
+        onChange={onChangeFunction}
+        isGroupDisabled
+      />
+    );
+
+    for (let i = 0; i < itemValues.length; i++) {
+      const value = itemValues[i];
+      const checked = i === 0;
+      const radioButtonElement = screen.queryByText(value) as HTMLInputElement;
+
+      useEvent.click(radioButtonElement);
+    }
+    expect(onChangeFunction).toHaveBeenCalledTimes(0);
+  });
 });
