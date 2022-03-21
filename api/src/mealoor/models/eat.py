@@ -96,3 +96,9 @@ class Eat(models.Model):
         verbose_name='データ更新日',
         auto_now=True,
     )
+
+    class Meta:
+        app_label = 'mealoor'
+
+    def __str__(self):
+        return self.account.username + ' ' + str(self.date) + ' ' + self.eat_timing + ' ' + self.name
