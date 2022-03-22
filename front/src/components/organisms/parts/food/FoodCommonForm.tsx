@@ -16,6 +16,7 @@ import { TFoodCategory } from "../../../../types/api/TFoodCategory";
 import { TFormAttribute } from "../../../../types/components/TFormAttribute";
 import { TFoodCommon } from "../../../../types/api/TFoodCommon";
 import { TEat } from "../../../../types/api/TEat";
+import { useEatApi } from "../../../../hooks/food/useEatApi";
 import { useFoodValidate } from "../../../../hooks/food/useFoodValidate";
 
 type Props = {
@@ -75,6 +76,8 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
     validateShop,
     validateNote,
   } = useFoodValidate();
+  const { createEat } = useEatApi();
+
   const eatTypeArrayBase = [
     { value: "外食" },
     { value: "中食" },
@@ -204,7 +207,7 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
     const checkResult = isInvalidAllValue();
     if (!checkResult) {
       if (model === "eat") {
-        console.log(getEatJson());
+        createEat(getEatJson());
       }
     }
   };
