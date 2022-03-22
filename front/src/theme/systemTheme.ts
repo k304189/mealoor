@@ -17,6 +17,7 @@ export const defaultCheckboxButtonColor = "#738CF0";
 export const appAccountBgColor = "#2A4365";
 export const appAccountBorderColor = "#C4F1F9";
 export const appBodyBgColor = "#51BC37";
+export const appEatBgColor = "#EE7800";
 
 const systemHeaderHeight = "48px";
 const systemMainHeight = `calc(100% - ${systemHeaderHeight})`;
@@ -91,6 +92,10 @@ export const systemTheme = extendTheme({
       },
       "button.body": {
         backgroundColor: appBodyBgColor,
+        color: "white",
+      },
+      "button.eat": {
+        backgroundColor: appEatBgColor,
         color: "white",
       },
       "div.defaultRadioButton": {

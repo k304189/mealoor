@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/no-unused-vars: off */
 import { ChangeEvent, memo, ReactNode, VFC, useEffect, useState } from "react";
 import { Box, HStack, VStack, useDisclosure } from "@chakra-ui/react";
 
@@ -18,15 +17,19 @@ import { TFormAttribute } from "../../../../types/components/TFormAttribute";
 
 type Props = {
   model: string;
+  updateMode: "create" | "update";
+  createFunction: () => Promise<void>;
+  updateFunction: () => Promise<void>;
 };
 
 export const FoodCommonForm: VFC<Props> = memo((props) => {
-  const { model } = props;
+  const { model, updateMode, createFunction, updateFunction } = props;
   const [name, setName] = useState("");
   const [eatType, setEatType] = useState("");
   const [foodType, setFoodType] = useState("");
   const [categories, setCategories] = useState<Array<TFoodCategory>>([]);
   const [expirationDate, setExpirationDate] = useState("");
+  const [date, setDate] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [location, setLocation] = useState("");
   const [shop, setShop] = useState("");
@@ -59,11 +62,13 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
   const [foodTypeGroupDisabled, setFoodTypeGroupDisabled] = useState(false);
 
   const remain = 100;
-  const createFunction = async () => {};
-  const updateFunction = async () => {};
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
+  };
+
+  const onChangeDate = (e: ChangeEvent<HTMLInputElement>) => {
+    setDate(e.target.value);
   };
 
   const onChangeExpirationDate = (e: ChangeEvent<HTMLInputElement>) => {
@@ -123,14 +128,6 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
           />
         </FormArea>
       </Box>
-      <Box w="25%">
-        <TextForm
-          label="店"
-          require="optional"
-          value={shop}
-          onChange={onChangeShop}
-        />
-      </Box>
     </>
   );
 
@@ -153,19 +150,20 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
           />
         </FormArea>
       </Box>
-      <Box w="25%">
-        <TextForm
-          label="店"
-          require="optional"
-          value={shop}
-          onChange={onChangeShop}
-        />
-      </Box>
     </>
   );
 
   const eatForm = (
     <>
+      <Box w="15%">
+        <TextForm
+          label="食事日"
+          type="date"
+          require="require"
+          value={date}
+          onChange={onChangeDate}
+        />
+      </Box>
       <Box w="30%">
         <FormArea
           label="食事タイミング"
@@ -174,26 +172,7 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
           <EatTimingRadio eatTiming={eatTiming} onChange={setEatTiming} />
         </FormArea>
       </Box>
-      <Box w="25%">
-        <TextForm
-          label="店"
-          require="optional"
-          value={shop}
-          onChange={onChangeShop}
-        />
-      </Box>
     </>
-  );
-
-  const mealForm = (
-    <Box w="25%">
-      <TextForm
-        label="店"
-        require="optional"
-        value={shop}
-        onChange={onChangeShop}
-      />
-    </Box>
   );
 
   useEffect(() => {
@@ -239,8 +218,6 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
       fa = eatForm;
     } else if (model === "food") {
       fa = foodForm;
-    } else if (model === "meal") {
-      fa = mealForm;
     } else {
       fa = (<Box />);
     }
@@ -251,7 +228,7 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
     <ModelFormFrame
       createFunction={createFunction}
       updateFunction={updateFunction}
-      updateMode="create"
+      updateMode={updateMode}
     >
       <VStack spacing={2}>
         <HStack w="100%">
@@ -316,6 +293,14 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
         </HStack>
         <HStack w="100%" gap={5}>
           {formArea}
+          <Box w="25%">
+            <TextForm
+              label="店"
+              require="optional"
+              value={shop}
+              onChange={onChangeShop}
+            />
+          </Box>
         </HStack>
         <HStack w="100%">
           <NumberForm
