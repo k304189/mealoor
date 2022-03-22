@@ -12,9 +12,6 @@ type Props = {
 export const EatModal: VFC<Props> = memo((props) => {
   const { isOpen, onClose, updateMode } = props;
 
-  const createFunction = async () => {};
-  const updateFunction = async () => {};
-
   return (
     <DefaultModal
       isOpen={isOpen}
@@ -24,8 +21,6 @@ export const EatModal: VFC<Props> = memo((props) => {
         <FoodCommonForm
           model="eat"
           updateMode={updateMode}
-          createFunction={createFunction}
-          updateFunction={updateFunction}
         />
       )}
       size="6xl"

@@ -128,27 +128,7 @@ describe("useFoodCategoryValidate Test", () => {
     // errorTextが空文字である
     expect(validateResult.errorText).toBe("");
   });
-
-  it("validateFoodCategory unit error when allDisabled is False and categoryDisabled is True ", () => {
-    act(() => {
-      validateResult = result.current.validateFoodCategory(ngUnitTestData, false, true);
-    });
-    // invalidがTrueである
-    expect(validateResult.invalid).toBeTruthy();
-    // errorTextが空文字である
-    expect(validateResult.errorText).toBe("単位が選択されていないデータが存在します");
-  });
-
-  it("validateFoodCategory unit error when allDisabled is False and categoryDisabled is False ", () => {
-    act(() => {
-      validateResult = result.current.validateFoodCategory(ngUnitTestData, false, false);
-    });
-    // invalidがTrueである
-    expect(validateResult.invalid).toBeTruthy();
-    // errorTextが空文字である
-    expect(validateResult.errorText).toBe("単位が選択されていないデータが存在します");
-  });
-
+  
   it("validateFoodCategory category and unit error when allDisabled is True and categoryDisabled is True ", () => {
     act(() => {
       validateResult = result.current.validateFoodCategory(ngCategoryAndUnitTestData, true, true);

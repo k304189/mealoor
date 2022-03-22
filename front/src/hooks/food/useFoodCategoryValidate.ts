@@ -16,10 +16,6 @@ export const useFoodCategoryValidate = (): T => {
     return (!category || category === "");
   };
 
-  const isEmptyUnit = (unit: string) => {
-    return (!unit || unit === "");
-  };
-
   const validateFoodCategory = useCallback((
     foodCategory: TFoodCategory,
     allDisabled: boolean,
@@ -30,10 +26,6 @@ export const useFoodCategoryValidate = (): T => {
     if (!(categoryDisabled && allDisabled)) { // カテゴリーが選択可能の場合
       invalid = isEmptyCategory(foodCategory.category);
       errorText = invalid ? "カテゴリーが選択されていないデータが存在します" : "";
-    }
-    if (!(invalid || allDisabled)) { // 全項目が選択可能の場合
-      invalid = isEmptyUnit(foodCategory.unit);
-      errorText = invalid ? "単位が選択されていないデータが存在します" : "";
     }
     return { invalid, errorText };
   }, []);
