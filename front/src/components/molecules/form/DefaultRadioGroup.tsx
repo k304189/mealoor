@@ -64,7 +64,7 @@ export const DefaultRadioGroup: VFC<Props> = memo((props) => {
   } = props;
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: groupName,
-    defaultValue: value,
+    value,
     onChange,
   });
   const group = getRootProps();

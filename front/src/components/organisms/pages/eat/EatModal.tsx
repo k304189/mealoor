@@ -1,16 +1,17 @@
 import { memo, VFC } from "react";
 
-import { FoodCommonForm } from "../../parts/food/FoodCommonForm";
+import { EatForm } from "./EatForm";
 import { DefaultModal } from "../../../molecules/layout/DefaultModal";
+import { TEat } from "../../../../types/api/TEat";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  updateMode: "create" | "update";
+  eat?: TEat | null;
 };
 
 export const EatModal: VFC<Props> = memo((props) => {
-  const { isOpen, onClose, updateMode } = props;
+  const { isOpen, onClose, eat = null } = props;
 
   return (
     <DefaultModal
@@ -18,9 +19,8 @@ export const EatModal: VFC<Props> = memo((props) => {
       onClose={onClose}
       modalHeader="食事編集"
       modalBody={(
-        <FoodCommonForm
-          model="eat"
-          updateMode={updateMode}
+        <EatForm
+          eat={eat}
         />
       )}
       size="6xl"

@@ -12,7 +12,6 @@ export const EatModalButton: VFC = memo(() => {
       <EatModal
         isOpen={isOpen}
         onClose={onClose}
-        updateMode="create"
       />
     </>
   );

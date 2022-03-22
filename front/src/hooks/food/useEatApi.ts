@@ -3,20 +3,55 @@ import axios from "axios";
 
 import { useRequestHeader } from "../common/auth/useRequestHeader";
 import { TEat } from "../../types/api/TEat";
-import { URL_EAT_CREATE } from "../../constants/urls";
+import {
+  URL_EAT_LIST,
+  URL_EAT_CREATE,
+  URL_EAT_UPDATE,
+  URL_EAT_DELETE,
+} from "../../constants/urls";
 
 type T = {
-  createEat: (eat: TEat) => Promise<number>;
+  getDateEats: (date: string) => Promise<Array<TEat>>;
+  createEat: (eat: TEat) => Promise<TEat>;
+  updateEat: (eat: TEat) => Promise<TEat>;
+  deleteEat: (deleteId: number) => Promise<number>;
 };
 
 export const useEatApi = (): T => {
   const { getRequestHeader } = useRequestHeader();
-  const createEat = useCallback(async (eat: TEat) => {
+
+  const getDateEats = useCallback(async (date: string) => {
     const headers = getRequestHeader();
-    const response = await axios.post(URL_EAT_CREATE, eat, { headers });
+    const url = `${URL_EAT_LIST}${date}`;
+    const response = await axios.get(url, { headers });
+
+    return response.data;
+  }, []);
+
+  const createEat = useCallback(async (createJson: TEat) => {
+    const headers = getRequestHeader();
+    const response = await axios.post(URL_EAT_CREATE, createJson, { headers });
+
+    return response.data;
+  }, []);
+
+  const updateEat = useCallback(async (updateJson: TEat) => {
+    const headers = getRequestHeader();
+    const url = `${URL_EAT_UPDATE}${updateJson.id}/`;
+
+    const response = await axios.patch(url, updateJson, { headers });
+
+    return response.data;
+  }, []);
+
+  const deleteEat = useCallback(async (deleteId: number) => {
+    const headers = getRequestHeader();
+    const url = `${URL_EAT_DELETE}${deleteId}/`;
+
+    const response = await axios.delete(url, { headers });
 
     return response.status;
   }, []);
 
-  return { createEat };
+  return { getDateEats, createEat, updateEat, deleteEat };
 };

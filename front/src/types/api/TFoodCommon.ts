@@ -1,4 +1,5 @@
 export type TFoodCommon = {
+  id: number;
   name: string;
   eat_type: string;
   food_type: string;
