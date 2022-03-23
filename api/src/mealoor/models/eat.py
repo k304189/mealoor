@@ -8,7 +8,7 @@ class Eat(models.Model):
     account = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='account',
+        related_name='eats',
         verbose_name='アカウント',
     )
     name = models.CharField(
