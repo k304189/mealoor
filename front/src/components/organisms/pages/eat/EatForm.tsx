@@ -176,6 +176,7 @@ export const EatForm: VFC<Props> = memo((props) => {
       setName(eat.name);
       setEatType(eat.eat_type);
       setFoodType(eat.food_type);
+      setCategories(eat.categories);
       setDate(eat.date);
       setEatTiming(eat.eat_timing);
       setShop(eat.shop);

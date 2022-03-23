@@ -4,6 +4,7 @@ from mealoor.models.eatCategory import EatCategory
 
 class EatCategorySerializer(serializers.ModelSerializer):
     """Serializer for EatCategory object"""
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = EatCategory
