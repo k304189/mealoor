@@ -1,8 +1,11 @@
+import { TFoodCategory } from "./TFoodCategory";
+
 export type TFoodCommon = {
   id: number;
   name: string;
   eat_type: string;
   food_type: string;
+  categories: Array<TFoodCategory>;
   shop: string;
   price: number;
   kcal: number;

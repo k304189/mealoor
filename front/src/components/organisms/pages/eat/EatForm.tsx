@@ -19,7 +19,7 @@ export const EatForm: VFC<Props> = memo((props) => {
   const [name, setName] = useState("");
   const [eatType, setEatType] = useState("");
   const [foodType, setFoodType] = useState("");
-  const [foodCategories, setFoodCategories] = useState<Array<TFoodCategory>>([]);
+  const [categories, setCategories] = useState<Array<TFoodCategory>>([]);
   const [shop, setShop] = useState("");
   const [price, setPrice] = useState(0);
   const [kcal, setKcal] = useState(0);
@@ -126,6 +126,7 @@ export const EatForm: VFC<Props> = memo((props) => {
       name,
       eat_type: eatType,
       food_type: foodType,
+      categories,
       shop,
       price,
       kcal,
@@ -237,8 +238,8 @@ export const EatForm: VFC<Props> = memo((props) => {
       setCarbo={setCarbo}
       discounted={discounted}
       setDiscounted={setDiscounted}
-      foodCategories={foodCategories}
-      setFoodCategories={setFoodCategories}
+      foodCategories={categories}
+      setFoodCategories={setCategories}
     >
       <>
         <Box w="20%">

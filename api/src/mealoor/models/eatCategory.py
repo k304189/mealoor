@@ -37,4 +37,4 @@ class EatCategory(models.Model):
         verbose_name_plural = 'EatCategories'
 
     def __str__(self):
-        return category
+        return self.category
