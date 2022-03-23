@@ -41,6 +41,7 @@ class Body(models.Model):
 
     class Meta:
         app_label = 'mealoor'
+        verbose_name_plural = 'Bodies'
         constraints = [
             models.UniqueConstraint(
                 fields=['account', 'date'],

@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 from mealoor.models import Account
 from mealoor.models import Body
 from mealoor.models import Eat
+from mealoor.models import EatCategory
 
 class AccountAdmin(BaseUserAdmin):
     ordering = ['id']
@@ -42,6 +43,11 @@ class EatAdmin(admin.ModelAdmin):
         'note',
     ]
 
+class EatCategoryAdmin(admin.ModelAdmin):
+    list_display = ['eat', 'category', 'amount', 'unit']
+    fields = ['eat', 'category', 'amount', 'unit']
+
 admin.site.register(Account, AccountAdmin)
 admin.site.register(Body, BodyAdmin)
 admin.site.register(Eat, EatAdmin)
+admin.site.register(EatCategory, EatCategoryAdmin)
