@@ -159,39 +159,37 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
   };
 
   useEffect(() => {
-    if (eatType === "自炊") {
-      if (foodType === "料理") {
-        setFoodTypeGroupDisabled(true);
-      } else {
-        setFoodTypeArray(foodTypeArrayBase.map((ft) => {
-          return { value: ft.value, disabled: ["料理"].includes(ft.value) };
-        }));
-      }
-    } else {
-      setFoodTypeArray(foodTypeArrayBase);
-    }
-    if (foodType === "料理") {
-      if (eatType === "自炊") {
-        setEatTypeGroupDisabled(true);
-      } else {
-        setEatTypeArray(eatTypeArrayBase.map((et) => {
-          return { value: et.value, disabled: ["自炊"].includes(et.value) };
-        }));
-      }
-    } else {
-      setEatTypeArray(eatTypeArrayBase);
-    }
-  }, [eatType, foodType]);
+    const radioGroupDisabled = eatType === "自炊" && foodType === "料理";
+    setEatTypeGroupDisabled(radioGroupDisabled);
+    setFoodTypeGroupDisabled(radioGroupDisabled);
 
-  useEffect(() => {
-    if (foodCategories.length >= 2) {
-      setFoodTypeArray(foodTypeArray.map((ft) => {
-        return { value: ft.value, disabled: ["食材"].includes(ft.value) };
-      }));
-    } else {
-      setFoodTypeArray(foodTypeArrayBase);
-    }
-  }, [foodCategories]);
+    const tmpEatTypeArray: Array<TFormAttribute> = eatTypeArrayBase.map((et) => {
+      let disabled = false;
+      if (et.value === "自炊") {
+        disabled = foodType === "料理";
+      }
+      return {
+        value: et.value,
+        disabled,
+      };
+    });
+
+    const tmpFoodTypeArray: Array<TFormAttribute> = foodTypeArrayBase.map((ft) => {
+      let disabled = false;
+      if (ft.value === "料理") {
+        disabled = eatType === "自炊";
+      } else if (ft.value === "食材") {
+        disabled = foodCategories.length > 1;
+      }
+      return {
+        value: ft.value,
+        disabled,
+      };
+    });
+
+    setEatTypeArray(tmpEatTypeArray);
+    setFoodTypeArray(tmpFoodTypeArray);
+  }, [eatType, foodType, foodCategories]);
 
   return (
     <ModelFormFrame
