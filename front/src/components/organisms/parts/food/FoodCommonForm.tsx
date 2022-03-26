@@ -64,8 +64,8 @@ type Props = {
   setLipid: Dispatch<SetStateAction<number>>;
   carbo: number;
   setCarbo: Dispatch<SetStateAction<number>>;
-  discounted: boolean;
-  setDiscounted: Dispatch<SetStateAction<boolean>>;
+  discounted?: boolean;
+  setDiscounted?: Dispatch<SetStateAction<boolean>> | (() => void);
   foodCategories: Array<TFoodCategory>;
   setFoodCategories: Dispatch<SetStateAction<Array<TFoodCategory>>>;
   invalidFoodCategories: boolean;
@@ -116,8 +116,8 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
     setLipid,
     carbo,
     setCarbo,
-    discounted,
-    setDiscounted,
+    discounted = false,
+    setDiscounted = () => {},
     foodCategories,
     setFoodCategories,
     invalidFoodCategories,
@@ -215,11 +215,15 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
               errorText={errorTextName}
             />
           </Box>
-          <Box w="10%" h="100%">
-            <CheckboxButton isChecked={discounted} onChange={onChangeDiscounted}>
-              割引品
-            </CheckboxButton>
-          </Box>
+          { "discounted" in props ? (
+            <Box w="10%" h="100%">
+              <CheckboxButton isChecked={discounted} onChange={onChangeDiscounted}>
+                割引品
+              </CheckboxButton>
+            </Box>
+          ) : (
+            <></>
+          )}
           <Box w="20%">
             <FormArea
               label="食事タイプ"

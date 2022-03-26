@@ -28,7 +28,6 @@ export const FavoriteEatForm: VFC<Props> = memo((props) => {
   const [lipid, setLipid] = useState(0);
   const [carbo, setCarbo] = useState(0);
   const [note, setNote] = useState("");
-  const [discounted, setDiscounted] = useState(false);
 
   const [registeredName, setRegisteredName] = useState("");
   const [amountNote, setAmountNote] = useState("");
@@ -178,7 +177,6 @@ export const FavoriteEatForm: VFC<Props> = memo((props) => {
       setProtein(favoriteEat.protein);
       setLipid(favoriteEat.lipid);
       setCarbo(favoriteEat.carbo);
-      setDiscounted(favoriteEat.discounted);
       setNote(favoriteEat.note);
 
       setUpdateMode("update");
@@ -228,8 +226,6 @@ export const FavoriteEatForm: VFC<Props> = memo((props) => {
       setLipid={setLipid}
       carbo={carbo}
       setCarbo={setCarbo}
-      discounted={discounted}
-      setDiscounted={setDiscounted}
       foodCategories={categories}
       setFoodCategories={setCategories}
       invalidFoodCategories={invalidCategories}

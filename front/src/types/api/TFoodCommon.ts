@@ -14,6 +14,5 @@ export type TFoodCommon = {
   protein: number;
   lipid: number;
   carbo: number;
-  discounted: boolean;
   note: string;
 };
