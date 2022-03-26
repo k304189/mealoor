@@ -68,6 +68,8 @@ type Props = {
   setDiscounted: Dispatch<SetStateAction<boolean>>;
   foodCategories: Array<TFoodCategory>;
   setFoodCategories: Dispatch<SetStateAction<Array<TFoodCategory>>>;
+  invalidFoodCategories: boolean;
+  errorTextFoodCategories: string;
   children?: ReactNode;
 };
 
@@ -118,6 +120,8 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
     setDiscounted,
     foodCategories,
     setFoodCategories,
+    invalidFoodCategories,
+    errorTextFoodCategories,
     children = (<></>),
   } = props;
 
@@ -253,6 +257,8 @@ export const FoodCommonForm: VFC<Props> = memo((props) => {
             <FormArea
               label="カテゴリー"
               require="require"
+              isInvalid={invalidFoodCategories}
+              errorText={errorTextFoodCategories}
             >
               <FoodCategoryPop
                 isOpen={isOpen}

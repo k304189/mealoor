@@ -6,7 +6,9 @@ import { EatTimingRadio } from "../../parts/food/EatTimingRadio";
 import { TextForm } from "../../parts/form/TextForm";
 import { FormArea } from "../../../molecules/form/FormArea";
 import { useFoodValidate } from "../../../../hooks/food/useFoodValidate";
+import { useFoodCategoryValidate } from "../../../../hooks/food/useFoodCategoryValidate";
 import { useEatApi } from "../../../../hooks/food/useEatApi";
+import { useMessage } from "../../../../hooks/common/layout/useMessage";
 import { TFoodCategory } from "../../../../types/api/TFoodCategory";
 import { TEat } from "../../../../types/api/TEat";
 
@@ -37,6 +39,7 @@ export const EatForm: VFC<Props> = memo((props) => {
   const [invalidName, setInvalidName] = useState(false);
   const [invalidEatType, setInvalidEatType] = useState(false);
   const [invalidFoodType, setInvalidFoodType] = useState(false);
+  const [invalidCategories, setInvalidCategories] = useState(false);
   const [invalidShop, setInvalidShop] = useState(false);
   const [invalidNote, setInvalidNote] = useState(false);
   const [invalidDate, setInvalidDate] = useState(false);
@@ -45,6 +48,7 @@ export const EatForm: VFC<Props> = memo((props) => {
   const [errorTextName, setErrorTextName] = useState("");
   const [errorTextEatType, setErrorTextEatType] = useState("");
   const [errorTextFoodType, setErrorTextFoodType] = useState("");
+  const [errorTextCategories, setErrorTextCategories] = useState("");
   const [errorTextShop, setErrorTextShop] = useState("");
   const [errorTextNote, setErrorTextNote] = useState("");
   const [errorTextDate, setErrorTextDate] = useState("");
@@ -63,7 +67,9 @@ export const EatForm: VFC<Props> = memo((props) => {
     validateShop,
     validateNote,
   } = useFoodValidate();
+  const { validateSelectedFoodCategories } = useFoodCategoryValidate();
   const { createEat, updateEat } = useEatApi();
+  const { errorToast } = useMessage();
 
   const onChangeDate = (e: ChangeEvent<HTMLInputElement>) => {
     setDate(e.target.value);
@@ -93,17 +99,21 @@ export const EatForm: VFC<Props> = memo((props) => {
     setErrorTextNote(errorText);
   };
 
-  const isInvalidAllValue = (): boolean => {
+  const isInvalidAllValue = () => {
     const { invalid: nameInv } = validateName(name);
     const { invalid: eatTypeInv, errorText: eatTypeErrTxt } = validateEatType(eatType);
     const { invalid: foodTypeInv, errorText: foodTypeErrTxt } = validateFoodType(foodType);
+    const {
+      invalid: categoriesInv,
+      errorText: categoriesErrTxt,
+    } = validateSelectedFoodCategories(categories);
     const { invalid: shopInv } = validateShop(shop);
     const { invalid: noteInv } = validateNote(note);
     const { invalid: dateInv } = validateDate(date);
     const { invalid: eatTimingInv, errorText: eatTimingErrTxt } = validateEatTiming(eatTiming);
 
     const checkResult = nameInv || eatTypeInv || foodTypeInv || shopInv
-      || noteInv || dateInv || eatTimingInv;
+      || categoriesInv || noteInv || dateInv || eatTimingInv;
 
     if (checkResult) {
       onBlurName();
@@ -113,11 +123,15 @@ export const EatForm: VFC<Props> = memo((props) => {
       setErrorTextEatType(eatTypeErrTxt);
       setInvalidFoodType(foodTypeInv);
       setErrorTextFoodType(foodTypeErrTxt);
+      setInvalidCategories(categoriesInv);
+      setErrorTextCategories(categoriesErrTxt);
       onBlurDate();
       setInvalidEatTiming(eatTimingInv);
       setErrorTextEatTiming(eatTimingErrTxt);
+
+      errorToast("入力値に不備があります");
+      throw new Error();
     }
-    return checkResult;
   };
 
   const getEatJson = (): TEat => {
@@ -143,27 +157,25 @@ export const EatForm: VFC<Props> = memo((props) => {
   };
 
   const createFunction = async () => {
-    const checkResult = isInvalidAllValue();
-    if (!checkResult) {
-      await createEat(getEatJson());
-    }
+    isInvalidAllValue();
+    await createEat(getEatJson());
   };
 
   const updateFunction = async () => {
-    const checkResult = isInvalidAllValue();
-    if (!checkResult) {
-      await updateEat(getEatJson());
-    }
+    isInvalidAllValue();
+    await updateEat(getEatJson());
   };
 
   useEffect(() => {
     const btnStatus = invalidName || invalidEatType || invalidFoodType
-      || invalidDate || invalidEatTiming || invalidShop || invalidNote;
+      || invalidCategories || invalidDate || invalidEatTiming || invalidShop
+      || invalidNote;
     setButtonDisabled(btnStatus);
   }, [
     invalidName,
     invalidEatType,
     invalidFoodType,
+    invalidCategories,
     invalidDate,
     invalidEatTiming,
     invalidShop,
@@ -241,6 +253,8 @@ export const EatForm: VFC<Props> = memo((props) => {
       setDiscounted={setDiscounted}
       foodCategories={categories}
       setFoodCategories={setCategories}
+      invalidFoodCategories={invalidCategories}
+      errorTextFoodCategories={errorTextCategories}
     >
       <>
         <Box w="20%">

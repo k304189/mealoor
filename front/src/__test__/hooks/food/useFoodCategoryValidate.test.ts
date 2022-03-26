@@ -128,7 +128,7 @@ describe("useFoodCategoryValidate Test", () => {
     // errorTextが空文字である
     expect(validateResult.errorText).toBe("");
   });
-  
+
   it("validateFoodCategory category and unit error when allDisabled is True and categoryDisabled is True ", () => {
     act(() => {
       validateResult = result.current.validateFoodCategory(ngCategoryAndUnitTestData, true, true);
@@ -167,5 +167,43 @@ describe("useFoodCategoryValidate Test", () => {
     expect(validateResult.invalid).toBeTruthy();
     // errorTextが空文字である
     expect(validateResult.errorText).toBe("カテゴリーが選択されていないデータが存在します");
+  });
+
+  it("validateSelectedFoodCategories When Safe Pattern", () => {
+    act(() => {
+      validateResult = result.current.validateSelectedFoodCategories([
+        { id: 1, category: "米", amount: 0, unit: "g" },
+        { id: 2, category: "卵", amount: 10, unit: "ml" },
+        { id: 3, category: "肉", amount: 20, unit: "g" },
+      ]);
+    });
+    // invalidがTrueである
+    expect(validateResult.invalid).toBeFalsy();
+    // errorTextが空文字である
+    expect(validateResult.errorText).toBe("");
+  });
+
+  it("validateSelectedFoodCategories When Empty Array", () => {
+    act(() => {
+      validateResult = result.current.validateSelectedFoodCategories([]);
+    });
+    // invalidがTrueである
+    expect(validateResult.invalid).toBeTruthy();
+    // errorTextが空文字である
+    expect(validateResult.errorText).toBe("カテゴリーが選択されていません");
+  });
+
+  it("validateSelectedFoodCategories When Exists Same Category", () => {
+    act(() => {
+      validateResult = result.current.validateSelectedFoodCategories([
+        { id: 1, category: "米", amount: 0, unit: "g" },
+        { id: 2, category: "卵", amount: 10, unit: "ml" },
+        { id: 3, category: "米", amount: 20, unit: "g" },
+      ]);
+    });
+    // invalidがTrueである
+    expect(validateResult.invalid).toBeTruthy();
+    // errorTextが空文字である
+    expect(validateResult.errorText).toBe("同じカテゴリーが複数選択されています");
   });
 });
