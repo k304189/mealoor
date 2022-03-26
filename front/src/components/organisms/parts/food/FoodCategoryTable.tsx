@@ -38,7 +38,7 @@ export const FoodCategoryTable: VFC<Props> = memo((props) => {
     allDisabled,
     categoryDisabled,
   } = props;
-  const [categoryId, setCategoryId] = useState(0);
+  const [categoryId, setCategoryId] = useState(-1);
   const [categoryClassName, setCategoryClassName] = useState("");
   const [commonClassName, setCommonClassName] = useState("");
 
@@ -77,7 +77,7 @@ export const FoodCategoryTable: VFC<Props> = memo((props) => {
 
   const addNewFoodCategory = () => {
     setFoodCategories([...foodCategories, getNewFoodCategory(categoryId)]);
-    setCategoryId(categoryId + 1);
+    setCategoryId(categoryId - 1);
   };
 
   const deleteFoodCategory = (index: number) => {

@@ -8,3 +8,7 @@ export const URL_BODY_GET = `${process.env.REACT_APP_API_V1_URL}/body/`;
 export const URL_BODY_CREATE = `${process.env.REACT_APP_API_V1_URL}/body/create/`;
 export const URL_BODY_UPDATE = `${process.env.REACT_APP_API_V1_URL}/body/update/`;
 export const URL_BODY_DELETE = `${process.env.REACT_APP_API_V1_URL}/body/delete/`;
+export const URL_EAT_LIST = `${process.env.REACT_APP_API_V1_URL}/eat/`;
+export const URL_EAT_CREATE = `${process.env.REACT_APP_API_V1_URL}/eat/create/`;
+export const URL_EAT_UPDATE = `${process.env.REACT_APP_API_V1_URL}/eat/update/`;
+export const URL_EAT_DELETE = `${process.env.REACT_APP_API_V1_URL}/eat/delete/`;

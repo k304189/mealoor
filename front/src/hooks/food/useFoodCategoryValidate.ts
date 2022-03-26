@@ -9,15 +9,14 @@ type T = {
     allDisabled: boolean,
     categoryDisabled: boolean,
   ) => TValidateReturn;
+  validateSelectedFoodCategories: (
+    foodCategories: Array<TFoodCategory>,
+  ) => TValidateReturn;
 };
 
 export const useFoodCategoryValidate = (): T => {
   const isEmptyCategory = (category: string) => {
     return (!category || category === "");
-  };
-
-  const isEmptyUnit = (unit: string) => {
-    return (!unit || unit === "");
   };
 
   const validateFoodCategory = useCallback((
@@ -31,12 +30,29 @@ export const useFoodCategoryValidate = (): T => {
       invalid = isEmptyCategory(foodCategory.category);
       errorText = invalid ? "カテゴリーが選択されていないデータが存在します" : "";
     }
-    if (!(invalid || allDisabled)) { // 全項目が選択可能の場合
-      invalid = isEmptyUnit(foodCategory.unit);
-      errorText = invalid ? "単位が選択されていないデータが存在します" : "";
+    return { invalid, errorText };
+  }, []);
+
+  const validateSelectedFoodCategories = useCallback((
+    foodCategories: Array<TFoodCategory>,
+  ) => {
+    let invalid = false;
+    let errorText = "";
+    if (!foodCategories || foodCategories.length <= 0) {
+      invalid = true;
+      errorText = "カテゴリーが選択されていません";
+    } else {
+      const selectedCategoryNames = foodCategories.map((fc) => {
+        return fc.category;
+      });
+      const distinctSelectedCategoryNames = new Set(selectedCategoryNames);
+      if (selectedCategoryNames.length !== distinctSelectedCategoryNames.size) {
+        invalid = true;
+        errorText = "同じカテゴリーが複数選択されています";
+      }
     }
     return { invalid, errorText };
   }, []);
 
-  return { validateFoodCategory };
+  return { validateFoodCategory, validateSelectedFoodCategories };
 };

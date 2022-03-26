@@ -16,12 +16,12 @@ type Props = {
   onClose: () => void;
   foodCategories: Array<TFoodCategory>;
   setFoodCategories: Dispatch<SetStateAction<Array<TFoodCategory>>>;
-  foodType: "食材" | "料理";
-  eatType?: "外食" | "中食" | "自炊" | "";
+  foodType: string;
+  eatType?: string;
 };
 
 export const FoodCategoryPop: VFC<Props> = memo((props) => {
-  const defaultTrrigerMsg = "カテゴリー";
+  const defaultTrrigerMsg = "選択してください";
   const { isOpen, onOpen, onClose, foodCategories, setFoodCategories, foodType, eatType = "" } = props;
   const { validateFoodCategory } = useFoodCategoryValidate();
   const [allDisabled, setAllDisabled] = useState(false);

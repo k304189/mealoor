@@ -60,6 +60,7 @@
       "react/jsx-props-no-spreading": "off",
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": ["error"],
-      "dot-notation": [2, {"allowPattern": "^[a-z]+(_[a-z]+)+$"}]
+      "dot-notation": [2, {"allowPattern": "^[a-z]+(_[a-z]+)+$"}],
+      "react/jsx-no-useless-fragment": "off"
     }
 }

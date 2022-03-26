@@ -10,10 +10,14 @@ export const readOnlyColor = "#A0AEC0";
 export const primaryButtonColor = "#FF6D62";
 export const withdrawButtonColor = "#829CBA";
 export const noButtonColor = "#F5F5F4";
+export const defaultRadioColor = "#D07D59";
+export const secondRadioColor = "#64A05E";
+export const defaultCheckboxButtonColor = "#738CF0";
 
 export const appAccountBgColor = "#2A4365";
 export const appAccountBorderColor = "#C4F1F9";
 export const appBodyBgColor = "#51BC37";
+export const appEatBgColor = "#EE7800";
 
 const systemHeaderHeight = "48px";
 const systemMainHeight = `calc(100% - ${systemHeaderHeight})`;
@@ -89,6 +93,43 @@ export const systemTheme = extendTheme({
       "button.body": {
         backgroundColor: appBodyBgColor,
         color: "white",
+      },
+      "button.eat": {
+        backgroundColor: appEatBgColor,
+        color: "white",
+      },
+      "div.defaultRadioButton": {
+        borderColor: defaultRadioColor,
+        color: defaultRadioColor,
+        _hover: {
+          cursor: "pointer",
+        },
+        _checked: {
+          bg: defaultRadioColor,
+          color: "white",
+        },
+      },
+      "div.defaultSecondRadioButton": {
+        borderColor: secondRadioColor,
+        color: secondRadioColor,
+        _hover: {
+          cursor: "pointer",
+        },
+        _checked: {
+          bg: secondRadioColor,
+          color: "white",
+        },
+      },
+      "div.defaultCheckboxButton": {
+        borderColor: defaultCheckboxButtonColor,
+        color: defaultCheckboxButtonColor,
+        _hover: {
+          cursor: "pointer",
+        },
+        _checked: {
+          bg: defaultCheckboxButtonColor,
+          color: "white",
+        },
       },
       ".systemHeader": {
         backgroundColor: mainColor,

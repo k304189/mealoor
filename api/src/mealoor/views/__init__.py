@@ -8,3 +8,7 @@ from mealoor.views.body import ShowBodyView
 from mealoor.views.body import CreateBodyView
 from mealoor.views.body import UpdateBodyView
 from mealoor.views.body import DeleteBodyView
+from mealoor.views.eat import ListDateEatView
+from mealoor.views.eat import CreateEatView
+from mealoor.views.eat import UpdateEatView
+from mealoor.views.eat import DeleteEatView

@@ -1,11 +1,11 @@
 import { memo, VFC } from "react";
 import { Select, SelectProps } from "@chakra-ui/react";
 
-import { TSelectOption } from "../../../types/components/TSelectOption";
+import { TFormAttribute } from "../../../types/components/TFormAttribute";
 import { accentColor } from "../../../theme/systemTheme";
 
 export type Props = SelectProps & {
-  options?: Array<TSelectOption>;
+  options?: Array<TFormAttribute>;
 };
 
 export const DefaultSelect: VFC<Props> = memo((props) => {
