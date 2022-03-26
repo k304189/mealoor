@@ -186,4 +186,64 @@ describe("useAccountValidate Test", () => {
     expect(validateResult.errorText).toBe("メモは100文字以内にしてください");
   });
 
+  it("validateRegisteredName when safe pattern", () => {
+    act(() => {
+      validateResult = result.current.validateRegisteredName("登録名");
+    });
+    // invalidがfalseである
+    expect(validateResult.invalid).toBeFalsy();
+    // errorTextが空文字である
+    expect(validateResult.errorText).toBe("");
+  });
+
+  it("validateRegisteredName when note is 60", () => {
+    act(() => {
+      validateResult = result.current.validateRegisteredName("a".repeat(60));
+    });
+    // invalidがfalseである
+    expect(validateResult.invalid).toBeFalsy();
+    // errorTextが空文字である
+    expect(validateResult.errorText).toBe("");
+  });
+
+  it("validateRegisteredName when note is 61", () => {
+    act(() => {
+      validateResult = result.current.validateRegisteredName("a".repeat(61));
+    });
+    // invalidがtrueである
+    expect(validateResult.invalid).toBeTruthy();
+    // errorTextがエラーメッセージである
+    expect(validateResult.errorText).toBe("60文字以内にしてください");
+  });
+
+  it("validateAmountNote when safe pattern", () => {
+    act(() => {
+      validateResult = result.current.validateAmountNote("分量メモ");
+    });
+    // invalidがfalseである
+    expect(validateResult.invalid).toBeFalsy();
+    // errorTextが空文字である
+    expect(validateResult.errorText).toBe("");
+  });
+
+  it("validateAmountNote when note is 10", () => {
+    act(() => {
+      validateResult = result.current.validateAmountNote("a".repeat(10));
+    });
+    // invalidがfalseである
+    expect(validateResult.invalid).toBeFalsy();
+    // errorTextが空文字である
+    expect(validateResult.errorText).toBe("");
+  });
+
+  it("validateAmountNote when note is 11", () => {
+    act(() => {
+      validateResult = result.current.validateAmountNote("a".repeat(11));
+    });
+    // invalidがtrueである
+    expect(validateResult.invalid).toBeTruthy();
+    // errorTextがエラーメッセージである
+    expect(validateResult.errorText).toBe("分量メモは10文字以内にしてください");
+  });
+
 });

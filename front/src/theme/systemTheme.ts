@@ -18,6 +18,7 @@ export const appAccountBgColor = "#2A4365";
 export const appAccountBorderColor = "#C4F1F9";
 export const appBodyBgColor = "#51BC37";
 export const appEatBgColor = "#EE7800";
+export const appFavoriteEatBgColor = "#FCC800";
 
 const systemHeaderHeight = "48px";
 const systemMainHeight = `calc(100% - ${systemHeaderHeight})`;
@@ -96,6 +97,10 @@ export const systemTheme = extendTheme({
       },
       "button.eat": {
         backgroundColor: appEatBgColor,
+        color: "white",
+      },
+      "button.favoriteEat": {
+        backgroundColor: appFavoriteEatBgColor,
         color: "white",
       },
       "div.defaultRadioButton": {

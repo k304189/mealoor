@@ -10,6 +10,8 @@ type T = {
   validateEatTiming: (eatTiming: string) => TValidateReturn;
   validateShop: (shop: string) => TValidateReturn;
   validateNote: (note: string) => TValidateReturn;
+  validateRegisteredName: (registeredName: string) => TValidateReturn;
+  validateAmountNote: (amountNote: string) => TValidateReturn;
 };
 
 export const useFoodValidate = (): T => {
@@ -89,6 +91,28 @@ export const useFoodValidate = (): T => {
     return { invalid, errorText };
   }, []);
 
+  const validateRegisteredName = useCallback((registeredName: string) => {
+    const maxLength = 60;
+    let invalid = false;
+    let errorText = "";
+    if (registeredName.length > maxLength) {
+      invalid = true;
+      errorText = `${maxLength}文字以内にしてください`;
+    }
+    return { invalid, errorText };
+  }, []);
+
+  const validateAmountNote = useCallback((amountNote: string) => {
+    const maxLength = 10;
+    let invalid = false;
+    let errorText = "";
+    if (amountNote.length > maxLength) {
+      invalid = true;
+      errorText = `分量メモは${maxLength}文字以内にしてください`;
+    }
+    return { invalid, errorText };
+  }, []);
+
   return {
     validateName,
     validateEatType,
@@ -97,5 +121,7 @@ export const useFoodValidate = (): T => {
     validateEatTiming,
     validateShop,
     validateNote,
+    validateRegisteredName,
+    validateAmountNote,
   };
 };
