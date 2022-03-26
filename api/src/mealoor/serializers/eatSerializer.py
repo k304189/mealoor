@@ -30,7 +30,7 @@ class EatSerializer(serializers.ModelSerializer):
             'discounted',
             'note',
         )
-        read_only_fields = ('id',)
+        read_only_fields = ('id', 'categories')
 
     @transaction.atomic
     def create(self, validated_data):
@@ -38,6 +38,9 @@ class EatSerializer(serializers.ModelSerializer):
         eat = Eat.objects.create(**validated_data)
         for eat_category_data in eat_categories_data:
             id = eat_category_data.pop('id')
+            if len(eat_categories_data) == 1:
+                eat_category_data['amount'] = eat.amount
+                eat_category_data['unit'] = eat.unit
             EatCategory.objects.create(eat=eat, **eat_category_data)
         return eat
 
@@ -58,6 +61,9 @@ class EatSerializer(serializers.ModelSerializer):
         # 画面上入力された内容をDBに登録または更新する
         for request_eat_category_data in request_eat_categories_data:
             id = request_eat_category_data.pop('id')
+            if len(request_eat_categories_data) == 1:
+                request_eat_category_data['amount'] = eat.amount
+                request_eat_category_data['unit'] = eat.unit
             # カテゴリー追加
             if id < 0:
                 EatCategory.objects.create(eat=eat, **request_eat_category_data)
