@@ -12,6 +12,7 @@ export const URL_EAT_LIST = `${process.env.REACT_APP_API_V1_URL}/eat/`;
 export const URL_EAT_CREATE = `${process.env.REACT_APP_API_V1_URL}/eat/create/`;
 export const URL_EAT_UPDATE = `${process.env.REACT_APP_API_V1_URL}/eat/update/`;
 export const URL_EAT_DELETE = `${process.env.REACT_APP_API_V1_URL}/eat/delete/`;
+export const URL_FAVORIRE_EAT_LIST = `${process.env.REACT_APP_API_V1_URL}/favoriteEat/`;
 export const URL_FAVORIRE_EAT_CREATE = `${process.env.REACT_APP_API_V1_URL}/favoriteEat/create/`;
 export const URL_FAVORIRE_EAT_UPDATE = `${process.env.REACT_APP_API_V1_URL}/favoriteEat/update/`;
 export const URL_FAVORIRE_EAT_DELETE = `${process.env.REACT_APP_API_V1_URL}/favoriteEat/delete/`;

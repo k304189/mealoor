@@ -6,7 +6,7 @@ from mealoor.models import FavoriteEat
 from mealoor.serializers import FavoriteEatSerializer
 
 class FavoriteEatPagination(pagination.PageNumberPagination):
-    page_size = 2
+    page_size = 10
 
     def get_paginated_response(self, data):
         next_page = self.page.next_page_number() if self.page.has_next() else None
