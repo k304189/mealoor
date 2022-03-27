@@ -198,6 +198,32 @@ export const systemTheme = extendTheme({
       ".bgMain": {
         backgroundColor: mainColor,
       },
+      ".pagination": {
+        display: "flex",
+        listStyle: "none",
+        gap: "2px",
+        li: {
+          borderRadius: "5px",
+          width: "40px",
+          height: "48px",
+          _hover: {
+            backgroundColor: accentColor,
+            color: "white",
+          },
+          "&.selected": {
+            backgroundColor: accentColor,
+            color: "white",
+          },
+        },
+        a: {
+          display: "flex",
+          width: "100%",
+          height: "100%",
+          fontWeight: "bold",
+          justifyContent: "center",
+          alignItems: "center",
+        },
+      },
       ".account": {
         backgroundColor: appAccountBgColor,
         borderLeftColor: appAccountBorderColor,
