@@ -1,6 +1,6 @@
 import { TFoodCommon } from "./TFoodCommon";
 
 export type TFavoriteEat = TFoodCommon & {
-  registeredName: string;
-  amountNote: string;
+  registered_name: string;
+  amount_note: string;
 };

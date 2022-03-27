@@ -1,9 +1,9 @@
-/* eslint @typescript-eslint/no-unused-vars: off */
 import { ChangeEvent, memo, VFC, useEffect, useState } from "react";
 import { Box } from "@chakra-ui/react";
 
 import { FoodCommonForm } from "../../parts/food/FoodCommonForm";
 import { TextForm } from "../../parts/form/TextForm";
+import { useFavoriteEatApi } from "../../../../hooks/food/useFavoriteEatApi";
 import { useFoodValidate } from "../../../../hooks/food/useFoodValidate";
 import { useFoodCategoryValidate } from "../../../../hooks/food/useFoodCategoryValidate";
 import { useMessage } from "../../../../hooks/common/layout/useMessage";
@@ -15,6 +15,7 @@ type Props = {
 };
 
 export const FavoriteEatForm: VFC<Props> = memo((props) => {
+  const [id, setId] = useState(0);
   const [name, setName] = useState("");
   const [eatType, setEatType] = useState("");
   const [foodType, setFoodType] = useState("");
@@ -65,6 +66,7 @@ export const FavoriteEatForm: VFC<Props> = memo((props) => {
     validateRegisteredName,
     validateAmountNote,
   } = useFoodValidate();
+  const { createFavoriteEat, updateFavoriteEat } = useFavoriteEatApi();
   const { validateSelectedFoodCategories } = useFoodCategoryValidate();
   const { errorToast } = useMessage();
 
@@ -140,9 +142,36 @@ export const FavoriteEatForm: VFC<Props> = memo((props) => {
     }
   };
 
-  const createFunction = async () => {};
+  const getFavoriteEatJson = (): TFavoriteEat => {
+    return {
+      id,
+      name,
+      eat_type: eatType,
+      food_type: foodType,
+      categories,
+      shop,
+      price,
+      kcal,
+      amount,
+      unit,
+      protein,
+      lipid,
+      carbo,
+      note,
+      registered_name: registeredName,
+      amount_note: amountNote,
+    };
+  };
 
-  const updateFunction = async () => {};
+  const createFunction = async () => {
+    isInvalidAllValue();
+    await createFavoriteEat(getFavoriteEatJson());
+  };
+
+  const updateFunction = async () => {
+    isInvalidAllValue();
+    await updateFavoriteEat(getFavoriteEatJson());
+  };
 
   useEffect(() => {
     const btnStatus = invalidName || invalidEatType || invalidFoodType
@@ -162,13 +191,13 @@ export const FavoriteEatForm: VFC<Props> = memo((props) => {
 
   useEffect(() => {
     if (favoriteEat) {
-      // setId(favoriteEat.id);
+      setId(favoriteEat.id);
       setName(favoriteEat.name);
       setEatType(favoriteEat.eat_type);
       setFoodType(favoriteEat.food_type);
       setCategories(favoriteEat.categories);
-      setRegisteredName(favoriteEat.registeredName);
-      setAmountNote(favoriteEat.amountNote);
+      setRegisteredName(favoriteEat.registered_name);
+      setAmountNote(favoriteEat.amount_note);
       setShop(favoriteEat.shop);
       setPrice(favoriteEat.price);
       setKcal(favoriteEat.kcal);

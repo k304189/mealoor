@@ -103,4 +103,4 @@ class FavoriteEat(models.Model):
         verbose_name_plural = 'FavoriteEats'
 
     def __str__(self):
-        return self.account.username + ' ' + self.name + ' ' + self.amountNote
+        return self.account.username + ' ' + self.name + ' ' + self.amount_note
