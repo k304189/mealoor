@@ -12,3 +12,6 @@ from mealoor.views.eat import ListDateEatView
 from mealoor.views.eat import CreateEatView
 from mealoor.views.eat import UpdateEatView
 from mealoor.views.eat import DeleteEatView
+from mealoor.views.favoriteEat import CreateFavoriteEatView
+from mealoor.views.favoriteEat import UpdateFavoriteEatView
+from mealoor.views.favoriteEat import DeleteFavoriteEatView

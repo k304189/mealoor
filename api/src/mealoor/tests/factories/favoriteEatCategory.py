@@ -9,7 +9,7 @@ class FavoriteEatCategoryFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ('id',)
 
     id = factory.Sequence(lambda n: n)
-    eat = factory.SubFactory(FavoriteEatFactory)
+    favorite_eat = factory.SubFactory(FavoriteEatFactory)
     category = "肉"
     amount = 100
     unit = "g"
