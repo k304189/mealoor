@@ -19,6 +19,7 @@ export const appAccountBorderColor = "#C4F1F9";
 export const appBodyBgColor = "#51BC37";
 export const appEatBgColor = "#EE7800";
 export const appFavoriteEatBgColor = "#FCC800";
+export const appFavoriteEatBorderColor = "#A16D58";
 
 const systemHeaderHeight = "48px";
 const systemMainHeight = `calc(100% - ${systemHeaderHeight})`;
@@ -101,7 +102,7 @@ export const systemTheme = extendTheme({
       },
       "button.favoriteEat": {
         backgroundColor: appFavoriteEatBgColor,
-        color: "white",
+        color: "black",
       },
       "div.defaultRadioButton": {
         borderColor: defaultRadioColor,
@@ -201,6 +202,11 @@ export const systemTheme = extendTheme({
         backgroundColor: appAccountBgColor,
         borderLeftColor: appAccountBorderColor,
         color: "white",
+      },
+      ".favoriteEat": {
+        backgroundColor: appFavoriteEatBgColor,
+        borderLeftColor: appFavoriteEatBorderColor,
+        color: "black",
       },
     },
   },
