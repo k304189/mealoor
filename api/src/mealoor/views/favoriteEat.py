@@ -9,12 +9,7 @@ class FavoriteEatPagination(pagination.PageNumberPagination):
     page_size = 10
 
     def get_paginated_response(self, data):
-        next_page = self.page.next_page_number() if self.page.has_next() else None
-        prev_page = self.page.previous_page_number() if self.page.has_previous() else None
-
         return response.Response({
-            'next_page': next_page,
-            'prev_page': prev_page,
             'count': self.page.paginator.count,
             'current_page': self.page.number,
             'total_pages': self.page.paginator.num_pages,
