@@ -224,6 +224,10 @@ export const systemTheme = extendTheme({
           alignItems: "center",
         },
       },
+      ".pagingTable td": {
+        paddingTop: "4px",
+        paddingBottom: "4px",
+      },
       ".account": {
         backgroundColor: appAccountBgColor,
         borderLeftColor: appAccountBorderColor,

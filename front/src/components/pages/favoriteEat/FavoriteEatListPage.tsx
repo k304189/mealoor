@@ -1,5 +1,5 @@
 import { memo, useEffect, useState, VFC } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Flex, Spacer } from "@chakra-ui/react";
 
 import { DefaultPaginateButton } from "../../atoms/button/DefaultPaginateButton";
 import { FavoriteEatModalButton } from "../../organisms/pages/favoriteEat/FavoriteEatModalButton";
@@ -38,8 +38,11 @@ export const FavoriteEatListPage: VFC = memo(() => {
   return (
     <HeaderLayout title="お気に入り食事" titleClass="favoriteEat">
       <Box p={1} className="bgMain" h="100%">
-        <FavoriteEatModalButton />
-        <DefaultPaginateButton totalPage={totalPage} onPageChange={onPageChange} />
+        <Flex>
+          <FavoriteEatModalButton />
+          <Spacer />
+          <DefaultPaginateButton totalPage={totalPage} onPageChange={onPageChange} />
+        </Flex>
         { favoriteEats ? (
           <FavoriteEatListTable favoriteEat={favoriteEats} />
         ) : (
