@@ -12,6 +12,10 @@ import {
 import { FavoriteEatModal } from "./FavoriteEatModal";
 import { DefaultLink } from "../../../atoms/button/DefaultLink";
 import { DefaultButton } from "../../../atoms/button/DefaultButton";
+import { DeleteButton } from "../../../molecules/button/DeleteButton";
+import { DefaultAlertDialog } from "../../../molecules/layout/DefaultAlertDialog";
+import { useMessage } from "../../../../hooks/common/layout/useMessage";
+import { useFavoriteEatApi } from "../../../../hooks/food/useFavoriteEatApi";
 import { TFavoriteEat } from "../../../../types/api/TFavoriteEat";
 
 type Props = {
@@ -20,15 +24,56 @@ type Props = {
 
 export const FavoriteEatListTable: VFC<Props> = memo((props) => {
   const [openFavoriteEat, setOpenFavoriteEat] = useState<TFavoriteEat | null>(null);
+  const [delFavoriteEat, setDelFavoriteEat] = useState<TFavoriteEat | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const { favoriteEat } = props;
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { deleteFavoriteEat } = useFavoriteEatApi();
+  const { successToast, errorToast } = useMessage();
+  const {
+    isOpen: editModalIsOpen,
+    onOpen: editModalOnOpen,
+    onClose: editModalOnClose,
+  } = useDisclosure();
+  const {
+    isOpen: deleteAlertIsOpen,
+    onOpen: deleteAlertOnOpen,
+    onClose: deleteAlertOnClose,
+  } = useDisclosure();
 
   const onClickFavoriteEatLink = (id: number) => {
     const index = favoriteEat.findIndex((fe) => {
       return fe.id === id;
     });
     setOpenFavoriteEat(favoriteEat[index]);
-    onOpen();
+    setSelectedIndex(index);
+    editModalOnOpen();
+  };
+
+  const onClickDeleteButton = (id: number) => {
+    const index = favoriteEat.findIndex((fe) => {
+      return fe.id === id;
+    });
+    setDelFavoriteEat(favoriteEat[index]);
+    setSelectedIndex(index);
+    deleteAlertOnOpen();
+  };
+
+  const callDeleteFavoriteEat = () => {
+    if (delFavoriteEat) {
+      deleteFavoriteEat(delFavoriteEat.id)
+        .then(() => {
+          successToast("データ削除に成功しました");
+          favoriteEat.splice(selectedIndex, 1);
+        })
+        .catch(() => {
+          errorToast("データ削除に失敗しました");
+        })
+        .finally(() => {
+          deleteAlertOnClose();
+        });
+    } else {
+      errorToast("削除データの特定に失敗しました");
+    }
   };
 
   return (
@@ -37,7 +82,8 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
         <Thead>
           <Tr>
             <Th w="25%">名前</Th>
-            <Th w="20%">店</Th>
+            <Th w="5%" />
+            <Th w="15%">店</Th>
             <Th w="10%">食事タイプ</Th>
             <Th w="10%">分量メモ</Th>
             <Th w="10%">価格</Th>
@@ -57,6 +103,14 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
                     {fe.name}
                   </DefaultLink>
                 </Td>
+                <Td>
+                  <DeleteButton
+                    hoverText="お気に入り食事削除"
+                    onClick={() => { onClickDeleteButton(fe.id); }}
+                    aria-label="deleteFavoriteEat"
+                    size="xs"
+                  />
+                </Td>
                 <Td>{fe.shop}</Td>
                 <Td>{fe.eat_type}</Td>
                 <Td>{fe.amount_note}</Td>
@@ -71,8 +125,15 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
       </Table>
       <FavoriteEatModal
         favoriteEat={openFavoriteEat}
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={editModalIsOpen}
+        onClose={editModalOnClose}
+      />
+      <DefaultAlertDialog
+        isOpen={deleteAlertIsOpen}
+        onClose={deleteAlertOnClose}
+        onClickYes={() => { callDeleteFavoriteEat(); }}
+        dialogHeader="お気に入り食事削除確認"
+        dialogBody={`${delFavoriteEat?.name ?? ""}のデータを削除します。よろしいですか`}
       />
     </>
   );
