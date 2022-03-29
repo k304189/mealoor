@@ -98,6 +98,7 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
               <Tr key={fe.id}>
                 <Td>
                   <DefaultLink
+                    hoverText="お気に入り食事編集"
                     onClick={() => { onClickFavoriteEatLink(fe.id); }}
                   >
                     {fe.name}

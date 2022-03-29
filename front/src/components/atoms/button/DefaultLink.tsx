@@ -1,8 +1,17 @@
 import { memo, VFC } from "react";
-import { Button, ButtonProps } from "@chakra-ui/react";
+import { Button, ButtonProps, Tooltip } from "@chakra-ui/react";
 
-export const DefaultLink: VFC<ButtonProps> = memo((props) => {
+type Props = ButtonProps & {
+  hoverText?: string
+}
+
+export const DefaultLink: VFC<Props> = memo((props) => {
+  const { hoverText } = props;
+  const linkButtonProp = { ...props };
+  delete linkButtonProp.hoverText;
   return (
-    <Button {...props} variant="link" size="sm" />
+    <Tooltip label={hoverText}>
+      <Button {...linkButtonProp} variant="link" size="sm" />
+    </Tooltip>
   );
 });
