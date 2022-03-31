@@ -10,9 +10,11 @@ import {
 } from "@chakra-ui/react";
 
 import { FavoriteEatModal } from "./FavoriteEatModal";
+import { CommonUseForm } from "../../parts/food/CommonUseForm";
 import { DefaultLink } from "../../../atoms/button/DefaultLink";
 import { DefaultButton } from "../../../atoms/button/DefaultButton";
 import { DeleteButton } from "../../../molecules/button/DeleteButton";
+import { DefaultModal } from "../../../molecules/layout/DefaultModal";
 import { DefaultAlertDialog } from "../../../molecules/layout/DefaultAlertDialog";
 import { useMessage } from "../../../../hooks/common/layout/useMessage";
 import { useFavoriteEatApi } from "../../../../hooks/food/useFavoriteEatApi";
@@ -26,6 +28,7 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
   const [openFavoriteEat, setOpenFavoriteEat] = useState<TFavoriteEat | null>(null);
   const [delFavoriteEat, setDelFavoriteEat] = useState<TFavoriteEat | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedDataText, setSelectedDataText] = useState("");
   const { favoriteEat } = props;
   const { deleteFavoriteEat } = useFavoriteEatApi();
   const { successToast, errorToast } = useMessage();
@@ -39,14 +42,32 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
     onOpen: deleteAlertOnOpen,
     onClose: deleteAlertOnClose,
   } = useDisclosure();
+  const {
+    isOpen: addEatModalIsOpen,
+    onOpen: addEatModalOnOpen,
+    onClose: addEatModalOnClose,
+  } = useDisclosure();
 
   const onClickFavoriteEatLink = (id: number) => {
     const index = favoriteEat.findIndex((fe) => {
       return fe.id === id;
     });
-    setOpenFavoriteEat(favoriteEat[index]);
+    setDelFavoriteEat(favoriteEat[index]);
     setSelectedIndex(index);
     editModalOnOpen();
+  };
+
+  const onClickAddEatButton = (id: number) => {
+    const index = favoriteEat.findIndex((fe) => {
+      return fe.id === id;
+    });
+    const selectedData = favoriteEat[index];
+    setOpenFavoriteEat(selectedData);
+    setSelectedDataText(
+      `${selectedData.name} ${selectedData.amount_note}`,
+    );
+    setSelectedIndex(index);
+    addEatModalOnOpen();
   };
 
   const onClickDeleteButton = (id: number) => {
@@ -118,7 +139,15 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
                 <Td>{`${fe.price}円`}</Td>
                 <Td>{`${fe.kcal}kcal`}</Td>
                 <Td>{`${fe.amount}${fe.unit || ""}`}</Td>
-                <Td><DefaultButton onClick={() => {}} size="xs" className="primary">食事登録</DefaultButton></Td>
+                <Td>
+                  <DefaultButton
+                    onClick={() => { onClickAddEatButton(fe.id); }}
+                    size="xs"
+                    className="primary"
+                  >
+                    食事登録
+                  </DefaultButton>
+                </Td>
               </Tr>
             );
           })}
@@ -135,6 +164,15 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
         onClickYes={() => { callDeleteFavoriteEat(); }}
         dialogHeader="お気に入り食事削除確認"
         dialogBody={`${delFavoriteEat?.name ?? ""}のデータを削除します。よろしいですか`}
+      />
+      <DefaultModal
+        isOpen={addEatModalIsOpen}
+        onClose={addEatModalOnClose}
+        modalHeader="食事登録"
+        modalBody={(
+          <CommonUseForm selectedDataText={selectedDataText} />
+        )}
+        size="xl"
       />
     </>
   );
