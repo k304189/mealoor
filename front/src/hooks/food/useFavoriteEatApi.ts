@@ -4,11 +4,13 @@ import axios from "axios";
 import { useRequestHeader } from "../common/auth/useRequestHeader";
 import { TFavoriteEat } from "../../types/api/TFavoriteEat";
 import { TFavoriteEatPaginate } from "../../types/api/TFavoriteEatPaginate";
+import { TUse } from "../../types/api/TUse";
 import {
   URL_FAVORIRE_EAT_LIST,
   URL_FAVORIRE_EAT_CREATE,
   URL_FAVORIRE_EAT_UPDATE,
   URL_FAVORIRE_EAT_DELETE,
+  URL_FAVORIRE_EAT_EAT,
 } from "../../constants/urls";
 
 type T = {
@@ -16,6 +18,7 @@ type T = {
   createFavoriteEat: (createJson: TFavoriteEat) => Promise<TFavoriteEat>;
   updateFavoriteEat: (updateJson: TFavoriteEat) => Promise<TFavoriteEat>;
   deleteFavoriteEat: (deleteId: number) => Promise<number>;
+  eatFavoriteEat: (eatJson: TUse) => Promise<number>;
 };
 
 export const useFavoriteEatApi = (): T => {
@@ -57,5 +60,20 @@ export const useFavoriteEatApi = (): T => {
     return response.status;
   }, []);
 
-  return { getFavoriteEat, createFavoriteEat, updateFavoriteEat, deleteFavoriteEat };
+  const eatFavoriteEat = useCallback(async (eatJson: TUse) => {
+    const headers = getRequestHeader();
+    const url = `${URL_FAVORIRE_EAT_EAT}${eatJson.id}/`;
+
+    const response = await axios.post(url, eatJson, { headers });
+
+    return response.status;
+  }, []);
+
+  return {
+    getFavoriteEat,
+    createFavoriteEat,
+    updateFavoriteEat,
+    deleteFavoriteEat,
+    eatFavoriteEat,
+  };
 };

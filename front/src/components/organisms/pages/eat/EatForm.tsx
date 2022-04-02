@@ -82,7 +82,7 @@ export const EatForm: VFC<Props> = memo((props) => {
   };
 
   const onBlurDate = () => {
-    const { invalid, errorText } = validateDate(date);
+    const { invalid, errorText } = validateDate(date, "食事日");
     setInvalidDate(invalid);
     setErrorTextDate(errorText);
   };

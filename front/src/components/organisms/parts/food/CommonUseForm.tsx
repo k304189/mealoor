@@ -1,4 +1,4 @@
-import { ChangeEvent, memo, useState, VFC } from "react";
+import { ChangeEvent, memo, useEffect, useState, VFC } from "react";
 import { Box, Flex, HStack, VStack } from "@chakra-ui/react";
 
 import { EatTimingRadio } from "./EatTimingRadio";
@@ -11,8 +11,11 @@ import { AddButton } from "../../../molecules/button/AddButton";
 import { MinusButton } from "../../../molecules/button/MinusButton";
 import { FormArea } from "../../../molecules/form/FormArea";
 import { useMessage } from "../../../../hooks/common/layout/useMessage";
+import { useFavoriteEatApi } from "../../../../hooks/food/useFavoriteEatApi";
+import { useFoodValidate } from "../../../../hooks/food/useFoodValidate";
 
 export type Props = {
+  id: number;
   quantity?: number;
   maxRate?: number;
   selectedDataText?: string;
@@ -25,8 +28,29 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
   const [price, setPrice] = useState(0);
   const [discounted, setDiscounted] = useState(false);
   const [note, setNote] = useState("");
-  const { successToast } = useMessage();
+
+  const [invalidDate, setInvalidDate] = useState(false);
+  const [invalidEatTiming, setInvalidEatTiming] = useState(false);
+  const [invalidRate, setInvalidRate] = useState(false);
+  const [invalidNote, setInvalidNote] = useState(false);
+
+  const [errorTextDate, setErrorTextDate] = useState("");
+  const [errorTextEatTiming, setErrorTextEatTiming] = useState("");
+  const [errorTextRate, setErrorTextRate] = useState("");
+  const [errorTextNote, setErrorTextNote] = useState("");
+
+  const [btnStatus, setBtnStatus] = useState(false);
+
+  const { successToast, errorToast } = useMessage();
+  const { eatFavoriteEat } = useFavoriteEatApi();
   const {
+    validateDate,
+    validateEatTiming,
+    validateNote,
+    validateRate,
+  } = useFoodValidate();
+  const {
+    id,
     quantity = 1,
     maxRate = Number.MAX_SAFE_INTEGER,
     selectedDataText = "",
@@ -42,6 +66,35 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
 
   const onChangeDiscounted = (e: ChangeEvent<HTMLInputElement>) => {
     setDiscounted(e.target.checked);
+  };
+
+  const onChangeEatTiming = (et: string) => {
+    const {
+      invalid: eatTimingInv,
+      errorText: eatTimingErrTxt,
+    } = validateEatTiming(et);
+
+    setInvalidEatTiming(eatTimingInv);
+    setErrorTextEatTiming(eatTimingErrTxt);
+    setEatTiming(et);
+  };
+
+  const onBlurDate = () => {
+    const { invalid, errorText } = validateDate(date);
+    setInvalidDate(invalid);
+    setErrorTextDate(errorText);
+  };
+
+  const onBlurNote = () => {
+    const { invalid, errorText } = validateNote(note);
+    setInvalidNote(invalid);
+    setErrorTextNote(errorText);
+  };
+
+  const onBlurRate = () => {
+    const { invalid, errorText } = validateRate(rate);
+    setInvalidRate(invalid);
+    setErrorTextRate(errorText);
   };
 
   const onClickAddButton = () => {
@@ -64,9 +117,67 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
     }
   };
 
-  const onClickButton = () => {
-    successToast("食事データを作成しました");
+  const clearForm = () => {
+    setDate("");
+    setEatTiming("");
+    setRate(0);
+    setPrice(0);
+    setDiscounted(false);
+    setNote("");
   };
+
+  const validateAllValue = () => {
+    const { invalid: dateInv } = validateDate(date);
+    const { invalid: noteInv } = validateNote(note);
+    const {
+      invalid: eatTimingInv,
+      errorText: eatTimingErrTxt,
+    } = validateEatTiming(eatTiming);
+    const { invalid: rateInv } = validateRate(rate);
+
+    const checkResult = dateInv || noteInv || eatTimingInv || rateInv;
+    if (checkResult) {
+      onBlurDate();
+      onBlurRate();
+      onBlurNote();
+      setInvalidEatTiming(eatTimingInv);
+      setInvalidEatTiming(eatTimingInv);
+      setErrorTextEatTiming(eatTimingErrTxt);
+
+      errorToast("入力値に不備があります");
+    }
+    return checkResult;
+  };
+
+  const getJson = () => {
+    const json = {
+      id,
+      date,
+      eat_timing: eatTiming,
+      rate,
+      price,
+      discounted,
+      note,
+    };
+    return json;
+  };
+
+  const onClickButton = () => {
+    if (!validateAllValue()) {
+      eatFavoriteEat(getJson())
+        .then(() => {
+          successToast("食事データを作成しました");
+          clearForm();
+        })
+        .catch(() => {
+          errorToast("食事データの登録に失敗しました");
+        });
+    }
+  };
+
+  useEffect(() => {
+    setBtnStatus(invalidDate || invalidEatTiming || invalidRate || invalidNote);
+  }, [invalidDate, invalidEatTiming, invalidRate, invalidNote]);
 
   return (
     <>
@@ -86,14 +197,19 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
               require="require"
               value={date}
               onChange={onChangeDate}
+              onBlur={onBlurDate}
+              errorText={errorTextDate}
+              isInvalid={invalidDate}
             />
           </Box>
           <Box w="60%">
             <FormArea
               label="食事タイミング"
               require="require"
+              errorText={errorTextEatTiming}
+              isInvalid={invalidEatTiming}
             >
-              <EatTimingRadio eatTiming={eatTiming} onChange={setEatTiming} />
+              <EatTimingRadio eatTiming={eatTiming} onChange={onChangeEatTiming} />
             </FormArea>
           </Box>
         </HStack>
@@ -104,6 +220,9 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
                 label="食事量"
                 value={rate}
                 onChange={setRate}
+                onBlur={onBlurRate}
+                errorText={errorTextRate}
+                isInvalid={invalidRate}
                 unit="%"
                 require="require"
               />
@@ -134,12 +253,16 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
             value={note}
             require="optional"
             onChange={onChangeNote}
+            onBlur={onBlurNote}
+            errorText={errorTextNote}
+            isInvalid={invalidNote}
             size="sm"
           />
           <Box pb={2} ml={2}>
             <DefaultButton
               className="primary"
               onClick={onClickButton}
+              disabled={btnStatus}
             >
               食事
             </DefaultButton>

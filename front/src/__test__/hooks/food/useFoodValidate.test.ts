@@ -96,14 +96,24 @@ describe("useAccountValidate Test", () => {
     expect(validateResult.errorText).toBe("");
   });
 
-  it("validateDate when date is empty", () => {
+  it("validateDate when date is empty and don't set dateName", () => {
     act(() => {
       validateResult = result.current.validateDate("");
     });
     // invalidがtrueである
     expect(validateResult.invalid).toBeTruthy();
     // errorTextがエラーメッセージである
-    expect(validateResult.errorText).toBe("食事日を入力してください");
+    expect(validateResult.errorText).toBe("日付を入力してください");
+  });
+
+  it("validateDate when date is empty and set dateName", () => {
+    act(() => {
+      validateResult = result.current.validateDate("", "チェック日付");
+    });
+    // invalidがtrueである
+    expect(validateResult.invalid).toBeTruthy();
+    // errorTextがエラーメッセージである
+    expect(validateResult.errorText).toBe("チェック日付を入力してください");
   });
 
   it("validateEatTiming when safe pattern", () => {
@@ -244,6 +254,36 @@ describe("useAccountValidate Test", () => {
     expect(validateResult.invalid).toBeTruthy();
     // errorTextがエラーメッセージである
     expect(validateResult.errorText).toBe("分量メモは10文字以内にしてください");
+  });
+
+  it("validateRate when safe pattern", () => {
+    act(() => {
+      validateResult = result.current.validateRate(20);
+    });
+    // invalidがfalseである
+    expect(validateResult.invalid).toBeFalsy();
+    // errorTextが空文字である
+    expect(validateResult.errorText).toBe("");
+  });
+
+  it("validateRate when rate is zero and don't set rateName", () => {
+    act(() => {
+      validateResult = result.current.validateRate(0);
+    });
+    // invalidがtrueである
+    expect(validateResult.invalid).toBeTruthy();
+    // errorTextがエラーメッセージである
+    expect(validateResult.errorText).toBe("割合は0より大きい値を入力してください");
+  });
+
+  it("validateRate when rate is minus and set rateName", () => {
+    act(() => {
+      validateResult = result.current.validateRate(-1, "チェック率");
+    });
+    // invalidがtrueである
+    expect(validateResult.invalid).toBeTruthy();
+    // errorTextがエラーメッセージである
+    expect(validateResult.errorText).toBe("チェック率は0より大きい値を入力してください");
   });
 
 });

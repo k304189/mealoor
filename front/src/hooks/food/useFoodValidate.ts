@@ -6,12 +6,13 @@ type T = {
   validateName: (name: string) => TValidateReturn;
   validateEatType: (eatType: string) => TValidateReturn;
   validateFoodType: (foodType: string) => TValidateReturn;
-  validateDate: (date: string) => TValidateReturn;
+  validateDate: (date: string, dateName?: string) => TValidateReturn;
   validateEatTiming: (eatTiming: string) => TValidateReturn;
   validateShop: (shop: string) => TValidateReturn;
   validateNote: (note: string) => TValidateReturn;
   validateRegisteredName: (registeredName: string) => TValidateReturn;
   validateAmountNote: (amountNote: string) => TValidateReturn;
+  validateRate: (rate: number, rateName?: string) => TValidateReturn;
 };
 
 export const useFoodValidate = (): T => {
@@ -49,12 +50,12 @@ export const useFoodValidate = (): T => {
     return { invalid, errorText };
   }, []);
 
-  const validateDate = useCallback((date: string) => {
+  const validateDate = useCallback((date: string, dateName?: string) => {
     let invalid = false;
     let errorText = "";
     if (!date || date === "") {
       invalid = true;
-      errorText = "食事日を入力してください";
+      errorText = `${dateName || "日付"}を入力してください`;
     }
     return { invalid, errorText };
   }, []);
@@ -113,6 +114,16 @@ export const useFoodValidate = (): T => {
     return { invalid, errorText };
   }, []);
 
+  const validateRate = useCallback((rate: number, rateName?: string) => {
+    let invalid = false;
+    let errorText = "";
+    if (rate <= 0) {
+      invalid = true;
+      errorText = `${rateName || "割合"}は0より大きい値を入力してください`;
+    }
+    return { invalid, errorText };
+  }, []);
+
   return {
     validateName,
     validateEatType,
@@ -123,5 +134,6 @@ export const useFoodValidate = (): T => {
     validateNote,
     validateRegisteredName,
     validateAmountNote,
+    validateRate,
   };
 };

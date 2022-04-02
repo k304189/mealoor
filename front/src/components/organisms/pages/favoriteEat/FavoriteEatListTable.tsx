@@ -52,7 +52,7 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
     const index = favoriteEat.findIndex((fe) => {
       return fe.id === id;
     });
-    setDelFavoriteEat(favoriteEat[index]);
+    setOpenFavoriteEat(favoriteEat[index]);
     setSelectedIndex(index);
     editModalOnOpen();
   };
@@ -170,7 +170,10 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
         onClose={addEatModalOnClose}
         modalHeader="食事登録"
         modalBody={(
-          <CommonUseForm selectedDataText={selectedDataText} />
+          <CommonUseForm
+            id={openFavoriteEat?.id ?? 0}
+            selectedDataText={selectedDataText}
+          />
         )}
         size="xl"
       />
