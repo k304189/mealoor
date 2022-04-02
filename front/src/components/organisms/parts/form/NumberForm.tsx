@@ -13,6 +13,7 @@ import { accentColor } from "../../../../theme/systemTheme";
 type Props = {
   value: number;
   onChange: (v: number) => void;
+  onBlur?: () => void;
   min?: number;
   max?: number;
   step?: number;
@@ -22,6 +23,8 @@ type Props = {
   labelSize?: string;
   require?: "require" | "optional" | "";
   helperText?: string;
+  errorText?: string;
+  isInvalid?: boolean;
   dataTestid?: string;
 };
 
@@ -29,6 +32,7 @@ export const NumberForm: VFC<Props> = memo((props) => {
   const {
     value,
     onChange,
+    onBlur = () => {},
     min = 0,
     max = Number.MAX_SAFE_INTEGER,
     step = 1,
@@ -38,6 +42,8 @@ export const NumberForm: VFC<Props> = memo((props) => {
     labelSize = "md",
     require = "",
     helperText = "",
+    errorText = "",
+    isInvalid = false,
     dataTestid = "",
   } = props;
 
@@ -47,12 +53,15 @@ export const NumberForm: VFC<Props> = memo((props) => {
       labelSize={labelSize}
       require={require}
       helperText={helperText}
+      errorText={errorText}
+      isInvalid={isInvalid}
     >
       <InputGroup>
         <NumberInput
           allowMouseWheel
           value={value}
           onChange={(vs: string, vn: number) => { onChange(vn); }}
+          onBlur={onBlur}
           min={min}
           max={max}
           step={step}

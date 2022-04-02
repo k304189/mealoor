@@ -2,21 +2,19 @@ import { ChangeEvent, memo, VFC, useEffect, useState } from "react";
 import { Box } from "@chakra-ui/react";
 
 import { FoodCommonForm } from "../../parts/food/FoodCommonForm";
-import { EatTimingRadio } from "../../parts/food/EatTimingRadio";
 import { TextForm } from "../../parts/form/TextForm";
-import { FormArea } from "../../../molecules/form/FormArea";
+import { useFavoriteEatApi } from "../../../../hooks/food/useFavoriteEatApi";
 import { useFoodValidate } from "../../../../hooks/food/useFoodValidate";
 import { useFoodCategoryValidate } from "../../../../hooks/food/useFoodCategoryValidate";
-import { useEatApi } from "../../../../hooks/food/useEatApi";
 import { useMessage } from "../../../../hooks/common/layout/useMessage";
 import { TFoodCategory } from "../../../../types/api/TFoodCategory";
-import { TEat } from "../../../../types/api/TEat";
+import { TFavoriteEat } from "../../../../types/api/TFavoriteEat";
 
 type Props = {
-  eat?: TEat | null;
+  favoriteEat?: TFavoriteEat | null;
 };
 
-export const EatForm: VFC<Props> = memo((props) => {
+export const FavoriteEatForm: VFC<Props> = memo((props) => {
   const [id, setId] = useState(0);
   const [name, setName] = useState("");
   const [eatType, setEatType] = useState("");
@@ -31,10 +29,9 @@ export const EatForm: VFC<Props> = memo((props) => {
   const [lipid, setLipid] = useState(0);
   const [carbo, setCarbo] = useState(0);
   const [note, setNote] = useState("");
-  const [discounted, setDiscounted] = useState(false);
 
-  const [date, setDate] = useState("");
-  const [eatTiming, setEatTiming] = useState("");
+  const [registeredName, setRegisteredName] = useState("");
+  const [amountNote, setAmountNote] = useState("");
 
   const [invalidName, setInvalidName] = useState(false);
   const [invalidEatType, setInvalidEatType] = useState(false);
@@ -42,8 +39,9 @@ export const EatForm: VFC<Props> = memo((props) => {
   const [invalidCategories, setInvalidCategories] = useState(false);
   const [invalidShop, setInvalidShop] = useState(false);
   const [invalidNote, setInvalidNote] = useState(false);
-  const [invalidDate, setInvalidDate] = useState(false);
-  const [invalidEatTiming, setInvalidEatTiming] = useState(false);
+
+  const [invalidRegisteredName, setInvalidRegisteredName] = useState(false);
+  const [invalidAmountNote, setInvalidAmountNote] = useState(false);
 
   const [errorTextName, setErrorTextName] = useState("");
   const [errorTextEatType, setErrorTextEatType] = useState("");
@@ -51,40 +49,39 @@ export const EatForm: VFC<Props> = memo((props) => {
   const [errorTextCategories, setErrorTextCategories] = useState("");
   const [errorTextShop, setErrorTextShop] = useState("");
   const [errorTextNote, setErrorTextNote] = useState("");
-  const [errorTextDate, setErrorTextDate] = useState("");
-  const [errorTextEatTiming, setErrorTextEatTiming] = useState("");
+
+  const [errorTextRegisteredName, setErrorTextRegisteredName] = useState("");
+  const [errorTextAmountNote, setErrorTextAmountNote] = useState("");
 
   const [updateMode, setUpdateMode] = useState<"create" | "update">("create");
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
-  const { eat = null } = props;
+  const { favoriteEat = null } = props;
   const {
     validateName,
     validateEatType,
     validateFoodType,
-    validateDate,
-    validateEatTiming,
     validateShop,
     validateNote,
+    validateRegisteredName,
+    validateAmountNote,
   } = useFoodValidate();
+  const { createFavoriteEat, updateFavoriteEat } = useFavoriteEatApi();
   const { validateSelectedFoodCategories } = useFoodCategoryValidate();
-  const { createEat, updateEat } = useEatApi();
   const { errorToast } = useMessage();
 
-  const onChangeDate = (e: ChangeEvent<HTMLInputElement>) => {
-    setDate(e.target.value);
+  const onChangeRegisteredName = (e: ChangeEvent<HTMLInputElement>) => {
+    setRegisteredName(e.target.value);
+  };
+
+  const onChangeAmountNote = (e: ChangeEvent<HTMLInputElement>) => {
+    setAmountNote(e.target.value);
   };
 
   const onBlurName = () => {
     const { invalid, errorText } = validateName(name);
     setInvalidName(invalid);
     setErrorTextName(errorText);
-  };
-
-  const onBlurDate = () => {
-    const { invalid, errorText } = validateDate(date, "食事日");
-    setInvalidDate(invalid);
-    setErrorTextDate(errorText);
   };
 
   const onBlurShop = () => {
@@ -99,6 +96,18 @@ export const EatForm: VFC<Props> = memo((props) => {
     setErrorTextNote(errorText);
   };
 
+  const onBlurRegisteredName = () => {
+    const { invalid, errorText } = validateRegisteredName(registeredName);
+    setInvalidRegisteredName(invalid);
+    setErrorTextRegisteredName(errorText);
+  };
+
+  const onBlurAmountNote = () => {
+    const { invalid, errorText } = validateAmountNote(amountNote);
+    setInvalidAmountNote(invalid);
+    setErrorTextAmountNote(errorText);
+  };
+
   const isInvalidAllValue = () => {
     const { invalid: nameInv } = validateName(name);
     const { invalid: eatTypeInv, errorText: eatTypeErrTxt } = validateEatType(eatType);
@@ -109,32 +118,31 @@ export const EatForm: VFC<Props> = memo((props) => {
     } = validateSelectedFoodCategories(categories);
     const { invalid: shopInv } = validateShop(shop);
     const { invalid: noteInv } = validateNote(note);
-    const { invalid: dateInv } = validateDate(date);
-    const { invalid: eatTimingInv, errorText: eatTimingErrTxt } = validateEatTiming(eatTiming);
+    const { invalid: registeredNameInv } = validateRegisteredName(registeredName);
+    const { invalid: amountNoteInv } = validateAmountNote(amountNote);
 
     const checkResult = nameInv || eatTypeInv || foodTypeInv || shopInv
-      || categoriesInv || noteInv || dateInv || eatTimingInv;
+      || categoriesInv || noteInv || registeredNameInv || amountNoteInv;
 
     if (checkResult) {
       onBlurName();
       onBlurShop();
       onBlurNote();
+      onBlurRegisteredName();
+      onBlurAmountNote();
       setInvalidEatType(eatTypeInv);
       setErrorTextEatType(eatTypeErrTxt);
       setInvalidFoodType(foodTypeInv);
       setErrorTextFoodType(foodTypeErrTxt);
       setInvalidCategories(categoriesInv);
       setErrorTextCategories(categoriesErrTxt);
-      onBlurDate();
-      setInvalidEatTiming(eatTimingInv);
-      setErrorTextEatTiming(eatTimingErrTxt);
 
       errorToast("入力値に不備があります");
       throw new Error();
     }
   };
 
-  const getEatJson = (): TEat => {
+  const getFavoriteEatJson = (): TFavoriteEat => {
     return {
       id,
       name,
@@ -149,58 +157,56 @@ export const EatForm: VFC<Props> = memo((props) => {
       protein,
       lipid,
       carbo,
-      discounted,
       note,
-      eat_timing: eatTiming,
-      date,
+      registered_name: registeredName,
+      amount_note: amountNote,
     };
   };
 
   const createFunction = async () => {
     isInvalidAllValue();
-    await createEat(getEatJson());
+    await createFavoriteEat(getFavoriteEatJson());
   };
 
   const updateFunction = async () => {
     isInvalidAllValue();
-    await updateEat(getEatJson());
+    await updateFavoriteEat(getFavoriteEatJson());
   };
 
   useEffect(() => {
     const btnStatus = invalidName || invalidEatType || invalidFoodType
-      || invalidCategories || invalidDate || invalidEatTiming || invalidShop
-      || invalidNote;
+      || invalidCategories || invalidRegisteredName || invalidAmountNote
+      || invalidShop || invalidNote;
     setButtonDisabled(btnStatus);
   }, [
     invalidName,
     invalidEatType,
     invalidFoodType,
     invalidCategories,
-    invalidDate,
-    invalidEatTiming,
+    invalidRegisteredName,
+    invalidAmountNote,
     invalidShop,
     invalidNote,
   ]);
 
   useEffect(() => {
-    if (eat) {
-      setId(eat.id);
-      setName(eat.name);
-      setEatType(eat.eat_type);
-      setFoodType(eat.food_type);
-      setCategories(eat.categories);
-      setDate(eat.date);
-      setEatTiming(eat.eat_timing);
-      setShop(eat.shop);
-      setPrice(eat.price);
-      setKcal(eat.kcal);
-      setAmount(eat.amount);
-      setUnit(eat.unit);
-      setProtein(eat.protein);
-      setLipid(eat.lipid);
-      setCarbo(eat.carbo);
-      setDiscounted(eat.discounted);
-      setNote(eat.note);
+    if (favoriteEat) {
+      setId(favoriteEat.id);
+      setName(favoriteEat.name);
+      setEatType(favoriteEat.eat_type);
+      setFoodType(favoriteEat.food_type);
+      setCategories(favoriteEat.categories);
+      setRegisteredName(favoriteEat.registered_name);
+      setAmountNote(favoriteEat.amount_note);
+      setShop(favoriteEat.shop);
+      setPrice(favoriteEat.price);
+      setKcal(favoriteEat.kcal);
+      setAmount(favoriteEat.amount);
+      setUnit(favoriteEat.unit);
+      setProtein(favoriteEat.protein);
+      setLipid(favoriteEat.lipid);
+      setCarbo(favoriteEat.carbo);
+      setNote(favoriteEat.note);
 
       setUpdateMode("update");
     }
@@ -249,35 +255,33 @@ export const EatForm: VFC<Props> = memo((props) => {
       setLipid={setLipid}
       carbo={carbo}
       setCarbo={setCarbo}
-      discounted={discounted}
-      setDiscounted={setDiscounted}
       foodCategories={categories}
       setFoodCategories={setCategories}
       invalidFoodCategories={invalidCategories}
       errorTextFoodCategories={errorTextCategories}
     >
       <>
-        <Box w="20%">
+        <Box w="30%">
           <TextForm
-            label="食事日"
-            type="date"
-            require="require"
-            value={date}
-            onChange={onChangeDate}
-            onBlur={onBlurDate}
-            isInvalid={invalidDate}
-            errorText={errorTextDate}
+            label="食事登録名"
+            require="optional"
+            value={registeredName}
+            onChange={onChangeRegisteredName}
+            onBlur={onBlurRegisteredName}
+            isInvalid={invalidRegisteredName}
+            errorText={errorTextRegisteredName}
           />
         </Box>
-        <Box w="30%">
-          <FormArea
-            label="食事タイミング"
-            require="require"
-            isInvalid={invalidEatTiming}
-            errorText={errorTextEatTiming}
-          >
-            <EatTimingRadio eatTiming={eatTiming} onChange={setEatTiming} />
-          </FormArea>
+        <Box w="15%">
+          <TextForm
+            label="分量メモ"
+            require="optional"
+            value={amountNote}
+            onChange={onChangeAmountNote}
+            onBlur={onBlurAmountNote}
+            isInvalid={invalidAmountNote}
+            errorText={errorTextAmountNote}
+          />
         </Box>
       </>
     </FoodCommonForm>

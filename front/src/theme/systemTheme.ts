@@ -18,6 +18,8 @@ export const appAccountBgColor = "#2A4365";
 export const appAccountBorderColor = "#C4F1F9";
 export const appBodyBgColor = "#51BC37";
 export const appEatBgColor = "#EE7800";
+export const appFavoriteEatBgColor = "#FCC800";
+export const appFavoriteEatBorderColor = "#A16D58";
 
 const systemHeaderHeight = "48px";
 const systemMainHeight = `calc(100% - ${systemHeaderHeight})`;
@@ -97,6 +99,10 @@ export const systemTheme = extendTheme({
       "button.eat": {
         backgroundColor: appEatBgColor,
         color: "white",
+      },
+      "button.favoriteEat": {
+        backgroundColor: appFavoriteEatBgColor,
+        color: "black",
       },
       "div.defaultRadioButton": {
         borderColor: defaultRadioColor,
@@ -192,10 +198,45 @@ export const systemTheme = extendTheme({
       ".bgMain": {
         backgroundColor: mainColor,
       },
+      ".pagination": {
+        display: "flex",
+        listStyle: "none",
+        gap: "2px",
+        li: {
+          borderRadius: "5px",
+          width: "40px",
+          height: "48px",
+          _hover: {
+            backgroundColor: accentColor,
+            color: "white",
+          },
+          "&.selected": {
+            backgroundColor: accentColor,
+            color: "white",
+          },
+        },
+        a: {
+          display: "flex",
+          width: "100%",
+          height: "100%",
+          fontWeight: "bold",
+          justifyContent: "center",
+          alignItems: "center",
+        },
+      },
+      ".pagingTable td": {
+        paddingTop: "4px",
+        paddingBottom: "4px",
+      },
       ".account": {
         backgroundColor: appAccountBgColor,
         borderLeftColor: appAccountBorderColor,
         color: "white",
+      },
+      ".favoriteEat": {
+        backgroundColor: appFavoriteEatBgColor,
+        borderLeftColor: appFavoriteEatBorderColor,
+        color: "black",
       },
     },
   },

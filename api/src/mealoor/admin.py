@@ -5,6 +5,8 @@ from mealoor.models import Account
 from mealoor.models import Body
 from mealoor.models import Eat
 from mealoor.models import EatCategory
+from mealoor.models import FavoriteEat
+from mealoor.models import FavoriteEatCategory
 
 class AccountAdmin(BaseUserAdmin):
     ordering = ['id']
@@ -47,7 +49,33 @@ class EatCategoryAdmin(admin.ModelAdmin):
     list_display = ['eat', 'category', 'amount', 'unit']
     fields = ['eat', 'category', 'amount', 'unit']
 
+class FavoriteEatAdmin(admin.ModelAdmin):
+    list_display = ['account', 'name', 'amount_note', 'shop', 'price', 'kcal']
+    fields = [
+        'account',
+        'name',
+        'amount_note',
+        'registered_name',
+        'shop',
+        'price',
+        'kcal',
+        'eat_type',
+        'food_type',
+        'amount',
+        'unit',
+        'protein',
+        'lipid',
+        'carbo',
+        'note',
+    ]
+
+class FavoriteEatCategoryAdmin(admin.ModelAdmin):
+    list_display = ['favorite_eat', 'category', 'amount', 'unit']
+    fields = ['favorite_eat', 'category', 'amount', 'unit']
+
 admin.site.register(Account, AccountAdmin)
 admin.site.register(Body, BodyAdmin)
 admin.site.register(Eat, EatAdmin)
 admin.site.register(EatCategory, EatCategoryAdmin)
+admin.site.register(FavoriteEat, FavoriteEatAdmin)
+admin.site.register(FavoriteEatCategory, FavoriteEatCategoryAdmin)
