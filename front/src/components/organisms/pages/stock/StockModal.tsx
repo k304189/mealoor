@@ -2,16 +2,16 @@ import { memo, VFC } from "react";
 
 import { StockForm } from "./StockForm";
 import { DefaultModal } from "../../../molecules/layout/DefaultModal";
-// import { TFavoriteEat } from "../../../../types/api/TFavoriteEat";
+import { TStock } from "../../../../types/api/TStock";
 
 type Props = {
-  // favoriteEat?: TFavoriteEat | null;
+  stock?: TStock | null;
   isOpen: boolean;
   onClose: () => void;
 };
 
 export const StockModal: VFC<Props> = memo((props) => {
-  const { isOpen, onClose } = props;
+  const { stock = null, isOpen, onClose } = props;
 
   return (
     <DefaultModal
@@ -19,7 +19,7 @@ export const StockModal: VFC<Props> = memo((props) => {
       onClose={onClose}
       modalHeader="食材編集"
       modalBody={(
-        <StockForm />
+        <StockForm stock={stock} />
       )}
       size="6xl"
     />

@@ -8,7 +8,7 @@ export const FavoriteEatModalButton: VFC = memo(() => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <>
-      <FavoriteEatIconButton onClick={onOpen} />
+      <FavoriteEatIconButton onClick={onOpen} className="favoriteEat" />
       <FavoriteEatModal
         isOpen={isOpen}
         onClose={onClose}

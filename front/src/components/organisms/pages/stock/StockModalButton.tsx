@@ -8,7 +8,7 @@ export const StockModalButton: VFC = memo(() => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <>
-      <StockIconButton onClick={onOpen} />
+      <StockIconButton onClick={onOpen} className="stock" />
       <StockModal
         isOpen={isOpen}
         onClose={onClose}

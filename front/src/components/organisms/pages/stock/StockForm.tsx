@@ -74,7 +74,7 @@ export const StockForm: VFC<Props> = memo((props) => {
     validateLocation,
   } = useFoodValidate();
   const { validateSelectedFoodCategories } = useFoodCategoryValidate();
-  const { createStock } = useStockApi();
+  const { createStock, updateStock } = useStockApi();
   const { errorToast } = useMessage();
 
   const onChangeLimit = (e: ChangeEvent<HTMLInputElement>) => {
@@ -183,7 +183,7 @@ export const StockForm: VFC<Props> = memo((props) => {
 
   const updateFunction = async () => {
     isInvalidAllValue();
-    console.log(getStockJson());
+    await updateStock(getStockJson());
   };
 
   useEffect(() => {

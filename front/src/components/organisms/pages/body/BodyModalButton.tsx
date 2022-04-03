@@ -8,7 +8,7 @@ export const BodyModalButton: VFC = memo(() => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <>
-      <BodyIconButton onClick={onOpen} />
+      <BodyIconButton onClick={onOpen} className="body" />
       <BodyModal
         isOpen={isOpen}
         onClose={onClose}
