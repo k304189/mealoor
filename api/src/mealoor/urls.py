@@ -23,4 +23,5 @@ urlpatterns = [
     path('favoriteEat/update/<int:id>/', views.UpdateFavoriteEatView.as_view(), name='favorite_eat_update'),
     path('favoriteEat/delete/<int:id>/', views.DeleteFavoriteEatView.as_view(), name='favorite_eat_delete'),
     path('favoriteEat/eat/<int:id>/', views.CreateEatFromFavoriteEatView.as_view(), name='favorite_eat_eat'),
+    path('stock/create/', views.CreateStockView.as_view(), name='stock_create'),
 ]

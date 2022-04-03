@@ -17,3 +17,4 @@ export const URL_FAVORIRE_EAT_CREATE = `${process.env.REACT_APP_API_V1_URL}/favo
 export const URL_FAVORIRE_EAT_DELETE = `${process.env.REACT_APP_API_V1_URL}/favoriteEat/delete/`;
 export const URL_FAVORIRE_EAT_UPDATE = `${process.env.REACT_APP_API_V1_URL}/favoriteEat/update/`;
 export const URL_FAVORIRE_EAT_EAT = `${process.env.REACT_APP_API_V1_URL}/favoriteEat/eat/`;
+export const URL_STOCK_CREATE = `${process.env.REACT_APP_API_V1_URL}/stock/create/`;

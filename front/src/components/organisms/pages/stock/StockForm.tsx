@@ -6,6 +6,7 @@ import { LocationRadio } from "../../parts/food/LocationRadio";
 import { TextForm } from "../../parts/form/TextForm";
 import { NumberForm } from "../../parts/form/NumberForm";
 import { FormArea } from "../../../molecules/form/FormArea";
+import { useStockApi } from "../../../../hooks/food/useStockApi";
 import { useFoodValidate } from "../../../../hooks/food/useFoodValidate";
 import { useFoodCategoryValidate } from "../../../../hooks/food/useFoodCategoryValidate";
 import { useMessage } from "../../../../hooks/common/layout/useMessage";
@@ -30,6 +31,7 @@ export const StockForm: VFC<Props> = memo((props) => {
   const [protein, setProtein] = useState(0);
   const [lipid, setLipid] = useState(0);
   const [carbo, setCarbo] = useState(0);
+  const [discounted, setDiscounted] = useState(false);
   const [note, setNote] = useState("");
 
   const [limit, setLimit] = useState("");
@@ -72,6 +74,7 @@ export const StockForm: VFC<Props> = memo((props) => {
     validateLocation,
   } = useFoodValidate();
   const { validateSelectedFoodCategories } = useFoodCategoryValidate();
+  const { createStock } = useStockApi();
   const { errorToast } = useMessage();
 
   const onChangeLimit = (e: ChangeEvent<HTMLInputElement>) => {
@@ -169,12 +172,13 @@ export const StockForm: VFC<Props> = memo((props) => {
       location,
       quantity,
       remain,
+      discounted,
     };
   };
 
   const createFunction = async () => {
     isInvalidAllValue();
-    console.log(getStockJson());
+    await createStock(getStockJson());
   };
 
   const updateFunction = async () => {
@@ -213,6 +217,7 @@ export const StockForm: VFC<Props> = memo((props) => {
       setProtein(stock.protein);
       setLipid(stock.lipid);
       setCarbo(stock.carbo);
+      setDiscounted(stock.discounted);
       setNote(stock.note);
 
       setLimit(stock.limit);
@@ -267,6 +272,8 @@ export const StockForm: VFC<Props> = memo((props) => {
       setLipid={setLipid}
       carbo={carbo}
       setCarbo={setCarbo}
+      discounted={discounted}
+      setDiscounted={setDiscounted}
       foodCategories={categories}
       setFoodCategories={setCategories}
       invalidFoodCategories={invalidCategories}

@@ -5,3 +5,5 @@ from mealoor.models.eat import Eat
 from mealoor.models.eatCategory import EatCategory
 from mealoor.models.favoriteEat import FavoriteEat
 from mealoor.models.favoriteEatCategory import FavoriteEatCategory
+from mealoor.models.stock import Stock
+from mealoor.models.stockCategory import StockCategory

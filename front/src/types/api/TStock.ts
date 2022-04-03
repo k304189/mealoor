@@ -5,4 +5,5 @@ export type TStock = TFoodCommon & {
   quantity: number;
   location: string;
   remain: number;
+  discounted: boolean;
 };

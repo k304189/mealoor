@@ -17,3 +17,4 @@ from mealoor.views.favoriteEat import CreateFavoriteEatView
 from mealoor.views.favoriteEat import UpdateFavoriteEatView
 from mealoor.views.favoriteEat import DeleteFavoriteEatView
 from mealoor.views.favoriteEat import CreateEatFromFavoriteEatView
+from mealoor.views.stock import CreateStockView
