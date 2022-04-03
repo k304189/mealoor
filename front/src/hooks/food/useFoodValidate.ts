@@ -13,6 +13,7 @@ type T = {
   validateRegisteredName: (registeredName: string) => TValidateReturn;
   validateAmountNote: (amountNote: string) => TValidateReturn;
   validateRate: (rate: number, rateName?: string) => TValidateReturn;
+  validateLocation: (location: string) => TValidateReturn;
 };
 
 export const useFoodValidate = (): T => {
@@ -124,6 +125,16 @@ export const useFoodValidate = (): T => {
     return { invalid, errorText };
   }, []);
 
+  const validateLocation = useCallback((location: string) => {
+    let invalid = false;
+    let errorText = "";
+    if (!location || location === "") {
+      invalid = true;
+      errorText = "保管場所を選択してください";
+    }
+    return { invalid, errorText };
+  }, []);
+
   return {
     validateName,
     validateEatType,
@@ -135,5 +146,6 @@ export const useFoodValidate = (): T => {
     validateRegisteredName,
     validateAmountNote,
     validateRate,
+    validateLocation,
   };
 };
