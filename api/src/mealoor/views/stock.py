@@ -22,7 +22,10 @@ class ListStockView(generics.ListAPIView):
     pagination_class = StockPagination
 
     def get_queryset(self):
-        return Stock.objects.filter(account=self.request.user)
+        return Stock.objects.filter(
+            account=self.request.user,
+            remain__gt='0',
+        ).order_by('limit')
 
 class CreateStockView(generics.CreateAPIView):
     """ Create Authentication Account's Stock """

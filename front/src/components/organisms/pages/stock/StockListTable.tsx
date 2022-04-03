@@ -1,4 +1,4 @@
-import { memo, VFC, useState } from "react";
+import { memo, VFC, ReactElement, useState } from "react";
 import {
   HStack,
   Table,
@@ -9,9 +9,11 @@ import {
   Td,
   useDisclosure,
 } from "@chakra-ui/react";
+import { BellIcon, WarningIcon, NotAllowedIcon } from "@chakra-ui/icons";
 
 import { StockModal } from "./StockModal";
 import { DefaultLink } from "../../../atoms/button/DefaultLink";
+import { DefaultIconButton } from "../../../atoms/button/DefaultIconButton";
 import { DeleteButton } from "../../../molecules/button/DeleteButton";
 import { EatIconButton } from "../../../molecules/button/EatIconButton";
 import { DivideIconButton } from "../../../molecules/button/DivideIconButton";
@@ -38,11 +40,65 @@ export const StockListTable: VFC<Props> = memo((props) => {
     editModalOnOpen();
   };
 
+  const calcLimitMinusNow = (limit: string): number => {
+    const now = new Date().getTime();
+    const limitTime = Date.parse(limit);
+    return (limitTime - now) / (1000 * 60 * 60 * 24);
+  };
+
+  const getLimitClassName = (limit: string): string => {
+    const diffTime = calcLimitMinusNow(limit);
+    let className = "";
+    if (diffTime < -1) {
+      className = "limitExpired";
+    } else if (diffTime >= -1 && diffTime < 0) {
+      className = "limitToday";
+    } else if (diffTime >= 0 && diffTime < 4) {
+      className = "limitWarning";
+    }
+    return className;
+  };
+
+  const getLimitAlertIcon = (limit: string): ReactElement => {
+    const className = getLimitClassName(limit);
+    let alert: ReactElement = (<></>);
+    let icon: ReactElement = (<></>);
+    let hoverText = "";
+    let ariaLabel = "";
+    if (className === "limitExpired") {
+      hoverText = "賞味期限切れです";
+      ariaLabel = "賞味期限切れ";
+      icon = (<NotAllowedIcon />);
+    } else if (className === "limitToday") {
+      hoverText = "賞味期限が今日までです";
+      ariaLabel = "賞味期限が今日まで";
+      icon = (<WarningIcon />);
+    } else if (className === "limitWarning") {
+      hoverText = "賞味期限が5日を切りました";
+      ariaLabel = "賞味期限が近い";
+      icon = (<BellIcon />);
+    }
+
+    if (className) {
+      alert = (
+        <DefaultIconButton
+          className="limitIcon"
+          hoverText={hoverText}
+          aria-label={ariaLabel}
+          icon={icon}
+          size="xs"
+        />
+      );
+    }
+    return alert;
+  };
+
   return (
     <>
       <Table className="pagingTable" size="sm">
         <Thead>
           <Tr>
+            <Th w="2%" />
             <Th w="25%">名前</Th>
             <Th w="15%">賞味期限</Th>
             <Th w="10%">食料タイプ</Th>
@@ -50,13 +106,14 @@ export const StockListTable: VFC<Props> = memo((props) => {
             <Th w="10%">カロリー</Th>
             <Th w="5%">量</Th>
             <Th w="10%">残量</Th>
-            <Th w="15%">食材編集</Th>
+            <Th w="13%">食材編集</Th>
           </Tr>
         </Thead>
         <Tbody>
           { stocks.map((stock) => {
             return (
-              <Tr key={stock.id}>
+              <Tr key={stock.id} className={ getLimitClassName(stock.limit) }>
+                <Td>{ getLimitAlertIcon(stock.limit) }</Td>
                 <Td>
                   <DefaultLink
                     hoverText="食材編集"
