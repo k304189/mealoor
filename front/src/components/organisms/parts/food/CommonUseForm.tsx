@@ -11,14 +11,18 @@ import { AddButton } from "../../../molecules/button/AddButton";
 import { MinusButton } from "../../../molecules/button/MinusButton";
 import { FormArea } from "../../../molecules/form/FormArea";
 import { useMessage } from "../../../../hooks/common/layout/useMessage";
-import { useFavoriteEatApi } from "../../../../hooks/food/useFavoriteEatApi";
 import { useFoodValidate } from "../../../../hooks/food/useFoodValidate";
+import { TUse } from "../../../../types/api/TUse";
 
 export type Props = {
   id: number;
+  useType: "trash" | "divide" | "eat";
+  callFunction: (json: TUse) => Promise<number>;
   quantity?: number;
   maxRate?: number;
   selectedDataText?: string;
+  setUseTypeJson?: boolean;
+  requirePrice?: boolean;
 };
 
 export const CommonUseForm: VFC<Props> = memo((props) => {
@@ -39,10 +43,10 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
   const [errorTextRate, setErrorTextRate] = useState("");
   const [errorTextNote, setErrorTextNote] = useState("");
 
+  const [btnText, setBtnText] = useState("");
   const [btnStatus, setBtnStatus] = useState(false);
 
   const { successToast, errorToast } = useMessage();
-  const { eatFavoriteEat } = useFavoriteEatApi();
   const {
     validateDate,
     validateEatTiming,
@@ -51,9 +55,13 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
   } = useFoodValidate();
   const {
     id,
+    useType,
+    callFunction,
     quantity = 1,
     maxRate = Number.MAX_SAFE_INTEGER,
     selectedDataText = "",
+    setUseTypeJson = false,
+    requirePrice = false,
   } = props;
 
   const onChangeDate = (e: ChangeEvent<HTMLInputElement>) => {
@@ -135,14 +143,18 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
     } = validateEatTiming(eatTiming);
     const { invalid: rateInv } = validateRate(rate);
 
-    const checkResult = dateInv || noteInv || eatTimingInv || rateInv;
+    let checkResult = dateInv || noteInv || rateInv;
+    if (useType === "eat") {
+      checkResult = checkResult || eatTimingInv;
+      if (eatTimingInv) {
+        setInvalidEatTiming(eatTimingInv);
+        setErrorTextEatTiming(eatTimingErrTxt);
+      }
+    }
     if (checkResult) {
       onBlurDate();
       onBlurRate();
       onBlurNote();
-      setInvalidEatTiming(eatTimingInv);
-      setInvalidEatTiming(eatTimingInv);
-      setErrorTextEatTiming(eatTimingErrTxt);
 
       errorToast("入力値に不備があります");
     }
@@ -150,27 +162,34 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
   };
 
   const getJson = () => {
-    const json = {
+    const json: TUse = {
       id,
       date,
-      eat_timing: eatTiming,
       rate,
-      price,
-      discounted,
       note,
     };
+    if (useType === "eat") {
+      json.eat_timing = eatTiming;
+    }
+    if (setUseTypeJson) {
+      json.use_type = useType;
+    }
+    if (requirePrice) {
+      json.price = price;
+      json.discounted = discounted;
+    }
     return json;
   };
 
   const onClickButton = () => {
     if (!validateAllValue()) {
-      eatFavoriteEat(getJson())
+      callFunction(getJson())
         .then(() => {
-          successToast("食事データを作成しました");
+          successToast("処理が作成しました");
           clearForm();
         })
         .catch(() => {
-          errorToast("食事データの登録に失敗しました");
+          errorToast("処理が失敗しました");
         });
     }
   };
@@ -178,6 +197,18 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
   useEffect(() => {
     setBtnStatus(invalidDate || invalidEatTiming || invalidRate || invalidNote);
   }, [invalidDate, invalidEatTiming, invalidRate, invalidNote]);
+
+  useEffect(() => {
+    let b = "";
+    if (useType === "trash") {
+      b = "処分";
+    } else if (useType === "divide") {
+      b = "分割";
+    } else if (useType === "eat") {
+      b = "食事";
+    }
+    setBtnText(b);
+  }, []);
 
   return (
     <>
@@ -192,7 +223,7 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
         <HStack gap={2} w="100%" h="30%">
           <Box w="40%">
             <TextForm
-              label="食事日"
+              label="日付"
               type="date"
               require="require"
               value={date}
@@ -202,22 +233,10 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
               isInvalid={invalidDate}
             />
           </Box>
-          <Box w="60%">
-            <FormArea
-              label="食事タイミング"
-              require="require"
-              errorText={errorTextEatTiming}
-              isInvalid={invalidEatTiming}
-            >
-              <EatTimingRadio eatTiming={eatTiming} onChange={onChangeEatTiming} />
-            </FormArea>
-          </Box>
-        </HStack>
-        <HStack w="100%" gap={4} h="50%">
           <Box w="40%" h="100%">
             <Flex h="100%" align="end" gap={1}>
               <NumberForm
-                label="食事量"
+                label="割合"
                 value={rate}
                 onChange={setRate}
                 onBlur={onBlurRate}
@@ -232,21 +251,43 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
               </HStack>
             </Flex>
           </Box>
-          <Box w="30%">
-            <NumberForm
-              label="価格"
-              value={price}
-              onChange={setPrice}
-              unit="円"
-              require="optional"
-            />
-          </Box>
-          <Box w="20%" h="100%">
-            <CheckboxButton isChecked={discounted} onChange={onChangeDiscounted}>
-              割引品
-            </CheckboxButton>
-          </Box>
         </HStack>
+        { useType === "eat" ? (
+          <HStack w="100%" h="20%">
+            <Box w="100%">
+              <FormArea
+                label="食事タイミング"
+                require="require"
+                errorText={errorTextEatTiming}
+                isInvalid={invalidEatTiming}
+              >
+                <EatTimingRadio eatTiming={eatTiming} onChange={onChangeEatTiming} />
+              </FormArea>
+            </Box>
+          </HStack>
+        ) : (
+          <></>
+        )}
+        { requirePrice ? (
+          <HStack w="100%" h="20%" gap={4}>
+            <Box w="35%">
+              <NumberForm
+                label="価格"
+                value={price}
+                onChange={setPrice}
+                unit="円"
+                require="optional"
+              />
+            </Box>
+            <Box w="15%" h="100%">
+              <CheckboxButton isChecked={discounted} onChange={onChangeDiscounted}>
+                割引品
+              </CheckboxButton>
+            </Box>
+          </HStack>
+        ) : (
+          <></>
+        )}
         <Flex w="100%" h="10%" align="end">
           <TextareaForm
             label="メモ"
@@ -264,7 +305,7 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
               onClick={onClickButton}
               disabled={btnStatus}
             >
-              食事
+              {btnText}
             </DefaultButton>
           </Box>
         </Flex>

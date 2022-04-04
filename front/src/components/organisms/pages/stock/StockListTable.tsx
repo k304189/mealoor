@@ -12,12 +12,15 @@ import {
 import { BellIcon, WarningIcon, NotAllowedIcon } from "@chakra-ui/icons";
 
 import { StockModal } from "./StockModal";
+import { CommonUseForm } from "../../parts/food/CommonUseForm";
 import { DefaultLink } from "../../../atoms/button/DefaultLink";
 import { DefaultIconButton } from "../../../atoms/button/DefaultIconButton";
 import { DeleteButton } from "../../../molecules/button/DeleteButton";
 import { EatIconButton } from "../../../molecules/button/EatIconButton";
+import { DefaultModal } from "../../../molecules/layout/DefaultModal";
 import { DivideIconButton } from "../../../molecules/button/DivideIconButton";
 import { TStock } from "../../../../types/api/TStock";
+import { TUse } from "../../../../types/api/TUse";
 
 type Props = {
   stocks: Array<TStock>;
@@ -25,12 +28,24 @@ type Props = {
 
 export const StockListTable: VFC<Props> = memo((props) => {
   const [openStock, setOpenStock] = useState<TStock | null>(null);
+  const [useModalHeader, setUseModalHeader] = useState("");
+  const [useType, setUseType] = useState<"trash" | "divide" | "eat">("trash");
   const { stocks } = props;
   const {
     isOpen: editModalIsOpen,
     onOpen: editModalOnOpen,
     onClose: editModalOnClose,
   } = useDisclosure();
+  const {
+    isOpen: useModalIsOpen,
+    onOpen: useModalOnOpen,
+    onClose: useModalOnClose,
+  } = useDisclosure();
+
+  const callFunction = async (json: TUse) => {
+    console.log(json);
+    return 200;
+  };
 
   const onClickStockLink = (id: number) => {
     const index = stocks.findIndex((s) => {
@@ -38,6 +53,24 @@ export const StockListTable: VFC<Props> = memo((props) => {
     });
     setOpenStock(stocks[index]);
     editModalOnOpen();
+  };
+
+  const onClickUseButton = (utype: "trash" | "divide" | "eat", id: number) => {
+    let umHeader: string = "";
+    if (utype === "trash") {
+      umHeader = "食材処分";
+    } else if (utype === "divide") {
+      umHeader = "食材分割";
+    } else if (utype === "eat") {
+      umHeader = "食事登録";
+    }
+    const index = stocks.findIndex((s) => {
+      return s.id === id;
+    });
+    setOpenStock(stocks[index]);
+    setUseType(utype);
+    setUseModalHeader(umHeader);
+    useModalOnOpen();
   };
 
   const calcLimitMinusNow = (limit: string): number => {
@@ -133,21 +166,21 @@ export const StockListTable: VFC<Props> = memo((props) => {
                     <DeleteButton
                       hoverText="対象の食材を処分します"
                       className="secondary"
-                      onClick={() => {}}
+                      onClick={() => { onClickUseButton("trash", stock.id); }}
                       aria-label="食材を捨てる"
                       size="xs"
                     />
                     <DivideIconButton
                       hoverText="対象の食材から食材データを分割します"
                       className="secondary"
-                      onClick={() => {}}
+                      onClick={() => { onClickUseButton("divide", stock.id); }}
                       aria-label="食材を分ける"
                       size="xs"
                     />
                     <EatIconButton
                       hoverText="対象の食材から食事データを登録します"
                       className="secondary"
-                      onClick={() => {}}
+                      onClick={() => { onClickUseButton("eat", stock.id); }}
                       aria-label="食材を食べる"
                       size="xs"
                     />
@@ -162,6 +195,23 @@ export const StockListTable: VFC<Props> = memo((props) => {
         stock={openStock}
         isOpen={editModalIsOpen}
         onClose={editModalOnClose}
+      />
+      <DefaultModal
+        isOpen={useModalIsOpen}
+        onClose={useModalOnClose}
+        modalHeader={useModalHeader}
+        modalBody={(
+          <CommonUseForm
+            id={openStock?.id ?? 0}
+            useType={useType}
+            callFunction={callFunction}
+            quantity={openStock?.quantity ?? 1}
+            maxRate={openStock?.remain ?? 100}
+            selectedDataText={openStock?.name ?? ""}
+            setUseTypeJson
+          />
+        )}
+        size="xl"
       />
     </>
   );
