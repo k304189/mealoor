@@ -30,7 +30,7 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedDataText, setSelectedDataText] = useState("");
   const { favoriteEat } = props;
-  const { deleteFavoriteEat } = useFavoriteEatApi();
+  const { deleteFavoriteEat, eatFavoriteEat } = useFavoriteEatApi();
   const { successToast, errorToast } = useMessage();
   const {
     isOpen: editModalIsOpen,
@@ -172,10 +172,13 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
         modalBody={(
           <CommonUseForm
             id={openFavoriteEat?.id ?? 0}
+            useType="eat"
+            callFunction={eatFavoriteEat}
             selectedDataText={selectedDataText}
+            requirePrice
           />
         )}
-        size="xl"
+        size="2xl"
       />
     </>
   );

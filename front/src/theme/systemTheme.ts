@@ -8,6 +8,7 @@ export const systemComponentColor = "blue.800";
 export const readOnlyColor = "#A0AEC0";
 
 export const primaryButtonColor = "#FF6D62";
+export const secondaryButtonColor = textColor;
 export const withdrawButtonColor = "#829CBA";
 export const noButtonColor = "#F5F5F4";
 export const defaultRadioColor = "#D07D59";
@@ -20,6 +21,12 @@ export const appBodyBgColor = "#51BC37";
 export const appEatBgColor = "#EE7800";
 export const appFavoriteEatBgColor = "#FCC800";
 export const appFavoriteEatBorderColor = "#A16D58";
+export const appStockBgColor = "#E03448";
+export const appStockBorderColor = "#FDBA77";
+
+export const trLimitExpiredBgColor = "#CBD5E0";
+export const trLimitTodayBgColor = "#FEB2B2";
+export const trLimitWarningBgColor = "#FAF089";
 
 const systemHeaderHeight = "48px";
 const systemMainHeight = `calc(100% - ${systemHeaderHeight})`;
@@ -84,6 +91,16 @@ export const systemTheme = extendTheme({
         backgroundColor: primaryButtonColor,
         color: "white",
       },
+      "button.secondary": {
+        backgroundColor: "transparent",
+        border: "1px solid",
+        borderColor: secondaryButtonColor,
+        color: secondaryButtonColor,
+        _hover: {
+          color: "white",
+          backgroundColor: secondaryButtonColor,
+        },
+      },
       "button.withdraw": {
         backgroundColor: withdrawButtonColor,
         color: "white",
@@ -91,6 +108,13 @@ export const systemTheme = extendTheme({
       "button.no": {
         backgroundColor: noButtonColor,
         color: "black",
+      },
+      "button.limitIcon": {
+        backgroundColor: "transparent",
+        _hover: {
+          backgroundColor: "transparent",
+          cursor: "default",
+        },
       },
       "button.body": {
         backgroundColor: appBodyBgColor,
@@ -103,6 +127,10 @@ export const systemTheme = extendTheme({
       "button.favoriteEat": {
         backgroundColor: appFavoriteEatBgColor,
         color: "black",
+      },
+      "button.stock": {
+        backgroundColor: appStockBgColor,
+        color: "white",
       },
       "div.defaultRadioButton": {
         borderColor: defaultRadioColor,
@@ -136,6 +164,15 @@ export const systemTheme = extendTheme({
           bg: defaultCheckboxButtonColor,
           color: "white",
         },
+      },
+      "tr.limitExpired": {
+        backgroundColor: trLimitExpiredBgColor,
+      },
+      "tr.limitToday": {
+        backgroundColor: trLimitTodayBgColor,
+      },
+      "tr.limitWarning": {
+        backgroundColor: trLimitWarningBgColor,
       },
       ".systemHeader": {
         backgroundColor: mainColor,
@@ -237,6 +274,11 @@ export const systemTheme = extendTheme({
         backgroundColor: appFavoriteEatBgColor,
         borderLeftColor: appFavoriteEatBorderColor,
         color: "black",
+      },
+      ".stock": {
+        backgroundColor: appStockBgColor,
+        borderLeftColor: appStockBorderColor,
+        color: "white",
       },
     },
   },

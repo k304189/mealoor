@@ -23,4 +23,9 @@ urlpatterns = [
     path('favoriteEat/update/<int:id>/', views.UpdateFavoriteEatView.as_view(), name='favorite_eat_update'),
     path('favoriteEat/delete/<int:id>/', views.DeleteFavoriteEatView.as_view(), name='favorite_eat_delete'),
     path('favoriteEat/eat/<int:id>/', views.CreateEatFromFavoriteEatView.as_view(), name='favorite_eat_eat'),
+    path('stock/create/', views.CreateStockView.as_view(), name='stock_create'),
+    path('stock/', views.ListStockView.as_view(), name='stock_list'),
+    path('stock/update/<int:id>/', views.UpdateStockView.as_view(), name='stock_update'),
+    path('stock/delete/<int:id>/', views.DeleteStockView.as_view(), name='stock_delete'),
+    path('stock/use/<int:id>/', views.UseStockView.as_view(), name='stock_use'),
 ]

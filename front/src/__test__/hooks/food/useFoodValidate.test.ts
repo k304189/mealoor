@@ -286,4 +286,24 @@ describe("useAccountValidate Test", () => {
     expect(validateResult.errorText).toBe("チェック率は0より大きい値を入力してください");
   });
 
+  it("validateLocation when safe pattern", () => {
+    act(() => {
+      validateResult = result.current.validateLocation("常温");
+    });
+    // invalidがfalseである
+    expect(validateResult.invalid).toBeFalsy();
+    // errorTextが空文字である
+    expect(validateResult.errorText).toBe("");
+  });
+
+  it("validateLocation when location is empty", () => {
+    act(() => {
+      validateResult = result.current.validateLocation("");
+    });
+    // invalidがtrueである
+    expect(validateResult.invalid).toBeTruthy();
+    // errorTextがエラーメッセージである
+    expect(validateResult.errorText).toBe("保管場所を選択してください");
+  });
+
 });

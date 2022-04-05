@@ -6,7 +6,7 @@ import { DefaultButton, Props } from "../../atoms/button/DefaultButton";
 
 export const BodyIconButton: VFC<Props> = memo((props) => {
   return (
-    <DefaultButton className="body" {...props}>
+    <DefaultButton {...props}>
       <FontAwesomeIcon icon={faFileMedical} />
     </DefaultButton>
   );

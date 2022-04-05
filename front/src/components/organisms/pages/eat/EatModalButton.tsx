@@ -8,7 +8,7 @@ export const EatModalButton: VFC = memo(() => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <>
-      <EatIconButton onClick={onOpen} />
+      <EatIconButton onClick={onOpen} className="eat" />
       <EatModal
         isOpen={isOpen}
         onClose={onClose}

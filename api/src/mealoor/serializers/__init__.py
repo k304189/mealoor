@@ -3,3 +3,5 @@ from mealoor.serializers.authTokenSerializer import AuthTokenSerializer
 from mealoor.serializers.bodySerializer import BodySerializer
 from mealoor.serializers.eatSerializer import EatSerializer
 from mealoor.serializers.favoriteEatSerializer import FavoriteEatSerializer
+from mealoor.serializers.stockSerializer import StockSerializer
+from mealoor.serializers.stockCategorySerializer import StockCategorySerializer

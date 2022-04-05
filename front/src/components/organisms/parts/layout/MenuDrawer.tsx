@@ -41,6 +41,16 @@ export const MenuDrawer: VFC<Props> = memo((props) => {
             ダッシュボード
           </Box>
           <Box className="menuSection" data-testid="menuSection">
+            食材
+          </Box>
+          <Box
+            className="menuButton"
+            data-testid="menuButton"
+            onClick={() => { navigate("/stock"); }}
+          >
+            家にある食材
+          </Box>
+          <Box className="menuSection" data-testid="menuSection">
             食事
           </Box>
           <Box
