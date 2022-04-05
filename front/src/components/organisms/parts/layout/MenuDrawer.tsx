@@ -50,6 +50,13 @@ export const MenuDrawer: VFC<Props> = memo((props) => {
           >
             家にある食材
           </Box>
+          <Box
+            className="menuButton"
+            data-testid="menuButton"
+            onClick={() => { navigate("/favoriteStock"); }}
+          >
+            よく買う食材
+          </Box>
           <Box className="menuSection" data-testid="menuSection">
             食事
           </Box>
