@@ -19,8 +19,9 @@ import { DeleteButton } from "../../../molecules/button/DeleteButton";
 import { EatIconButton } from "../../../molecules/button/EatIconButton";
 import { DefaultModal } from "../../../molecules/layout/DefaultModal";
 import { DivideIconButton } from "../../../molecules/button/DivideIconButton";
+import { useStockApi } from "../../../../hooks/food/useStockApi";
 import { TStock } from "../../../../types/api/TStock";
-import { TUse } from "../../../../types/api/TUse";
+// import { TUse } from "../../../../types/api/TUse";
 
 type Props = {
   stocks: Array<TStock>;
@@ -41,11 +42,7 @@ export const StockListTable: VFC<Props> = memo((props) => {
     onOpen: useModalOnOpen,
     onClose: useModalOnClose,
   } = useDisclosure();
-
-  const callFunction = async (json: TUse) => {
-    console.log(json);
-    return 200;
-  };
+  const { useStock } = useStockApi();
 
   const onClickStockLink = (id: number) => {
     const index = stocks.findIndex((s) => {
@@ -204,7 +201,7 @@ export const StockListTable: VFC<Props> = memo((props) => {
           <CommonUseForm
             id={openStock?.id ?? 0}
             useType={useType}
-            callFunction={callFunction}
+            callFunction={useStock}
             quantity={openStock?.quantity ?? 1}
             maxRate={openStock?.remain ?? 100}
             selectedDataText={openStock?.name ?? ""}

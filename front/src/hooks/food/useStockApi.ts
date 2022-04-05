@@ -3,12 +3,14 @@ import axios from "axios";
 
 import { useRequestHeader } from "../common/auth/useRequestHeader";
 import { TStock } from "../../types/api/TStock";
+import { TUse } from "../../types/api/TUse";
 import { TStockPaginate } from "../../types/api/TStockPaginate";
 import {
   URL_STOCK_LIST,
   URL_STOCK_CREATE,
   URL_STOCK_UPDATE,
   URL_STOCK_DELETE,
+  URL_STOCK_USE,
 } from "../../constants/urls";
 
 type T = {
@@ -16,6 +18,7 @@ type T = {
   createStock: (createJson: TStock) => Promise<TStock>;
   updateStock: (updateJson: TStock) => Promise<TStock>;
   deleteStock: (deleteId: number) => Promise<number>;
+  useStock: (useJson: TUse) => Promise<number>;
 };
 
 export const useStockApi = (): T => {
@@ -57,5 +60,15 @@ export const useStockApi = (): T => {
     return response.data;
   }, []);
 
-  return { getStock, createStock, updateStock, deleteStock };
+  const useStock = useCallback(async (useJson: TUse) => {
+    const headers = getRequestHeader();
+
+    const url = `${URL_STOCK_USE}${useJson.id}/`;
+
+    const response = await axios.post(url, useJson, { headers });
+
+    return response.status;
+  }, []);
+
+  return { getStock, createStock, updateStock, deleteStock, useStock };
 };

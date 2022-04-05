@@ -9,6 +9,7 @@ from mealoor.models import FavoriteEat
 from mealoor.models import FavoriteEatCategory
 from mealoor.models import Stock
 from mealoor.models import StockCategory
+from mealoor.models import Use
 
 class AccountAdmin(BaseUserAdmin):
     ordering = ['id']
@@ -102,6 +103,10 @@ class StockCategoryAdmin(admin.ModelAdmin):
     list_display = ['stock', 'category', 'amount', 'unit']
     fields = ['stock', 'category', 'amount', 'unit']
 
+class UseAdmin(admin.ModelAdmin):
+    list_display = ['stock', 'date', 'use_type', 'rate']
+    fields = ['stock', 'date', 'use_type', 'rate', 'note']
+
 admin.site.register(Account, AccountAdmin)
 admin.site.register(Body, BodyAdmin)
 admin.site.register(Eat, EatAdmin)
@@ -110,3 +115,4 @@ admin.site.register(FavoriteEat, FavoriteEatAdmin)
 admin.site.register(FavoriteEatCategory, FavoriteEatCategoryAdmin)
 admin.site.register(Stock, StockAdmin)
 admin.site.register(StockCategory, StockCategoryAdmin)
+admin.site.register(Use, UseAdmin)

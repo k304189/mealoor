@@ -21,3 +21,4 @@ export const URL_STOCK_LIST = `${process.env.REACT_APP_API_V1_URL}/stock/`;
 export const URL_STOCK_CREATE = `${process.env.REACT_APP_API_V1_URL}/stock/create/`;
 export const URL_STOCK_UPDATE = `${process.env.REACT_APP_API_V1_URL}/stock/update/`;
 export const URL_STOCK_DELETE = `${process.env.REACT_APP_API_V1_URL}/stock/delete/`;
+export const URL_STOCK_USE = `${process.env.REACT_APP_API_V1_URL}/stock/use/`;
