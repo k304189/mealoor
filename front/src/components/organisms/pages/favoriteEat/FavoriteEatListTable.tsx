@@ -175,7 +175,9 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
             useType="eat"
             callFunction={eatFavoriteEat}
             selectedDataText={selectedDataText}
+            initName={openFavoriteEat?.registered_name || openFavoriteEat?.name}
             initPrice={openFavoriteEat?.price ?? 0}
+            requireName
             requirePrice
           />
         )}

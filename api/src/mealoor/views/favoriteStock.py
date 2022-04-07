@@ -61,6 +61,7 @@ class CreateStockFromFavoriteStockView(APIView):
         limit = request.data['date']
         location = request.data['location']
         rate = request.data['rate']
+        name = request.data['name']
         price = request.data['price']
         discounted = request.data['discounted']
         note = request.data['note']
@@ -69,9 +70,6 @@ class CreateStockFromFavoriteStockView(APIView):
         target_favorite_stock_categories = FavoriteStockCategory.objects.filter(
             favorite_stock=target_favorite_stock,
         )
-        name = target_favorite_stock.registered_name
-        if not(name):
-            name = target_favorite_stock.name
 
         calced_rate = Decimal(str(rate / 100))
 

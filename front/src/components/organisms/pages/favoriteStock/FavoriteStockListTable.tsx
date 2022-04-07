@@ -177,7 +177,9 @@ export const FavoriteStockListTable: VFC<Props> = memo((props) => {
             useType="stock"
             callFunction={stockFavoriteStock}
             selectedDataText={selectedDataText}
+            initName={openFavoriteStock?.registered_name || openFavoriteStock?.name}
             initPrice={openFavoriteStock?.price ?? 0}
+            requireName
             requirePrice
           />
         )}

@@ -61,6 +61,7 @@ class CreateEatFromFavoriteEatView(APIView):
         date = request.data['date']
         eat_timing = request.data['eat_timing']
         rate = request.data['rate']
+        name = request.data['name']
         price = request.data['price']
         discounted = request.data['discounted']
         note = request.data['note']
@@ -69,9 +70,6 @@ class CreateEatFromFavoriteEatView(APIView):
         target_favorite_eat_categories = FavoriteEatCategory.objects.filter(
             favorite_eat=target_favorite_eat,
         )
-        name = target_favorite_eat.registered_name
-        if not(name):
-            name = target_favorite_eat.name
 
         calced_rate = Decimal(str(rate / 100))
 
