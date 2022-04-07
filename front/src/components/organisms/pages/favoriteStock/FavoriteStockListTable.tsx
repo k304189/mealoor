@@ -9,7 +9,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import { FavoriteEatModal } from "./FavoriteEatModal";
+import { FavoriteStockModal } from "./FavoriteStockModal";
 import { CommonUseForm } from "../../parts/food/CommonUseForm";
 import { DefaultLink } from "../../../atoms/button/DefaultLink";
 import { DefaultButton } from "../../../atoms/button/DefaultButton";
@@ -17,21 +17,23 @@ import { DeleteButton } from "../../../molecules/button/DeleteButton";
 import { DefaultModal } from "../../../molecules/layout/DefaultModal";
 import { DefaultAlertDialog } from "../../../molecules/layout/DefaultAlertDialog";
 import { useMessage } from "../../../../hooks/common/layout/useMessage";
-import { useFavoriteEatApi } from "../../../../hooks/food/useFavoriteEatApi";
-import { TFavoriteEat } from "../../../../types/api/TFavoriteEat";
+import { useFavoriteStockApi } from "../../../../hooks/food/useFavoriteStockApi";
+import { TFavoriteStock } from "../../../../types/api/TFavoriteStock";
 
 type Props = {
-  favoriteEat: Array<TFavoriteEat>;
+  favoriteStocks: Array<TFavoriteStock>;
 };
 
-export const FavoriteEatListTable: VFC<Props> = memo((props) => {
-  const [openFavoriteEat, setOpenFavoriteEat] = useState<TFavoriteEat | null>(null);
-  const [delFavoriteEat, setDelFavoriteEat] = useState<TFavoriteEat | null>(null);
+export const FavoriteStockListTable: VFC<Props> = memo((props) => {
+  const [openFavoriteStock, setOpenFavoriteStock] = useState<TFavoriteStock | null>(null);
+  const [delFavoriteStock, setDelFavoriteStock] = useState<TFavoriteStock | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedDataText, setSelectedDataText] = useState("");
-  const { favoriteEat } = props;
-  const { deleteFavoriteEat, eatFavoriteEat } = useFavoriteEatApi();
+  const { favoriteStocks } = props;
+
+  const { deleteFavoriteStock, stockFavoriteStock } = useFavoriteStockApi();
   const { successToast, errorToast } = useMessage();
+
   const {
     isOpen: editModalIsOpen,
     onOpen: editModalOnOpen,
@@ -43,48 +45,48 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
     onClose: deleteAlertOnClose,
   } = useDisclosure();
   const {
-    isOpen: addEatModalIsOpen,
-    onOpen: addEatModalOnOpen,
-    onClose: addEatModalOnClose,
+    isOpen: addStockModalIsOpen,
+    onOpen: addStockModalOnOpen,
+    onClose: addStockModalOnClose,
   } = useDisclosure();
 
-  const onClickFavoriteEatLink = (id: number) => {
-    const index = favoriteEat.findIndex((fe) => {
-      return fe.id === id;
+  const onClickFavoriteStockLink = (id: number) => {
+    const index = favoriteStocks.findIndex((favoriteStock) => {
+      return favoriteStock.id === id;
     });
-    setOpenFavoriteEat(favoriteEat[index]);
+    setOpenFavoriteStock(favoriteStocks[index]);
     setSelectedIndex(index);
     editModalOnOpen();
   };
 
-  const onClickAddEatButton = (id: number) => {
-    const index = favoriteEat.findIndex((fe) => {
-      return fe.id === id;
+  const onClickAddStockButton = (id: number) => {
+    const index = favoriteStocks.findIndex((favoriteStock) => {
+      return favoriteStock.id === id;
     });
-    const selectedData = favoriteEat[index];
-    setOpenFavoriteEat(selectedData);
+    const selectedData = favoriteStocks[index];
+    setOpenFavoriteStock(selectedData);
     setSelectedDataText(
-      `${selectedData.name} ${selectedData.amount_note}`,
+      `${selectedData.name} ${selectedData.quantity}個`,
     );
     setSelectedIndex(index);
-    addEatModalOnOpen();
+    addStockModalOnOpen();
   };
 
   const onClickDeleteButton = (id: number) => {
-    const index = favoriteEat.findIndex((fe) => {
-      return fe.id === id;
+    const index = favoriteStocks.findIndex((favoriteStock) => {
+      return favoriteStock.id === id;
     });
-    setDelFavoriteEat(favoriteEat[index]);
+    setDelFavoriteStock(favoriteStocks[index]);
     setSelectedIndex(index);
     deleteAlertOnOpen();
   };
 
-  const callDeleteFavoriteEat = () => {
-    if (delFavoriteEat) {
-      deleteFavoriteEat(delFavoriteEat.id)
+  const callDeleteFavoriteStock = () => {
+    if (delFavoriteStock) {
+      deleteFavoriteStock(delFavoriteStock.id)
         .then(() => {
           successToast("データ削除に成功しました");
-          favoriteEat.splice(selectedIndex, 1);
+          favoriteStocks.splice(selectedIndex, 1);
         })
         .catch(() => {
           errorToast("データ削除に失敗しました");
@@ -105,8 +107,8 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
             <Th w="25%">名前</Th>
             <Th w="5%" />
             <Th w="15%">店</Th>
-            <Th w="10%">食事タイプ</Th>
-            <Th w="10%">分量メモ</Th>
+            <Th w="10%">食材タイプ</Th>
+            <Th w="10%">個数</Th>
             <Th w="10%">価格</Th>
             <Th w="10%">カロリー</Th>
             <Th w="5%">量</Th>
@@ -114,38 +116,38 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
           </Tr>
         </Thead>
         <Tbody>
-          { favoriteEat.map((fe) => {
+          { favoriteStocks.map((favoriteStock) => {
             return (
-              <Tr key={fe.id}>
+              <Tr key={favoriteStock.id}>
                 <Td>
                   <DefaultLink
                     hoverText="お気に入り食事編集"
-                    onClick={() => { onClickFavoriteEatLink(fe.id); }}
+                    onClick={() => { onClickFavoriteStockLink(favoriteStock.id); }}
                   >
-                    {fe.name}
+                    {favoriteStock.name}
                   </DefaultLink>
                 </Td>
                 <Td>
                   <DeleteButton
-                    hoverText="お気に入り食事削除"
-                    onClick={() => { onClickDeleteButton(fe.id); }}
-                    aria-label="deleteFavoriteEat"
+                    hoverText="よく買う食材削除"
+                    onClick={() => { onClickDeleteButton(favoriteStock.id); }}
+                    aria-label="deleteFavoriteStock"
                     size="xs"
                   />
                 </Td>
-                <Td>{fe.shop}</Td>
-                <Td>{fe.eat_type}</Td>
-                <Td>{fe.amount_note}</Td>
-                <Td>{`${fe.price}円`}</Td>
-                <Td>{`${fe.kcal}kcal`}</Td>
-                <Td>{`${fe.amount}${fe.unit || ""}`}</Td>
+                <Td>{favoriteStock.shop}</Td>
+                <Td>{favoriteStock.food_type}</Td>
+                <Td>{`${favoriteStock.quantity}個`}</Td>
+                <Td>{`${favoriteStock.price}円`}</Td>
+                <Td>{`${favoriteStock.kcal}kcal`}</Td>
+                <Td>{`${favoriteStock.amount}${favoriteStock.unit || ""}`}</Td>
                 <Td>
                   <DefaultButton
-                    onClick={() => { onClickAddEatButton(fe.id); }}
+                    onClick={() => { onClickAddStockButton(favoriteStock.id); }}
                     size="xs"
                     className="primary"
                   >
-                    食事登録
+                    食材登録
                   </DefaultButton>
                 </Td>
               </Tr>
@@ -153,29 +155,29 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
           })}
         </Tbody>
       </Table>
-      <FavoriteEatModal
-        favoriteEat={openFavoriteEat}
+      <FavoriteStockModal
+        favoriteStock={openFavoriteStock}
         isOpen={editModalIsOpen}
         onClose={editModalOnClose}
       />
       <DefaultAlertDialog
         isOpen={deleteAlertIsOpen}
         onClose={deleteAlertOnClose}
-        onClickYes={() => { callDeleteFavoriteEat(); }}
-        dialogHeader="お気に入り食事削除確認"
-        dialogBody={`${delFavoriteEat?.name ?? ""}のデータを削除します。よろしいですか`}
+        onClickYes={() => { callDeleteFavoriteStock(); }}
+        dialogHeader="よく買う食材削除確認"
+        dialogBody={`${delFavoriteStock?.name ?? ""}のデータを削除します。よろしいですか`}
       />
       <DefaultModal
-        isOpen={addEatModalIsOpen}
-        onClose={addEatModalOnClose}
-        modalHeader="食事登録"
+        isOpen={addStockModalIsOpen}
+        onClose={addStockModalOnClose}
+        modalHeader="食材登録"
         modalBody={(
           <CommonUseForm
-            id={openFavoriteEat?.id ?? 0}
-            useType="eat"
-            callFunction={eatFavoriteEat}
+            id={openFavoriteStock?.id ?? 0}
+            useType="stock"
+            callFunction={stockFavoriteStock}
             selectedDataText={selectedDataText}
-            initPrice={openFavoriteEat?.price ?? 0}
+            initPrice={openFavoriteStock?.price ?? 0}
             requirePrice
           />
         )}

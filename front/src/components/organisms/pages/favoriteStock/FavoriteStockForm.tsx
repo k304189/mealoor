@@ -1,11 +1,10 @@
-import { memo, VFC, useEffect, useState } from "react";
+import { ChangeEvent, memo, VFC, useEffect, useState } from "react";
 import { Box } from "@chakra-ui/react";
 
 import { FoodCommonForm } from "../../parts/food/FoodCommonForm";
-import { LocationRadio } from "../../parts/food/LocationRadio";
+import { TextForm } from "../../parts/form/TextForm";
 import { NumberForm } from "../../parts/form/NumberForm";
-import { FormArea } from "../../../molecules/form/FormArea";
-// import { useStockApi } from "../../../../hooks/food/useStockApi";
+import { useFavoriteStockApi } from "../../../../hooks/food/useFavoriteStockApi";
 import { useFoodValidate } from "../../../../hooks/food/useFoodValidate";
 import { useFoodCategoryValidate } from "../../../../hooks/food/useFoodCategoryValidate";
 import { useMessage } from "../../../../hooks/common/layout/useMessage";
@@ -17,7 +16,7 @@ type Props = {
 };
 
 export const FavoriteStockForm: VFC<Props> = memo((props) => {
-  // const [id, setId] = useState(0);
+  const [id, setId] = useState(0);
   const [name, setName] = useState("");
   const [eatType, setEatType] = useState("");
   const [foodType, setFoodType] = useState("");
@@ -32,8 +31,8 @@ export const FavoriteStockForm: VFC<Props> = memo((props) => {
   const [carbo, setCarbo] = useState(0);
   const [note, setNote] = useState("");
 
+  const [registeredName, setRegisteredName] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [location, setLocation] = useState("");
 
   const [invalidName, setInvalidName] = useState(false);
   const [invalidEatType, setInvalidEatType] = useState(false);
@@ -42,7 +41,7 @@ export const FavoriteStockForm: VFC<Props> = memo((props) => {
   const [invalidShop, setInvalidShop] = useState(false);
   const [invalidNote, setInvalidNote] = useState(false);
 
-  const [invalidLocation, setInvalidLocation] = useState(false);
+  const [invalidRegisteredName, setInvalidRegisteredName] = useState(false);
 
   const [errorTextName, setErrorTextName] = useState("");
   const [errorTextEatType, setErrorTextEatType] = useState("");
@@ -51,7 +50,7 @@ export const FavoriteStockForm: VFC<Props> = memo((props) => {
   const [errorTextShop, setErrorTextShop] = useState("");
   const [errorTextNote, setErrorTextNote] = useState("");
 
-  const [errorTextLocation, setErrorTextLocation] = useState("");
+  const [errorTextRegisteredName, setErrorTextRegisteredName] = useState("");
 
   const [updateMode, setUpdateMode] = useState<"create" | "update">("create");
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -64,17 +63,14 @@ export const FavoriteStockForm: VFC<Props> = memo((props) => {
     validateFoodType,
     validateShop,
     validateNote,
-    validateLocation,
+    validateRegisteredName,
   } = useFoodValidate();
   const { validateSelectedFoodCategories } = useFoodCategoryValidate();
-  // const { createStock, updateStock } = useStockApi();
+  const { createFavoriteStock, updateFavoriteStock } = useFavoriteStockApi();
   const { errorToast } = useMessage();
 
-  const onChangeLocation = (loc: string) => {
-    const { invalid, errorText } = validateLocation(loc);
-    setInvalidLocation(invalid);
-    setErrorTextLocation(errorText);
-    setLocation(loc);
+  const onChangeRegisteredName = (e: ChangeEvent<HTMLInputElement>) => {
+    setRegisteredName(e.target.value);
   };
 
   const onBlurName = () => {
@@ -95,10 +91,10 @@ export const FavoriteStockForm: VFC<Props> = memo((props) => {
     setErrorTextNote(errorText);
   };
 
-  const onBlurLocation = () => {
-    const { invalid, errorText } = validateLocation(location);
-    setInvalidLocation(invalid);
-    setErrorTextLocation(errorText);
+  const onBlurRegisteredName = () => {
+    const { invalid, errorText } = validateRegisteredName(registeredName);
+    setInvalidRegisteredName(invalid);
+    setErrorTextRegisteredName(errorText);
   };
 
   const isInvalidAllValue = () => {
@@ -111,16 +107,16 @@ export const FavoriteStockForm: VFC<Props> = memo((props) => {
     } = validateSelectedFoodCategories(categories);
     const { invalid: shopInv } = validateShop(shop);
     const { invalid: noteInv } = validateNote(note);
-    const { invalid: locationInv } = validateLocation(location);
+    const { invalid: registeredNameInv } = validateRegisteredName(registeredName);
 
     const checkResult = nameInv || eatTypeInv || foodTypeInv || shopInv
-      || categoriesInv || noteInv || locationInv;
+      || categoriesInv || noteInv || registeredNameInv;
 
     if (checkResult) {
       onBlurName();
       onBlurShop();
       onBlurNote();
-      onBlurLocation();
+      onBlurRegisteredName();
       setInvalidEatType(eatTypeInv);
       setErrorTextEatType(eatTypeErrTxt);
       setInvalidFoodType(foodTypeInv);
@@ -133,40 +129,41 @@ export const FavoriteStockForm: VFC<Props> = memo((props) => {
     }
   };
 
-  // const getFavoriteStockJson = (): TFavoriteStock => {
-  //   return {
-  //     id,
-  //     name,
-  //     eat_type: eatType,
-  //     food_type: foodType,
-  //     categories,
-  //     shop,
-  //     price,
-  //     kcal,
-  //     amount,
-  //     unit,
-  //     protein,
-  //     lipid,
-  //     carbo,
-  //     note,
-  //     location,
-  //     quantity,
-  //   };
-  // };
+  const getFavoriteStockJson = (): TFavoriteStock => {
+    return {
+      id,
+      name,
+      eat_type: eatType,
+      food_type: foodType,
+      categories,
+      shop,
+      price,
+      kcal,
+      amount,
+      unit,
+      protein,
+      lipid,
+      carbo,
+      note,
+      registered_name: registeredName,
+      quantity,
+    };
+  };
 
   const createFunction = async () => {
     isInvalidAllValue();
-    console.log("createFunction Called");
+    createFavoriteStock(getFavoriteStockJson());
   };
 
   const updateFunction = async () => {
     isInvalidAllValue();
-    console.log("updateFunction Called");
+    updateFavoriteStock(getFavoriteStockJson());
   };
 
   useEffect(() => {
     const btnStatus = invalidName || invalidEatType || invalidFoodType
-      || invalidCategories || invalidShop || invalidNote || invalidLocation;
+      || invalidCategories || invalidShop || invalidNote
+      || invalidRegisteredName;
     setButtonDisabled(btnStatus);
   }, [
     invalidName,
@@ -175,12 +172,12 @@ export const FavoriteStockForm: VFC<Props> = memo((props) => {
     invalidCategories,
     invalidShop,
     invalidNote,
-    invalidLocation,
+    invalidRegisteredName,
   ]);
 
   useEffect(() => {
     if (favoriteStock) {
-      // setId(favoriteStock.id);
+      setId(favoriteStock.id);
       setName(favoriteStock.name);
       setEatType(favoriteStock.eat_type);
       setFoodType(favoriteStock.food_type);
@@ -195,7 +192,7 @@ export const FavoriteStockForm: VFC<Props> = memo((props) => {
       setCarbo(favoriteStock.carbo);
       setNote(favoriteStock.note);
 
-      setLocation(favoriteStock.location);
+      setRegisteredName(favoriteStock.registered_name);
       setQuantity(favoriteStock.quantity);
 
       setUpdateMode("update");
@@ -251,15 +248,16 @@ export const FavoriteStockForm: VFC<Props> = memo((props) => {
       errorTextFoodCategories={errorTextCategories}
     >
       <>
-        <Box w="25%">
-          <FormArea
-            label="保管場所"
-            require="require"
-            isInvalid={invalidLocation}
-            errorText={errorTextLocation}
-          >
-            <LocationRadio location={location} onChange={onChangeLocation} />
-          </FormArea>
+        <Box w="30%">
+          <TextForm
+            label="食材登録名"
+            require="optional"
+            value={registeredName}
+            onChange={onChangeRegisteredName}
+            onBlur={onBlurRegisteredName}
+            isInvalid={invalidRegisteredName}
+            errorText={errorTextRegisteredName}
+          />
         </Box>
         <Box w="15%">
           <NumberForm

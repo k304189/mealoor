@@ -6,7 +6,7 @@ from mealoor.models.favoriteEatCategory import FavoriteEatCategory
 from .favoriteEatCategorySerializer import FavoriteEatCategorySerializer
 
 class FavoriteEatSerializer(serializers.ModelSerializer):
-    """Serializer for Eat object"""
+    """Serializer for FavoriteEat object"""
     categories = FavoriteEatCategorySerializer(many=True)
 
     class Meta:

@@ -4,11 +4,11 @@ from django.core.validators import MaxValueValidator
 from django.core.validators import MinValueValidator
 
 
-class Stock(models.Model):
+class FavoriteStock(models.Model):
     account = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='stocks',
+        related_name='favorite_stocks',
         verbose_name='アカウント',
     )
     name = models.CharField(
@@ -23,23 +23,16 @@ class Stock(models.Model):
         verbose_name='食料タイプ',
         max_length=10,
     )
-    limit = models.DateField(
-        verbose_name='賞味期限',
-    )
-    location = models.CharField(
-        verbose_name='保管場所',
-        max_length=10,
+    registered_name = models.CharField(
+        verbose_name='食材登録名',
+        max_length=60,
+        null=True,
+        blank=True,
     )
     quantity = models.PositiveIntegerField(
         verbose_name='個数',
         default=1,
         validators=[MinValueValidator(1)]
-    )
-    remain = models.PositiveIntegerField(
-        verbose_name='残量',
-        default=100,
-        validators=[MinValueValidator(0),
-                    MaxValueValidator(100)],
     )
     shop = models.CharField(
         verbose_name='店',
@@ -89,10 +82,6 @@ class Stock(models.Model):
         validators=[MinValueValidator(0.0),
                     MaxValueValidator(999.9)],
     )
-    discounted = models.BooleanField(
-        verbose_name='割引フラグ',
-        default=False,
-    )
     note = models.TextField(
         verbose_name='メモ',
         max_length=100,
@@ -110,7 +99,7 @@ class Stock(models.Model):
 
     class Meta:
         app_label = 'mealoor'
-        verbose_name_plural = 'Stocks'
+        verbose_name_plural = 'FavoriteStocks'
 
     def __str__(self):
-        return self.account.username + ' ' + self.name + ' ' + str(self.limit)
+        return self.account.username + ' ' + self.name + ' ' + str(self.quantity) + '個'

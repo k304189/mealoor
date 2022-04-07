@@ -2,6 +2,7 @@ import { ChangeEvent, memo, useEffect, useState, VFC } from "react";
 import { Box, Flex, HStack, VStack } from "@chakra-ui/react";
 
 import { EatTimingRadio } from "./EatTimingRadio";
+import { LocationRadio } from "./LocationRadio";
 import { NumberForm } from "../form/NumberForm";
 import { TextForm } from "../form/TextForm";
 import { TextareaForm } from "../form/TextareaForm";
@@ -16,17 +17,19 @@ import { TUse } from "../../../../types/api/TUse";
 
 export type Props = {
   id: number;
-  useType: "trash" | "divide" | "eat";
+  useType: "trash" | "divide" | "eat" | "stock";
   callFunction: (json: TUse) => Promise<number>;
   quantity?: number;
   maxRate?: number;
   selectedDataText?: string;
   setUseTypeJson?: boolean;
+  initPrice?: number;
   requirePrice?: boolean;
 };
 
 export const CommonUseForm: VFC<Props> = memo((props) => {
   const [date, setDate] = useState("");
+  const [location, setLocation] = useState("");
   const [eatTiming, setEatTiming] = useState("");
   const [rate, setRate] = useState(0);
   const [price, setPrice] = useState(0);
@@ -35,20 +38,25 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
 
   const [invalidDate, setInvalidDate] = useState(false);
   const [invalidEatTiming, setInvalidEatTiming] = useState(false);
+  const [invalidLocation, setInvalidLocation] = useState(false);
   const [invalidRate, setInvalidRate] = useState(false);
   const [invalidNote, setInvalidNote] = useState(false);
 
   const [errorTextDate, setErrorTextDate] = useState("");
   const [errorTextEatTiming, setErrorTextEatTiming] = useState("");
+  const [errorTextLocation, setErrorTextLocation] = useState("");
   const [errorTextRate, setErrorTextRate] = useState("");
   const [errorTextNote, setErrorTextNote] = useState("");
 
+  const [dateLabel, setDateLabel] = useState("");
+  const [rateLabel, setRateLabel] = useState("");
   const [btnText, setBtnText] = useState("");
   const [btnStatus, setBtnStatus] = useState(false);
 
   const { successToast, errorToast } = useMessage();
   const {
     validateDate,
+    validateLocation,
     validateEatTiming,
     validateNote,
     validateRate,
@@ -62,6 +70,7 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
     selectedDataText = "",
     setUseTypeJson = false,
     requirePrice = false,
+    initPrice = 0,
   } = props;
 
   const onChangeDate = (e: ChangeEvent<HTMLInputElement>) => {
@@ -85,6 +94,17 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
     setInvalidEatTiming(eatTimingInv);
     setErrorTextEatTiming(eatTimingErrTxt);
     setEatTiming(et);
+  };
+
+  const onChangeLocation = (loc: string) => {
+    const {
+      invalid: locationInv,
+      errorText: locationErrTxt,
+    } = validateEatTiming(loc);
+
+    setInvalidLocation(locationInv);
+    setErrorTextLocation(locationErrTxt);
+    setLocation(loc);
   };
 
   const onBlurDate = () => {
@@ -128,6 +148,7 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
   const clearForm = () => {
     setDate("");
     setEatTiming("");
+    setLocation("");
     setRate(0);
     setPrice(0);
     setDiscounted(false);
@@ -137,6 +158,10 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
   const validateAllValue = () => {
     const { invalid: dateInv } = validateDate(date);
     const { invalid: noteInv } = validateNote(note);
+    const {
+      invalid: locationInv,
+      errorText: locationErrTxt,
+    } = validateLocation(location);
     const {
       invalid: eatTimingInv,
       errorText: eatTimingErrTxt,
@@ -149,6 +174,13 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
       if (eatTimingInv) {
         setInvalidEatTiming(eatTimingInv);
         setErrorTextEatTiming(eatTimingErrTxt);
+      }
+    }
+    if (useType === "stock") {
+      checkResult = checkResult || locationInv;
+      if (locationInv) {
+        setInvalidEatTiming(locationInv);
+        setErrorTextEatTiming(locationErrTxt);
       }
     }
     if (checkResult) {
@@ -170,6 +202,8 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
     };
     if (useType === "eat") {
       json.eat_timing = eatTiming;
+    } else if (useType === "stock") {
+      json.location = location;
     }
     if (setUseTypeJson) {
       json.use_type = useType;
@@ -195,19 +229,35 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
   };
 
   useEffect(() => {
-    setBtnStatus(invalidDate || invalidEatTiming || invalidRate || invalidNote);
-  }, [invalidDate, invalidEatTiming, invalidRate, invalidNote]);
+    setBtnStatus(
+      invalidDate || invalidEatTiming || invalidLocation || invalidRate || invalidNote,
+    );
+  }, [invalidDate, invalidEatTiming, invalidLocation, invalidRate, invalidNote]);
 
   useEffect(() => {
     let b = "";
+    let dl = "使用日";
+    let rl = "使用率";
     if (useType === "trash") {
       b = "処分";
     } else if (useType === "divide") {
       b = "分割";
     } else if (useType === "eat") {
       b = "食事";
+      dl = "食事日";
+      rl = "食事率";
+    } else if (useType === "stock") {
+      b = "登録";
+      dl = "賞味期限";
+      rl = "追加率";
     }
     setBtnText(b);
+    setDateLabel(dl);
+    setRateLabel(rl);
+
+    if (requirePrice) {
+      setPrice(initPrice);
+    }
   }, []);
 
   return (
@@ -223,7 +273,7 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
         <HStack gap={2} w="100%" h="30%">
           <Box w="40%">
             <TextForm
-              label="日付"
+              label={dateLabel}
               type="date"
               require="require"
               value={date}
@@ -236,7 +286,7 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
           <Box w="40%" h="100%">
             <Flex h="100%" align="end" gap={1}>
               <NumberForm
-                label="割合"
+                label={rateLabel}
                 value={rate}
                 onChange={setRate}
                 onBlur={onBlurRate}
@@ -262,6 +312,22 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
                 isInvalid={invalidEatTiming}
               >
                 <EatTimingRadio eatTiming={eatTiming} onChange={onChangeEatTiming} />
+              </FormArea>
+            </Box>
+          </HStack>
+        ) : (
+          <></>
+        )}
+        { useType === "stock" ? (
+          <HStack w="100%" h="20%">
+            <Box w="100%">
+              <FormArea
+                label="保管場所"
+                require="require"
+                errorText={errorTextLocation}
+                isInvalid={invalidLocation}
+              >
+                <LocationRadio location={location} onChange={onChangeLocation} />
               </FormArea>
             </Box>
           </HStack>

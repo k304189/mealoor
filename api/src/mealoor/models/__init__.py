@@ -8,3 +8,5 @@ from mealoor.models.favoriteEatCategory import FavoriteEatCategory
 from mealoor.models.stock import Stock
 from mealoor.models.stockCategory import StockCategory
 from mealoor.models.use import Use
+from mealoor.models.favoriteStock import FavoriteStock
+from mealoor.models.favoriteStockCategory import FavoriteStockCategory

@@ -22,3 +22,8 @@ from mealoor.views.stock import CreateStockView
 from mealoor.views.stock import UpdateStockView
 from mealoor.views.stock import DeleteStockView
 from mealoor.views.stock import UseStockView
+from mealoor.views.favoriteStock import ListFavoriteStockView
+from mealoor.views.favoriteStock import CreateFavoriteStockView
+from mealoor.views.favoriteStock import UpdateFavoriteStockView
+from mealoor.views.favoriteStock import DeleteFavoriteStockView
+from mealoor.views.favoriteStock import CreateStockFromFavoriteStockView
