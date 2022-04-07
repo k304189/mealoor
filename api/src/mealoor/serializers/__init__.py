@@ -5,3 +5,5 @@ from mealoor.serializers.eatSerializer import EatSerializer
 from mealoor.serializers.favoriteEatSerializer import FavoriteEatSerializer
 from mealoor.serializers.stockSerializer import StockSerializer
 from mealoor.serializers.stockCategorySerializer import StockCategorySerializer
+from mealoor.serializers.favoriteStockSerializer import FavoriteStockSerializer
+from mealoor.serializers.favoriteStockCategorySerializer import FavoriteStockCategorySerializer

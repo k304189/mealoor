@@ -6,11 +6,11 @@ import { TFavoriteEat } from "../../types/api/TFavoriteEat";
 import { TFavoriteEatPaginate } from "../../types/api/TFavoriteEatPaginate";
 import { TUse } from "../../types/api/TUse";
 import {
-  URL_FAVORIRE_EAT_LIST,
-  URL_FAVORIRE_EAT_CREATE,
-  URL_FAVORIRE_EAT_UPDATE,
-  URL_FAVORIRE_EAT_DELETE,
-  URL_FAVORIRE_EAT_EAT,
+  URL_FAVORITE_EAT_LIST,
+  URL_FAVORITE_EAT_CREATE,
+  URL_FAVORITE_EAT_UPDATE,
+  URL_FAVORITE_EAT_DELETE,
+  URL_FAVORITE_EAT_EAT,
 } from "../../constants/urls";
 
 type T = {
@@ -26,7 +26,7 @@ export const useFavoriteEatApi = (): T => {
 
   const getFavoriteEat = useCallback(async (page?: number) => {
     const headers = getRequestHeader();
-    let url = URL_FAVORIRE_EAT_LIST;
+    let url = URL_FAVORITE_EAT_LIST;
     if (page) {
       url = `${url}?page=${page}`;
     }
@@ -37,14 +37,14 @@ export const useFavoriteEatApi = (): T => {
 
   const createFavoriteEat = useCallback(async (createJson: TFavoriteEat) => {
     const headers = getRequestHeader();
-    const response = await axios.post(URL_FAVORIRE_EAT_CREATE, createJson, { headers });
+    const response = await axios.post(URL_FAVORITE_EAT_CREATE, createJson, { headers });
 
     return response.data;
   }, []);
 
   const updateFavoriteEat = useCallback(async (updateJson: TFavoriteEat) => {
     const headers = getRequestHeader();
-    const url = `${URL_FAVORIRE_EAT_UPDATE}${updateJson.id}/`;
+    const url = `${URL_FAVORITE_EAT_UPDATE}${updateJson.id}/`;
 
     const response = await axios.patch(url, updateJson, { headers });
 
@@ -53,7 +53,7 @@ export const useFavoriteEatApi = (): T => {
 
   const deleteFavoriteEat = useCallback(async (deleteId: number) => {
     const headers = getRequestHeader();
-    const url = `${URL_FAVORIRE_EAT_DELETE}${deleteId}/`;
+    const url = `${URL_FAVORITE_EAT_DELETE}${deleteId}/`;
 
     const response = await axios.delete(url, { headers });
 
@@ -62,7 +62,7 @@ export const useFavoriteEatApi = (): T => {
 
   const eatFavoriteEat = useCallback(async (eatJson: TUse) => {
     const headers = getRequestHeader();
-    const url = `${URL_FAVORIRE_EAT_EAT}${eatJson.id}/`;
+    const url = `${URL_FAVORITE_EAT_EAT}${eatJson.id}/`;
 
     const response = await axios.post(url, eatJson, { headers });
 

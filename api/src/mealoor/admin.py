@@ -10,6 +10,8 @@ from mealoor.models import FavoriteEatCategory
 from mealoor.models import Stock
 from mealoor.models import StockCategory
 from mealoor.models import Use
+from mealoor.models import FavoriteStock
+from mealoor.models import FavoriteStockCategory
 
 class AccountAdmin(BaseUserAdmin):
     ordering = ['id']
@@ -107,6 +109,30 @@ class UseAdmin(admin.ModelAdmin):
     list_display = ['stock', 'date', 'use_type', 'rate']
     fields = ['stock', 'date', 'use_type', 'rate', 'note']
 
+class FavoriteStockAdmin(admin.ModelAdmin):
+    list_display = ['account', 'name', 'quantity', 'price', 'kcal']
+    fields = [
+        'account',
+        'name',
+        'registered_name',
+        'quantity',
+        'shop',
+        'price',
+        'kcal',
+        'eat_type',
+        'food_type',
+        'amount',
+        'unit',
+        'protein',
+        'lipid',
+        'carbo',
+        'note',
+    ]
+
+class FavoriteStockCategoryAdmin(admin.ModelAdmin):
+    list_display = ['favorite_stock', 'category', 'amount', 'unit']
+    fields = ['favorite_stock', 'category', 'amount', 'unit']
+
 admin.site.register(Account, AccountAdmin)
 admin.site.register(Body, BodyAdmin)
 admin.site.register(Eat, EatAdmin)
@@ -116,3 +142,5 @@ admin.site.register(FavoriteEatCategory, FavoriteEatCategoryAdmin)
 admin.site.register(Stock, StockAdmin)
 admin.site.register(StockCategory, StockCategoryAdmin)
 admin.site.register(Use, UseAdmin)
+admin.site.register(FavoriteStock, FavoriteStockAdmin)
+admin.site.register(FavoriteStockCategory, FavoriteStockCategoryAdmin)

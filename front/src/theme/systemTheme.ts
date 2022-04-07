@@ -23,6 +23,8 @@ export const appFavoriteEatBgColor = "#FCC800";
 export const appFavoriteEatBorderColor = "#A16D58";
 export const appStockBgColor = "#E03448";
 export const appStockBorderColor = "#FDBA77";
+export const appFavoriteStockBgColor = "#FF97C2";
+export const appFavoriteStockBorderColor = "#A791B2";
 
 export const trLimitExpiredBgColor = "#CBD5E0";
 export const trLimitTodayBgColor = "#FEB2B2";
@@ -131,6 +133,10 @@ export const systemTheme = extendTheme({
       "button.stock": {
         backgroundColor: appStockBgColor,
         color: "white",
+      },
+      "button.favoriteStock": {
+        backgroundColor: appFavoriteStockBgColor,
+        color: "black",
       },
       "div.defaultRadioButton": {
         borderColor: defaultRadioColor,
@@ -279,6 +285,11 @@ export const systemTheme = extendTheme({
         backgroundColor: appStockBgColor,
         borderLeftColor: appStockBorderColor,
         color: "white",
+      },
+      ".favoriteStock": {
+        backgroundColor: appFavoriteStockBgColor,
+        borderLeftColor: appFavoriteStockBorderColor,
+        color: "black",
       },
     },
   },
