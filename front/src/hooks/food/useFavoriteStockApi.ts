@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { useRequestHeader } from "../common/auth/useRequestHeader";
 import { TFavoriteStock } from "../../types/api/TFavoriteStock";
-import { TUse } from "../../types/api/TUse";
+import { TSendUse } from "../../types/api/TSendUse";
 import { TFavoriteStockPaginate } from "../../types/api/TFavoriteStockPaginate";
 import {
   URL_FAVORITE_STOCK_LIST,
@@ -18,7 +18,7 @@ type T = {
   createFavoriteStock: (createJson: TFavoriteStock) => Promise<TFavoriteStock>;
   updateFavoriteStock: (updateJson: TFavoriteStock) => Promise<TFavoriteStock>;
   deleteFavoriteStock: (deleteId: number) => Promise<number>;
-  stockFavoriteStock: (useJson: TUse) => Promise<number>;
+  stockFavoriteStock: (useJson: TSendUse) => Promise<number>;
 };
 
 export const useFavoriteStockApi = (): T => {
@@ -60,7 +60,7 @@ export const useFavoriteStockApi = (): T => {
     return response.status;
   }, []);
 
-  const stockFavoriteStock = useCallback(async (useJson: TUse) => {
+  const stockFavoriteStock = useCallback(async (useJson: TSendUse) => {
     const headers = getRequestHeader();
     const url = `${URL_FAVORITE_STOCK_STOCK}${useJson.id}/`;
 

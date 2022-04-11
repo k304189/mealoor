@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRequestHeader } from "../common/auth/useRequestHeader";
 import { TFavoriteEat } from "../../types/api/TFavoriteEat";
 import { TFavoriteEatPaginate } from "../../types/api/TFavoriteEatPaginate";
-import { TUse } from "../../types/api/TUse";
+import { TSendUse } from "../../types/api/TSendUse";
 import {
   URL_FAVORITE_EAT_LIST,
   URL_FAVORITE_EAT_CREATE,
@@ -18,7 +18,7 @@ type T = {
   createFavoriteEat: (createJson: TFavoriteEat) => Promise<TFavoriteEat>;
   updateFavoriteEat: (updateJson: TFavoriteEat) => Promise<TFavoriteEat>;
   deleteFavoriteEat: (deleteId: number) => Promise<number>;
-  eatFavoriteEat: (eatJson: TUse) => Promise<number>;
+  eatFavoriteEat: (eatJson: TSendUse) => Promise<number>;
 };
 
 export const useFavoriteEatApi = (): T => {
@@ -60,7 +60,7 @@ export const useFavoriteEatApi = (): T => {
     return response.status;
   }, []);
 
-  const eatFavoriteEat = useCallback(async (eatJson: TUse) => {
+  const eatFavoriteEat = useCallback(async (eatJson: TSendUse) => {
     const headers = getRequestHeader();
     const url = `${URL_FAVORITE_EAT_EAT}${eatJson.id}/`;
 
