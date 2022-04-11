@@ -37,6 +37,7 @@ class CreateCookStockView(APIView):
         )
         cook_categories = []
         cook_ingredients = []
+        ing_stock_uses = []
 
         for ingredient in ingredients:
             rate = ingredient['rate']
@@ -79,17 +80,20 @@ class CreateCookStockView(APIView):
                 )
                 cook_ingredients.append(cook_ingredient)
 
-            Use(
+            ing_stock_use = Use(
                 stock=ing_stock,
                 use_type="料理",
                 date=datetime.date.today(),
                 rate=rate,
                 note=name,
-            ).save()
+                created_stock=cook,
+            )
+            ing_stock_uses.append(ing_stock_use)
 
         cook.save()
         StockCategory.objects.bulk_create(cook_categories)
         CookIngredient.objects.bulk_create(cook_ingredients)
+        Use.objects.bulk_create(ing_stock_uses)
 
         eat_cook_categories = []
         if date and eat_timing and eat_rate:
@@ -131,6 +135,7 @@ class CreateCookStockView(APIView):
                 date=date,
                 rate=eat_rate,
                 note=cook.name,
+                created_eat=cook_eat,
             ).save()
 
         return response.Response(

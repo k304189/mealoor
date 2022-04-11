@@ -80,13 +80,13 @@ class UseStockView(APIView):
         target_stock.save()
 
         use_type_name = use_type_name_dict[use_type]
-        Use(
+        stock_use = Use(
             stock=target_stock,
             use_type=use_type_name,
             date=date,
             rate=rate,
             note=note,
-        ).save()
+        )
 
         if use_type == 'divide':
             target_stock.id = None
@@ -109,6 +109,8 @@ class UseStockView(APIView):
                     amount=stock_category.amount * calced_rate,
                     unit=stock_category.unit
                 ).save()
+
+            stock_use.created_stock = target_stock
 
         elif use_type == 'eat':
             create_eat = Eat(
@@ -138,6 +140,10 @@ class UseStockView(APIView):
                     amount=stock_category.amount * calced_rate,
                     unit=stock_category.unit,
                 ).save()
+
+            stock_use.created_eat = create_eat
+
+        stock_use.save()
 
         return response.Response(
             status=status.HTTP_201_CREATED
