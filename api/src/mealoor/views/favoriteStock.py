@@ -104,6 +104,6 @@ class CreateStockFromFavoriteStockView(APIView):
             )
             create_stock_category.save()
 
-        return response.Response({
-            'status': status.HTTP_201_CREATED
-        })
+        return response.Response(
+            status=status.HTTP_201_CREATED
+        )

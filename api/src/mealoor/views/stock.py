@@ -139,6 +139,6 @@ class UseStockView(APIView):
                     unit=stock_category.unit,
                 ).save()
 
-        return response.Response({
-            'status': status.HTTP_201_CREATED
-        })
+        return response.Response(
+            status=status.HTTP_201_CREATED
+        )

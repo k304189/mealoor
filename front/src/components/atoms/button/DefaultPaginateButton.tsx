@@ -4,10 +4,11 @@ import ReactPaginate from "react-paginate";
 type Props = {
   onPageChange: (page: { selected: number }) => void;
   totalPage: number;
+  size?: "xs" | "sm" | "md" | "lg";
 };
 
 export const DefaultPaginateButton: VFC<Props> = memo((props) => {
-  const { onPageChange, totalPage } = props;
+  const { onPageChange, totalPage, size = "md" } = props;
   return (
     <ReactPaginate
       previousLabel="<"
@@ -18,6 +19,9 @@ export const DefaultPaginateButton: VFC<Props> = memo((props) => {
       pageRangeDisplayed={3}
       onPageChange={onPageChange}
       containerClassName="pagination"
+      pageClassName={size}
+      previousClassName={size}
+      nextClassName={size}
     />
   );
 });

@@ -25,7 +25,10 @@ type Props = {
   helperText?: string;
   errorText?: string;
   isInvalid?: boolean;
+  isDisabled?: boolean;
+  isReadOnly?: boolean;
   dataTestid?: string;
+  size?: "xs" | "sm" | "md" | "lg";
 };
 
 export const NumberForm: VFC<Props> = memo((props) => {
@@ -44,7 +47,10 @@ export const NumberForm: VFC<Props> = memo((props) => {
     helperText = "",
     errorText = "",
     isInvalid = false,
+    isDisabled = false,
+    isReadOnly = false,
     dataTestid = "",
+    size = "md",
   } = props;
 
   return (
@@ -55,8 +61,10 @@ export const NumberForm: VFC<Props> = memo((props) => {
       helperText={helperText}
       errorText={errorText}
       isInvalid={isInvalid}
+      isDisabled={isDisabled}
+      isReadOnly={isReadOnly}
     >
-      <InputGroup>
+      <InputGroup size={size}>
         <NumberInput
           allowMouseWheel
           value={value}
