@@ -12,16 +12,17 @@ import {
 import { BellIcon, WarningIcon, NotAllowedIcon } from "@chakra-ui/icons";
 
 import { StockModal } from "./StockModal";
+import { CookIngredientListTable } from "./CookIngredientListTable";
 import { CommonUseForm } from "../../parts/food/CommonUseForm";
 import { DefaultLink } from "../../../atoms/button/DefaultLink";
 import { DefaultIconButton } from "../../../atoms/button/DefaultIconButton";
 import { DeleteButton } from "../../../molecules/button/DeleteButton";
 import { EatIconButton } from "../../../molecules/button/EatIconButton";
+import { IngredientIconButton } from "../../../molecules/button/IngredientIconButton";
 import { DefaultModal } from "../../../molecules/layout/DefaultModal";
 import { DivideIconButton } from "../../../molecules/button/DivideIconButton";
 import { useStockApi } from "../../../../hooks/food/useStockApi";
 import { TStock } from "../../../../types/api/TStock";
-// import { TUse } from "../../../../types/api/TUse";
 
 type Props = {
   stocks: Array<TStock>;
@@ -42,6 +43,11 @@ export const StockListTable: VFC<Props> = memo((props) => {
     onOpen: useModalOnOpen,
     onClose: useModalOnClose,
   } = useDisclosure();
+  const {
+    isOpen: ingredientModalIsOpen,
+    onOpen: ingredientModalOnOpen,
+    onClose: ingredientModalOnClose,
+  } = useDisclosure();
   const { useStock } = useStockApi();
 
   const onClickStockLink = (id: number) => {
@@ -50,6 +56,14 @@ export const StockListTable: VFC<Props> = memo((props) => {
     });
     setOpenStock(stocks[index]);
     editModalOnOpen();
+  };
+
+  const onClickCookIngredientButton = (id: number) => {
+    const index = stocks.findIndex((s) => {
+      return s.id === id;
+    });
+    setOpenStock(stocks[index]);
+    ingredientModalOnOpen();
   };
 
   const onClickUseButton = (utype: "trash" | "divide" | "eat", id: number) => {
@@ -130,13 +144,14 @@ export const StockListTable: VFC<Props> = memo((props) => {
           <Tr>
             <Th w="2%" />
             <Th w="25%">名前</Th>
+            <Th w="3%" />
             <Th w="15%">賞味期限</Th>
             <Th w="10%">食料タイプ</Th>
             <Th w="10%">価格</Th>
             <Th w="10%">カロリー</Th>
             <Th w="5%">量</Th>
             <Th w="10%">残量</Th>
-            <Th w="13%">食材編集</Th>
+            <Th w="10%">食材編集</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -151,6 +166,18 @@ export const StockListTable: VFC<Props> = memo((props) => {
                   >
                     {stock.name}
                   </DefaultLink>
+                </Td>
+                <Td>
+                  {(stock.eat_type === "自炊" && stock.food_type === "料理") ? (
+                    <IngredientIconButton
+                      className="secondary"
+                      aria-label="使用材料を表示"
+                      onClick={() => { onClickCookIngredientButton(stock.id); }}
+                      size="xs"
+                    />
+                  ) : (
+                    <></>
+                  )}
                 </Td>
                 <Td>{stock.limit}</Td>
                 <Td>{stock.food_type}</Td>
@@ -206,6 +233,19 @@ export const StockListTable: VFC<Props> = memo((props) => {
             maxRate={openStock?.remain ?? 100}
             selectedDataText={openStock?.name ?? ""}
             setUseTypeJson
+          />
+        )}
+        size="xl"
+      />
+      <DefaultModal
+        isOpen={ingredientModalIsOpen}
+        onClose={ingredientModalOnClose}
+        modalHeader="使用食材一覧"
+        modalBody={(
+          <CookIngredientListTable
+            cookId={openStock?.id ?? 0}
+            cookName={openStock?.name ?? ""}
+            remain={openStock?.remain ?? 0}
           />
         )}
         size="xl"

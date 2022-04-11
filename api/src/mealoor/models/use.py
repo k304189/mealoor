@@ -3,13 +3,14 @@ from django.core.validators import MaxValueValidator
 from django.core.validators import MinValueValidator
 
 from .stock import Stock
+from .eat import Eat
 
 class Use(models.Model):
     stock = models.ForeignKey(
         Stock,
         on_delete=models.CASCADE,
         related_name='uses',
-        verbose_name='使用履歴',
+        verbose_name='使用食材',
     )
     use_type = models.CharField(
         verbose_name='使用区分',
@@ -17,6 +18,22 @@ class Use(models.Model):
     )
     date = models.DateField(
         verbose_name='使用日',
+    )
+    created_stock = models.ForeignKey(
+        Stock,
+        on_delete=models.CASCADE,
+        related_name='created_stock',
+        verbose_name='作成された食材',
+        blank=True,
+        null=True,
+    )
+    created_eat = models.ForeignKey(
+        Eat,
+        on_delete=models.CASCADE,
+        related_name='created_eat',
+        verbose_name='作成された食事',
+        blank=True,
+        null=True,
     )
     rate = models.PositiveIntegerField(
         verbose_name='使用率',

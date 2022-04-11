@@ -13,6 +13,7 @@ type Props = {
   dataTestid?: string;
   leftAddon?: string;
   rightAddon?: string;
+  size?: "xs" | "sm" | "md" | "lg";
 }
 
 export const ReadOnlyInput: VFC<Props> = memo((props) => {
@@ -22,9 +23,10 @@ export const ReadOnlyInput: VFC<Props> = memo((props) => {
     dataTestid = "",
     leftAddon = "",
     rightAddon = "",
+    size = "md",
   } = props;
   return (
-    <InputGroup>
+    <InputGroup size={size}>
       {leftAddon === ""
         ? (<Box />)
         : (<InputLeftAddon>{leftAddon}</InputLeftAddon>)}

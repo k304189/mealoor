@@ -241,6 +241,10 @@ export const systemTheme = extendTheme({
       ".bgMain": {
         backgroundColor: mainColor,
       },
+      ".sectionTitle": {
+        borderLeft: `5px solid ${baseColor}`,
+        paddingLeft: "8px",
+      },
       ".pagination": {
         display: "flex",
         listStyle: "none",
@@ -252,6 +256,22 @@ export const systemTheme = extendTheme({
           _hover: {
             backgroundColor: accentColor,
             color: "white",
+          },
+          "&.xs": {
+            width: "20px",
+            height: "28px",
+          },
+          "&.sm": {
+            width: "24px",
+            height: "32px",
+          },
+          "&.md": {
+            width: "28px",
+            height: "36px",
+          },
+          "&.lg": {
+            width: "32px",
+            height: "40px",
           },
           "&.selected": {
             backgroundColor: accentColor,

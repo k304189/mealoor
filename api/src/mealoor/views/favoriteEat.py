@@ -103,6 +103,6 @@ class CreateEatFromFavoriteEatView(APIView):
             )
             create_eat_category.save()
 
-        return response.Response({
-            'status': status.HTTP_201_CREATED
-        })
+        return response.Response(
+            status=status.HTTP_201_CREATED
+        )

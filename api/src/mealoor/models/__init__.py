@@ -10,3 +10,4 @@ from mealoor.models.stockCategory import StockCategory
 from mealoor.models.use import Use
 from mealoor.models.favoriteStock import FavoriteStock
 from mealoor.models.favoriteStockCategory import FavoriteStockCategory
+from mealoor.models.cookIngredient import CookIngredient

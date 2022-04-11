@@ -33,4 +33,7 @@ urlpatterns = [
     path('favoriteStock/update/<int:id>/', views.UpdateFavoriteStockView.as_view(), name='favorite_stock_update'),
     path('favoriteStock/delete/<int:id>/', views.DeleteFavoriteStockView.as_view(), name='favorite_stock_delete'),
     path('favoriteStock/stock/<int:id>/', views.CreateStockFromFavoriteStockView.as_view(), name='favorite_stock_stock'),
+    path('cook/create/', views.CreateCookStockView.as_view(), name='cook_create'),
+    path('cook/cancel/<int:cook_id>/', views.CancelCookStockView.as_view(), name='cook_cancel'),
+    path('cookIngredient/<int:cook_id>/', views.ListCookIngredientView.as_view(), name='cook_ingredient_list'),
 ]

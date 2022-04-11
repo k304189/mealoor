@@ -7,3 +7,4 @@ from mealoor.serializers.stockSerializer import StockSerializer
 from mealoor.serializers.stockCategorySerializer import StockCategorySerializer
 from mealoor.serializers.favoriteStockSerializer import FavoriteStockSerializer
 from mealoor.serializers.favoriteStockCategorySerializer import FavoriteStockCategorySerializer
+from mealoor.serializers.cookIngredientSerializer import CookIngredientSerializer
