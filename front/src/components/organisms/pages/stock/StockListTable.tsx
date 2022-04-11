@@ -19,6 +19,7 @@ import { DefaultIconButton } from "../../../atoms/button/DefaultIconButton";
 import { DeleteButton } from "../../../molecules/button/DeleteButton";
 import { EatIconButton } from "../../../molecules/button/EatIconButton";
 import { IngredientIconButton } from "../../../molecules/button/IngredientIconButton";
+import { UseIconButton } from "../../../molecules/button/UseIconButton";
 import { DefaultModal } from "../../../molecules/layout/DefaultModal";
 import { DivideIconButton } from "../../../molecules/button/DivideIconButton";
 import { useStockApi } from "../../../../hooks/food/useStockApi";
@@ -168,16 +169,26 @@ export const StockListTable: VFC<Props> = memo((props) => {
                   </DefaultLink>
                 </Td>
                 <Td>
-                  {(stock.eat_type === "自炊" && stock.food_type === "料理") ? (
-                    <IngredientIconButton
+                  <HStack gap={1} align="right">
+                    <UseIconButton
                       className="secondary"
-                      aria-label="使用材料を表示"
-                      onClick={() => { onClickCookIngredientButton(stock.id); }}
+                      aria-label="使用履歴を表示"
+                      onClick={() => {}}
                       size="xs"
+                      hoverText="使用履歴を表示"
                     />
-                  ) : (
-                    <></>
-                  )}
+                    {(stock.eat_type === "自炊" && stock.food_type === "料理") ? (
+                      <IngredientIconButton
+                        className="secondary"
+                        aria-label="使用材料を表示"
+                        onClick={() => { onClickCookIngredientButton(stock.id); }}
+                        size="xs"
+                        hoverText="料理に使用した食材を表示"
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </HStack>
                 </Td>
                 <Td>{stock.limit}</Td>
                 <Td>{stock.food_type}</Td>
