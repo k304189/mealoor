@@ -108,7 +108,7 @@ class StockCategoryAdmin(admin.ModelAdmin):
 
 class UseAdmin(admin.ModelAdmin):
     list_display = ['stock', 'date', 'use_type', 'rate']
-    fields = ['stock', 'date', 'use_type', 'rate', 'note']
+    fields = ['stock', 'date', 'use_type', 'rate', 'created_stock', 'created_eat', 'note']
 
 class FavoriteStockAdmin(admin.ModelAdmin):
     list_display = ['account', 'name', 'quantity', 'price', 'kcal']
