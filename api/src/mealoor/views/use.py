@@ -24,5 +24,5 @@ class ListUseView(generics.ListAPIView):
 
     def get_queryset(self):
         stock_id = self.kwargs['stock_id']
-        target_stock = Stock.objects.get=(id=stock_id)
+        target_stock = Stock.objects.get(id=stock_id)
         return Use.objects.filter(stock=target_stock).order_by('date')

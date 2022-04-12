@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import axios from "axios";
 
 import { useRequestHeader } from "../common/auth/useRequestHeader";
-import { TUse } from "../../types/api/TUse";
 import { TUsePaginate } from "../../types/api/TUsePaginate";
 import {
   URL_USE_LIST,

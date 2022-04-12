@@ -13,6 +13,7 @@ import { BellIcon, WarningIcon, NotAllowedIcon } from "@chakra-ui/icons";
 
 import { StockModal } from "./StockModal";
 import { CookIngredientListTable } from "./CookIngredientListTable";
+import { UseListTable } from "./UseListTable";
 import { CommonUseForm } from "../../parts/food/CommonUseForm";
 import { DefaultLink } from "../../../atoms/button/DefaultLink";
 import { DefaultIconButton } from "../../../atoms/button/DefaultIconButton";
@@ -49,6 +50,11 @@ export const StockListTable: VFC<Props> = memo((props) => {
     onOpen: ingredientModalOnOpen,
     onClose: ingredientModalOnClose,
   } = useDisclosure();
+  const {
+    isOpen: useHistoryModalIsOpen,
+    onOpen: useHistoryModalOnOpen,
+    onClose: useHistoryModalOnClose,
+  } = useDisclosure();
   const { useStock } = useStockApi();
 
   const onClickStockLink = (id: number) => {
@@ -65,6 +71,14 @@ export const StockListTable: VFC<Props> = memo((props) => {
     });
     setOpenStock(stocks[index]);
     ingredientModalOnOpen();
+  };
+
+  const onClickUseHistoryButton = (id: number) => {
+    const index = stocks.findIndex((s) => {
+      return s.id === id;
+    });
+    setOpenStock(stocks[index]);
+    useHistoryModalOnOpen();
   };
 
   const onClickUseButton = (utype: "trash" | "divide" | "eat", id: number) => {
@@ -173,7 +187,7 @@ export const StockListTable: VFC<Props> = memo((props) => {
                     <UseIconButton
                       className="secondary"
                       aria-label="使用履歴を表示"
-                      onClick={() => {}}
+                      onClick={() => { onClickUseHistoryButton(stock.id); }}
                       size="xs"
                       hoverText="使用履歴を表示"
                     />
@@ -260,6 +274,18 @@ export const StockListTable: VFC<Props> = memo((props) => {
           />
         )}
         size="xl"
+      />
+      <DefaultModal
+        isOpen={useHistoryModalIsOpen}
+        onClose={useHistoryModalOnClose}
+        modalHeader="使用履歴"
+        modalBody={(
+          <UseListTable
+            stockId={openStock?.id ?? 0}
+            stockName={openStock?.name ?? ""}
+          />
+        )}
+        size="3xl"
       />
     </>
   );
