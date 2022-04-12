@@ -1,12 +1,7 @@
 export type TUse = {
   id: number;
   date: string;
-  use_type?: string;
-  location?: string;
-  eat_timing?: string;
+  use_type: string;
   rate: number;
-  name?: string;
-  price?: number;
-  discounted?: boolean;
-  note?: string;
+  note: string;
 };

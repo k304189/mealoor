@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { useRequestHeader } from "../common/auth/useRequestHeader";
 import { TStock } from "../../types/api/TStock";
-import { TUse } from "../../types/api/TUse";
+import { TSendUse } from "../../types/api/TSendUse";
 import { TStockPaginate } from "../../types/api/TStockPaginate";
 import {
   URL_STOCK_LIST,
@@ -18,7 +18,7 @@ type T = {
   createStock: (createJson: TStock) => Promise<TStock>;
   updateStock: (updateJson: TStock) => Promise<TStock>;
   deleteStock: (deleteId: number) => Promise<number>;
-  useStock: (useJson: TUse) => Promise<number>;
+  useStock: (useJson: TSendUse) => Promise<number>;
 };
 
 export const useStockApi = (): T => {
@@ -60,7 +60,7 @@ export const useStockApi = (): T => {
     return response.data;
   }, []);
 
-  const useStock = useCallback(async (useJson: TUse) => {
+  const useStock = useCallback(async (useJson: TSendUse) => {
     const headers = getRequestHeader();
 
     const url = `${URL_STOCK_USE}${useJson.id}/`;

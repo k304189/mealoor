@@ -13,12 +13,12 @@ import { MinusButton } from "../../../molecules/button/MinusButton";
 import { FormArea } from "../../../molecules/form/FormArea";
 import { useMessage } from "../../../../hooks/common/layout/useMessage";
 import { useFoodValidate } from "../../../../hooks/food/useFoodValidate";
-import { TUse } from "../../../../types/api/TUse";
+import { TSendUse } from "../../../../types/api/TSendUse";
 
 export type Props = {
   id: number;
   useType: "trash" | "divide" | "eat" | "stock";
-  callFunction: (json: TUse) => Promise<number>;
+  callFunction: (json: TSendUse) => Promise<number>;
   quantity?: number;
   maxRate?: number;
   selectedDataText?: string;
@@ -218,7 +218,7 @@ export const CommonUseForm: VFC<Props> = memo((props) => {
   };
 
   const getJson = () => {
-    const json: TUse = {
+    const json: TSendUse = {
       id,
       date,
       rate,

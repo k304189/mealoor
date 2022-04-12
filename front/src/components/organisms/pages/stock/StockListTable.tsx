@@ -13,12 +13,14 @@ import { BellIcon, WarningIcon, NotAllowedIcon } from "@chakra-ui/icons";
 
 import { StockModal } from "./StockModal";
 import { CookIngredientListTable } from "./CookIngredientListTable";
+import { UseListTable } from "./UseListTable";
 import { CommonUseForm } from "../../parts/food/CommonUseForm";
 import { DefaultLink } from "../../../atoms/button/DefaultLink";
 import { DefaultIconButton } from "../../../atoms/button/DefaultIconButton";
 import { DeleteButton } from "../../../molecules/button/DeleteButton";
 import { EatIconButton } from "../../../molecules/button/EatIconButton";
 import { IngredientIconButton } from "../../../molecules/button/IngredientIconButton";
+import { UseIconButton } from "../../../molecules/button/UseIconButton";
 import { DefaultModal } from "../../../molecules/layout/DefaultModal";
 import { DivideIconButton } from "../../../molecules/button/DivideIconButton";
 import { useStockApi } from "../../../../hooks/food/useStockApi";
@@ -48,6 +50,11 @@ export const StockListTable: VFC<Props> = memo((props) => {
     onOpen: ingredientModalOnOpen,
     onClose: ingredientModalOnClose,
   } = useDisclosure();
+  const {
+    isOpen: useHistoryModalIsOpen,
+    onOpen: useHistoryModalOnOpen,
+    onClose: useHistoryModalOnClose,
+  } = useDisclosure();
   const { useStock } = useStockApi();
 
   const onClickStockLink = (id: number) => {
@@ -64,6 +71,14 @@ export const StockListTable: VFC<Props> = memo((props) => {
     });
     setOpenStock(stocks[index]);
     ingredientModalOnOpen();
+  };
+
+  const onClickUseHistoryButton = (id: number) => {
+    const index = stocks.findIndex((s) => {
+      return s.id === id;
+    });
+    setOpenStock(stocks[index]);
+    useHistoryModalOnOpen();
   };
 
   const onClickUseButton = (utype: "trash" | "divide" | "eat", id: number) => {
@@ -168,16 +183,26 @@ export const StockListTable: VFC<Props> = memo((props) => {
                   </DefaultLink>
                 </Td>
                 <Td>
-                  {(stock.eat_type === "自炊" && stock.food_type === "料理") ? (
-                    <IngredientIconButton
+                  <HStack gap={1} align="right">
+                    <UseIconButton
                       className="secondary"
-                      aria-label="使用材料を表示"
-                      onClick={() => { onClickCookIngredientButton(stock.id); }}
+                      aria-label="使用履歴を表示"
+                      onClick={() => { onClickUseHistoryButton(stock.id); }}
                       size="xs"
+                      hoverText="使用履歴を表示"
                     />
-                  ) : (
-                    <></>
-                  )}
+                    {(stock.eat_type === "自炊" && stock.food_type === "料理") ? (
+                      <IngredientIconButton
+                        className="secondary"
+                        aria-label="使用材料を表示"
+                        onClick={() => { onClickCookIngredientButton(stock.id); }}
+                        size="xs"
+                        hoverText="料理に使用した食材を表示"
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </HStack>
                 </Td>
                 <Td>{stock.limit}</Td>
                 <Td>{stock.food_type}</Td>
@@ -249,6 +274,18 @@ export const StockListTable: VFC<Props> = memo((props) => {
           />
         )}
         size="xl"
+      />
+      <DefaultModal
+        isOpen={useHistoryModalIsOpen}
+        onClose={useHistoryModalOnClose}
+        modalHeader="使用履歴"
+        modalBody={(
+          <UseListTable
+            stockId={openStock?.id ?? 0}
+            stockName={openStock?.name ?? ""}
+          />
+        )}
+        size="3xl"
       />
     </>
   );
