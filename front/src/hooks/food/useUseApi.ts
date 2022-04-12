@@ -5,10 +5,12 @@ import { useRequestHeader } from "../common/auth/useRequestHeader";
 import { TUsePaginate } from "../../types/api/TUsePaginate";
 import {
   URL_USE_LIST,
+  URL_USE_DELETE,
 } from "../../constants/urls";
 
 type T = {
   getUse: (id: number, page?: number) => Promise<TUsePaginate>;
+  deleteUse: (id: number) => Promise<number>;
 };
 
 export const useUseApi = (): T => {
@@ -25,5 +27,13 @@ export const useUseApi = (): T => {
     return response.data;
   }, []);
 
-  return { getUse };
+  const deleteUse = useCallback(async (id: number) => {
+    const headers = getRequestHeader();
+    const url = `${URL_USE_DELETE}${id}/`;
+    const response = await axios.delete(url, { headers });
+
+    return response.status;
+  }, []);
+
+  return { getUse, deleteUse };
 };

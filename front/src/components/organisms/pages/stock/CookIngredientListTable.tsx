@@ -27,6 +27,7 @@ type Props = {
 export const CookIngredientListTable: VFC<Props> = memo((props) => {
   const [cookIngredients, setCookIngredients] = useState<Array<TCookIngredient>>([]);
   const [totalPage, setTotalPage] = useState(0);
+  const [btnDisabled, setBtnDisabled] = useState(false);
 
   const { cookId, cookName, remain } = props;
   const { cancelCook } = useCookApi();
@@ -58,6 +59,7 @@ export const CookIngredientListTable: VFC<Props> = memo((props) => {
     cancelCook(cookId)
       .then(() => {
         successToast("料理の取消が完了しました");
+        setBtnDisabled(true);
       })
       .catch(() => {
         errorToast("料理の取消が失敗しました");
@@ -71,11 +73,15 @@ export const CookIngredientListTable: VFC<Props> = memo((props) => {
   return (
     <>
       <Flex>
-        <Box>
+        <Box className="sectionTitle">
           {`料理名：${cookName}`}
         </Box>
         <Spacer />
-        <DefaultPaginateButton totalPage={totalPage} onPageChange={onPageChange} />
+        <DefaultPaginateButton
+          totalPage={totalPage}
+          onPageChange={onPageChange}
+          size="sm"
+        />
       </Flex>
       <Table size="sm">
         <Thead>
@@ -99,12 +105,12 @@ export const CookIngredientListTable: VFC<Props> = memo((props) => {
           })}
         </Tbody>
       </Table>
-      <Flex justify="flex-end">
+      <Flex mt={2} justify="flex-end">
         <DefaultButton
           className="primary"
           onClick={onClickCancelButton}
-          disabled={remain !== 100}
-          hoverText="残量が100%の時、元の食材データを復活します"
+          disabled={btnDisabled || remain !== 100}
+          hoverText="料理データを削除し、元の食材データを復活します"
         >
           取消
         </DefaultButton>

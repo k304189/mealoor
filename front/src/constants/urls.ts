@@ -31,3 +31,4 @@ export const URL_COOK_CREATE = `${process.env.REACT_APP_API_V1_URL}/cook/create/
 export const URL_COOK_CANCEL = `${process.env.REACT_APP_API_V1_URL}/cook/cancel/`;
 export const URL_COOK_INGREDIENT_LIST = `${process.env.REACT_APP_API_V1_URL}/cookIngredient/`;
 export const URL_USE_LIST = `${process.env.REACT_APP_API_V1_URL}/use/`;
+export const URL_USE_DELETE = `${process.env.REACT_APP_API_V1_URL}/use/delete/`;
