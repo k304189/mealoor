@@ -242,8 +242,10 @@ export const systemTheme = extendTheme({
         backgroundColor: mainColor,
       },
       ".sectionTitle": {
+        display: "flex",
         borderLeft: `5px solid ${baseColor}`,
         paddingLeft: "8px",
+        alignItems: "center",
       },
       ".pagination": {
         display: "flex",
