@@ -3,6 +3,7 @@ import axios from "axios";
 
 import { useRequestHeader } from "../common/auth/useRequestHeader";
 import { TEat } from "../../types/api/TEat";
+import { TEatPaginate } from "../../types/api/TEatPaginate";
 import {
   URL_EAT_LIST,
   URL_EAT_CREATE,
@@ -11,7 +12,7 @@ import {
 } from "../../constants/urls";
 
 type T = {
-  getDateEats: (date: string) => Promise<Array<TEat>>;
+  getDateEats: (date: string, page?: number) => Promise<TEatPaginate>;
   createEat: (eat: TEat) => Promise<TEat>;
   updateEat: (eat: TEat) => Promise<TEat>;
   deleteEat: (deleteId: number) => Promise<number>;
@@ -20,9 +21,12 @@ type T = {
 export const useEatApi = (): T => {
   const { getRequestHeader } = useRequestHeader();
 
-  const getDateEats = useCallback(async (date: string) => {
+  const getDateEats = useCallback(async (date: string, page?: number) => {
     const headers = getRequestHeader();
-    const url = `${URL_EAT_LIST}${date}`;
+    let url = `${URL_EAT_LIST}${date}`;
+    if (page) {
+      url = `${url}?page=${page}`;
+    }
     const response = await axios.get(url, { headers });
 
     return response.data;

@@ -1,11 +1,29 @@
 from rest_framework import generics
+from rest_framework import pagination
+from rest_framework import response
+from rest_framework import status
+from rest_framework.views import APIView
+from django.db import transaction
 
+from mealoor.models import Use
 from mealoor.models import Eat
 from mealoor.serializers import EatSerializer
+
+class EatPagination(pagination.PageNumberPagination):
+    page_size = 10
+
+    def get_paginated_response(self, data):
+        return response.Response({
+            'count': self.page.paginator.count,
+            'total_pages': self.page.paginator.num_pages,
+            'page_size': self.page_size,
+            'results': data,
+        })
 
 class ListDateEatView(generics.ListAPIView):
     """ Show Authentication Account's Body """
     serializer_class = EatSerializer
+    pagination_class = EatPagination
 
     def get_queryset(self):
         date = self.kwargs['date']
@@ -29,10 +47,22 @@ class UpdateEatView(generics.UpdateAPIView):
     def get_queryset(self):
         return Eat.objects.filter(account=self.request.user)
 
-class DeleteEatView(generics.DestroyAPIView):
+class DeleteEatView(APIView):
     """ Delete Authentication Account's Body """
-    serializer_class = EatSerializer
-    lookup_field = 'id'
+    @transaction.atomic
+    def delete(self, request, id):
+        target_eat = Eat.objects.get(id=id)
+        target_use = Use.objects.filter(created_eat=target_eat)
 
-    def get_queryset(self):
-        return Eat.objects.filter(account=self.request.user)
+        try:
+            target_use = Use.objects.get(created_eat=target_eat)
+            target_use.stock.remain += target_use.rate
+            target_use.stock.save()
+        except Use.DoesNotExist:
+            pass
+
+        target_eat.delete()
+
+        return response.Response(
+            status=status.HTTP_204_NO_CONTENT
+        )
