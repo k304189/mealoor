@@ -17,10 +17,11 @@ import { TBody } from "../../../../types/api/TBody";
 type Props = {
   beforeData?: TBody | null;
   afterData?: TBody | null;
+  size?: "xs" | "sm" | "md" | "lg";
 };
 
 export const BodyCompareTable: VFC<Props> = memo((props) => {
-  const { beforeData = null, afterData = null } = props;
+  const { beforeData = null, afterData = null, size = "md" } = props;
   const [diffBody, setDiffBody] = useState<TBody | null>(null);
 
   const getArrowIcon = (value: number): IconDefinition => {
@@ -52,7 +53,7 @@ export const BodyCompareTable: VFC<Props> = memo((props) => {
   }, [beforeData, afterData]);
 
   return (
-    <Table size="sm">
+    <Table size={size}>
       <Thead>
         <Tr>
           <Th w="20%">日付</Th>
