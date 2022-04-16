@@ -29,6 +29,8 @@ export const appFavoriteStockBorderColor = "#A791B2";
 export const trLimitExpiredBgColor = "#CBD5E0";
 export const trLimitTodayBgColor = "#FEB2B2";
 export const trLimitWarningBgColor = "#FAF089";
+export const tdMinusValueBgColor = "#BBE2F1";
+export const tdPlusValueBgColor = "#FDEDE4";
 
 const systemHeaderHeight = "48px";
 const systemMainHeight = `calc(100% - ${systemHeaderHeight})`;
@@ -312,6 +314,14 @@ export const systemTheme = extendTheme({
         backgroundColor: appFavoriteStockBgColor,
         borderLeftColor: appFavoriteStockBorderColor,
         color: "black",
+      },
+      ".diffDownCell": {
+        backgroundColor: tdMinusValueBgColor,
+        color: "blue",
+      },
+      ".diffUpCell": {
+        backgroundColor: tdPlusValueBgColor,
+        color: "red",
       },
     },
   },

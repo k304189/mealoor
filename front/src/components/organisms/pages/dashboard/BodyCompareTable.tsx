@@ -1,7 +1,7 @@
 import { memo, useEffect, useState, VFC } from "react";
 import {
+  Box,
   Flex,
-  Spacer,
   Table,
   Tbody,
   Thead,
@@ -9,9 +9,8 @@ import {
   Td,
   Th,
 } from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconDefinition, faArrowDown, faArrowRight, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
+import { ArrowIcon } from "../../../molecules/display/ArrowIcon";
 import { TBody } from "../../../../types/api/TBody";
 
 type Props = {
@@ -24,14 +23,24 @@ export const BodyCompareTable: VFC<Props> = memo((props) => {
   const { beforeData = null, afterData = null, size = "md" } = props;
   const [diffBody, setDiffBody] = useState<TBody | null>(null);
 
-  const getArrowIcon = (value: number): IconDefinition => {
-    let icon: IconDefinition = faArrowRight;
-    if (value > 0) {
-      icon = faArrowUp;
-    } else if (value < 0) {
-      icon = faArrowDown;
+  const getDiffClassName = (value: number) => {
+    let className = "";
+    if (value < 0) {
+      className = "diffDownCell";
+    } else if (value > 0) {
+      className = "diffUpCell";
     }
-    return icon;
+    return className;
+  };
+
+  const getArrowHoverText = (value: number) => {
+    let hoverText = "";
+    if (value < 0) {
+      hoverText = "減少しています";
+    } else if (value > 0) {
+      hoverText = "増加しています";
+    }
+    return hoverText;
   };
 
   useEffect(() => {
@@ -56,10 +65,10 @@ export const BodyCompareTable: VFC<Props> = memo((props) => {
     <Table size={size}>
       <Thead>
         <Tr>
-          <Th w="20%">日付</Th>
-          <Th w="20%">体重</Th>
-          <Th w="30%">体脂肪率</Th>
-          <Th w="30%">体脂肪量</Th>
+          <Th w="19%">日付</Th>
+          <Th w="27%">体重</Th>
+          <Th w="27%">体脂肪率</Th>
+          <Th w="27%">体脂肪量</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -86,25 +95,37 @@ export const BodyCompareTable: VFC<Props> = memo((props) => {
         { diffBody ? (
           <Tr>
             <Td />
-            <Td>
-              <Flex>
+            <Td className={getDiffClassName(diffBody.weight ?? 0)}>
+              <Flex align="center">
                 {`${diffBody.weight}kg`}
-                <Spacer />
-                <FontAwesomeIcon icon={getArrowIcon(diffBody.weight)} />
+                <Box pl={5}>
+                  <ArrowIcon
+                    value={(diffBody.weight ?? 0)}
+                    hoverText={getArrowHoverText(diffBody.weight ?? 0)}
+                  />
+                </Box>
               </Flex>
             </Td>
-            <Td>
-              <Flex>
+            <Td className={getDiffClassName(diffBody.fat_rate ?? 0)}>
+              <Flex align="center">
                 {`${diffBody.fat_rate}%`}
-                <Spacer />
-                <FontAwesomeIcon icon={getArrowIcon(diffBody.fat_rate)} />
+                <Box pl={5}>
+                  <ArrowIcon
+                    value={(diffBody.fat_rate ?? 0)}
+                    hoverText={getArrowHoverText(diffBody.fat_rate ?? 0)}
+                  />
+                </Box>
               </Flex>
             </Td>
-            <Td>
-              <Flex>
+            <Td className={getDiffClassName(diffBody.fat_weight ?? 0)}>
+              <Flex align="center">
                 {`${diffBody.fat_weight}kg`}
-                <Spacer />
-                <FontAwesomeIcon icon={getArrowIcon(diffBody.fat_weight ?? 0)} />
+                <Box pl={5}>
+                  <ArrowIcon
+                    value={(diffBody.fat_weight ?? 0)}
+                    hoverText={getArrowHoverText(diffBody.fat_weight ?? 0)}
+                  />
+                </Box>
               </Flex>
             </Td>
           </Tr>

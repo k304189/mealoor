@@ -1,7 +1,7 @@
 import { memo, useEffect, useState, VFC } from "react";
 import {
+  Box,
   Flex,
-  Spacer,
   Table,
   Tbody,
   Thead,
@@ -9,9 +9,8 @@ import {
   Td,
   Th,
 } from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconDefinition, faArrowDown, faArrowRight, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
+import { ArrowIcon } from "../../../molecules/display/ArrowIcon";
 import { TEatSummary } from "../../../../types/api/TEatSummary";
 
 type Props = {
@@ -25,14 +24,24 @@ export const EatSummaryCompareTable: VFC<Props> = memo((props) => {
   const { beforeData = null, afterData = null, unit = "", size = "md" } = props;
   const [diffEatSummary, setDiffEatSummary] = useState<TEatSummary | null>(null);
 
-  const getArrowIcon = (value: number): IconDefinition => {
-    let icon: IconDefinition = faArrowRight;
-    if (value > 0) {
-      icon = faArrowUp;
-    } else if (value < 0) {
-      icon = faArrowDown;
+  const getDiffClassName = (value: number) => {
+    let className = "";
+    if (value < 0) {
+      className = "diffDownCell";
+    } else if (value > 0) {
+      className = "diffUpCell";
     }
-    return icon;
+    return className;
+  };
+
+  const getArrowHoverText = (value: number) => {
+    let hoverText = "";
+    if (value < 0) {
+      hoverText = "減少しています";
+    } else if (value > 0) {
+      hoverText = "増加しています";
+    }
+    return hoverText;
   };
 
   useEffect(() => {
@@ -89,32 +98,48 @@ export const EatSummaryCompareTable: VFC<Props> = memo((props) => {
         { diffEatSummary ? (
           <Tr>
             <Td />
-            <Td>
-              <Flex>
+            <Td className={getDiffClassName(diffEatSummary.breakfast ?? 0)}>
+              <Flex align="center">
                 {`${diffEatSummary.breakfast}${unit}`}
-                <Spacer />
-                <FontAwesomeIcon icon={getArrowIcon(diffEatSummary.breakfast ?? 0)} />
+                <Box pl={5}>
+                  <ArrowIcon
+                    value={(diffEatSummary.breakfast ?? 0)}
+                    hoverText={getArrowHoverText(diffEatSummary.breakfast ?? 0)}
+                  />
+                </Box>
               </Flex>
             </Td>
-            <Td>
-              <Flex>
+            <Td className={getDiffClassName(diffEatSummary.lunch ?? 0)}>
+              <Flex align="center">
                 {`${diffEatSummary.lunch}${unit}`}
-                <Spacer />
-                <FontAwesomeIcon icon={getArrowIcon(diffEatSummary.lunch ?? 0)} />
+                <Box pl={5}>
+                  <ArrowIcon
+                    value={(diffEatSummary.lunch ?? 0)}
+                    hoverText={getArrowHoverText(diffEatSummary.lunch ?? 0)}
+                  />
+                </Box>
               </Flex>
             </Td>
-            <Td>
-              <Flex>
+            <Td className={getDiffClassName(diffEatSummary.dinner ?? 0)}>
+              <Flex align="center">
                 {`${diffEatSummary.dinner}${unit}`}
-                <Spacer />
-                <FontAwesomeIcon icon={getArrowIcon(diffEatSummary.dinner ?? 0)} />
+                <Box pl={5}>
+                  <ArrowIcon
+                    value={(diffEatSummary.dinner ?? 0)}
+                    hoverText={getArrowHoverText(diffEatSummary.dinner ?? 0)}
+                  />
+                </Box>
               </Flex>
             </Td>
-            <Td>
-              <Flex>
+            <Td className={getDiffClassName(diffEatSummary.snack ?? 0)}>
+              <Flex align="center">
                 {`${diffEatSummary.snack}${unit}`}
-                <Spacer />
-                <FontAwesomeIcon icon={getArrowIcon(diffEatSummary.snack ?? 0)} />
+                <Box pl={5}>
+                  <ArrowIcon
+                    value={(diffEatSummary.snack ?? 0)}
+                    hoverText={getArrowHoverText(diffEatSummary.snack ?? 0)}
+                  />
+                </Box>
               </Flex>
             </Td>
           </Tr>
