@@ -14,6 +14,7 @@ import { EatSummaryCompareTable } from "../../organisms/pages/dashboard/EatSumma
 import { TodayEatListModal } from "../../organisms/pages/dashboard/TodayEatListModal";
 import { DefaultButton } from "../../atoms/button/DefaultButton";
 import { DefaultLink } from "../../atoms/button/DefaultLink";
+import { DefaultAlert } from "../../molecules/display/DefaultAlert";
 import { TextForm } from "../../organisms/parts/form/TextForm";
 import { BodyModalButton } from "../../organisms/pages/body/BodyModalButton";
 import { EatModalButton } from "../../organisms/pages/eat/EatModalButton";
@@ -34,6 +35,7 @@ export const DashboardPage: VFC = memo(() => {
   const [afterBody, setAfterBody] = useState<TBody | null>(null);
   const [beforeEatSummary, setBeforeEatSummary] = useState<TEatSummary | null>(null);
   const [afterEatSummary, setAfterEatSummary] = useState<TEatSummary | null>(null);
+  const [warningStockCount, setWarningStockCount] = useState(0);
 
   const [btnLoading, setBtnLoading] = useState(false);
 
@@ -150,6 +152,9 @@ export const DashboardPage: VFC = memo(() => {
     setAfterBody(getTableBodyData());
     setBeforeEatSummary(getTableEatSummaryData(true));
     setAfterEatSummary(getTableEatSummaryData());
+    if (dashboardData) {
+      setWarningStockCount(dashboardData.warning_stock_count);
+    }
   }, [dashboardData]);
 
   return (
@@ -178,6 +183,13 @@ export const DashboardPage: VFC = memo(() => {
           >
             切替
           </DefaultButton>
+          { warningStockCount > 0 ? (
+            <DefaultAlert status="warning">
+              {`賞味期限が近い食材が${warningStockCount}個あります`}
+            </DefaultAlert>
+          ) : (
+            <></>
+          )}
         </HStack>
         <Flex w="100%" mt={5}>
           <VStack w="40%" gap={3}>

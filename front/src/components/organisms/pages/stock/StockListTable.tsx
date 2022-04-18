@@ -102,17 +102,17 @@ export const StockListTable: VFC<Props> = memo((props) => {
   const calcLimitMinusNow = (limit: string): number => {
     const now = new Date().getTime();
     const limitTime = Date.parse(limit);
-    return (limitTime - now) / (1000 * 60 * 60 * 24);
+    return Math.ceil((limitTime - now) / (1000 * 60 * 60 * 24));
   };
 
   const getLimitClassName = (limit: string): string => {
     const diffTime = calcLimitMinusNow(limit);
     let className = "";
-    if (diffTime < -1) {
+    if (diffTime <= -1) {
       className = "limitExpired";
-    } else if (diffTime >= -1 && diffTime < 0) {
+    } else if (diffTime > -1 && diffTime <= 0) {
       className = "limitToday";
-    } else if (diffTime >= 0 && diffTime < 4) {
+    } else if (diffTime > 0 && diffTime <= 3) {
       className = "limitWarning";
     }
     return className;

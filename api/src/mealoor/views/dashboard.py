@@ -7,6 +7,7 @@ from django.db.models import Sum
 
 from mealoor.models import Body
 from mealoor.models import Eat
+from mealoor.models import Stock
 
 class ListDashboardView(APIView):
     """ List Dashboard Data """
@@ -18,6 +19,14 @@ class ListDashboardView(APIView):
             target_datetime.day,
         )
         last_month = target_date + datetime.timedelta(days=-30)
+
+        today = datetime.date.today()
+        warning_limit_date = today + datetime.timedelta(days=3)
+
+        warning_limit_stock_count = Stock.objects.filter(
+            limit__range=[today, warning_limit_date],
+            remain__gt='0',
+        ).count()
 
         eat_summary = Eat.objects.filter(
             date__range=[last_month, target_date]
@@ -129,6 +138,7 @@ class ListDashboardView(APIView):
                 'fat_rate': body_fat_rate,
                 'fat_weight': body_fat_weight,
             },
+            'warning_stock_count': warning_limit_stock_count,
         }
 
         return response.Response(

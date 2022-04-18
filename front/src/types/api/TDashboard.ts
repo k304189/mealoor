@@ -19,4 +19,5 @@ export type TDashboard = {
     fat_rate: Array<number | null>;
     fat_weight: Array<number | null>;
   },
+  warning_stock_count: number;
 };
