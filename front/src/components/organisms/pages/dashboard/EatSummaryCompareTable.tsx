@@ -76,10 +76,10 @@ export const EatSummaryCompareTable: VFC<Props> = memo((props) => {
         { afterData ? (
           <Tr>
             <Td>{afterData.date}</Td>
-            <Td>{`${afterData.breakfast}${unit}`}</Td>
-            <Td>{`${afterData.lunch}${unit}`}</Td>
-            <Td>{`${afterData.dinner}${unit}`}</Td>
-            <Td>{`${afterData.snack}${unit}`}</Td>
+            <Td>{`${afterData.breakfast || 0}${unit}`}</Td>
+            <Td>{`${afterData.lunch || 0}${unit}`}</Td>
+            <Td>{`${afterData.dinner || 0}${unit}`}</Td>
+            <Td>{`${afterData.snack || 0}${unit}`}</Td>
           </Tr>
         ) : (
           <></>
@@ -87,10 +87,10 @@ export const EatSummaryCompareTable: VFC<Props> = memo((props) => {
         { beforeData ? (
           <Tr>
             <Td>{beforeData.date}</Td>
-            <Td>{`${beforeData.breakfast}${unit}`}</Td>
-            <Td>{`${beforeData.lunch}${unit}`}</Td>
-            <Td>{`${beforeData.dinner}${unit}`}</Td>
-            <Td>{`${beforeData.snack}${unit}`}</Td>
+            <Td>{`${beforeData.breakfast || 0}${unit}`}</Td>
+            <Td>{`${beforeData.lunch || 0}${unit}`}</Td>
+            <Td>{`${beforeData.dinner || 0}${unit}`}</Td>
+            <Td>{`${beforeData.snack || 0}${unit}`}</Td>
           </Tr>
         ) : (
           <></>

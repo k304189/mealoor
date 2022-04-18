@@ -5,7 +5,6 @@ import { EatTable } from "../eat/EatTable";
 import { DefaultPaginateButton } from "../../../atoms/button/DefaultPaginateButton";
 
 import { TEat } from "../../../../types/api/TEat";
-// import { TEatPaginate } from "../../../../types/api/TEatPaginate";
 import { useEatApi } from "../../../../hooks/food/useEatApi";
 import { useMessage } from "../../../../hooks/common/layout/useMessage";
 

@@ -32,3 +32,4 @@ from mealoor.views.cook import CancelCookStockView
 from mealoor.views.cookIngredient import ListCookIngredientView
 from mealoor.views.use import ListUseView
 from mealoor.views.use import DeleteUseView
+from mealoor.views.dashboard import ListDashboardView
