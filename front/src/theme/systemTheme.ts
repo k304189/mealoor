@@ -29,6 +29,8 @@ export const appFavoriteStockBorderColor = "#A791B2";
 export const trLimitExpiredBgColor = "#CBD5E0";
 export const trLimitTodayBgColor = "#FEB2B2";
 export const trLimitWarningBgColor = "#FAF089";
+export const tdMinusValueBgColor = "#BBE2F1";
+export const tdPlusValueBgColor = "#FDEDE4";
 
 const systemHeaderHeight = "48px";
 const systemMainHeight = `calc(100% - ${systemHeaderHeight})`;
@@ -242,8 +244,10 @@ export const systemTheme = extendTheme({
         backgroundColor: mainColor,
       },
       ".sectionTitle": {
+        display: "flex",
         borderLeft: `5px solid ${baseColor}`,
         paddingLeft: "8px",
+        alignItems: "center",
       },
       ".pagination": {
         display: "flex",
@@ -291,6 +295,31 @@ export const systemTheme = extendTheme({
         paddingTop: "4px",
         paddingBottom: "4px",
       },
+      ".eatTable": {
+        td: {
+          "&.breakfast": {
+            backgroundColor: "#CCFFEC",
+          },
+          "&.lunch": {
+            backgroundColor: "#FDFDC4",
+          },
+          "&.dinner": {
+            backgroundColor: "#FFE8CF",
+          },
+          "&.snack": {
+            backgroundColor: "#FFDEDE",
+          },
+          "&.eatTypeOut": {
+            backgroundColor: "#FFA952",
+          },
+          "&.eatTypeHmr": {
+            backgroundColor: "#FFE79A",
+          },
+          "&.eatTypeIn": {
+            backgroundColor: "#FEFFDF",
+          },
+        },
+      },
       ".account": {
         backgroundColor: appAccountBgColor,
         borderLeftColor: appAccountBorderColor,
@@ -310,6 +339,14 @@ export const systemTheme = extendTheme({
         backgroundColor: appFavoriteStockBgColor,
         borderLeftColor: appFavoriteStockBorderColor,
         color: "black",
+      },
+      ".diffDownCell": {
+        backgroundColor: tdMinusValueBgColor,
+        color: "blue",
+      },
+      ".diffUpCell": {
+        backgroundColor: tdPlusValueBgColor,
+        color: "red",
       },
     },
   },

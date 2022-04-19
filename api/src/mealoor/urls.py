@@ -38,4 +38,5 @@ urlpatterns = [
     path('cookIngredient/<int:cook_id>/', views.ListCookIngredientView.as_view(), name='cook_ingredient_list'),
     path('use/<int:stock_id>/', views.ListUseView.as_view(), name='use_list'),
     path('use/delete/<int:id>/', views.DeleteUseView.as_view(), name='use_delete'),
+    path('dashboard/<str:date>/', views.ListDashboardView.as_view(), name='list_dashboard'),
 ]
