@@ -4,6 +4,8 @@ from rest_framework import response
 from rest_framework import status
 from rest_framework.views import APIView
 from django.db import transaction
+from django.db.models import Case
+from django.db.models import When
 
 from mealoor.models import Use
 from mealoor.models import Eat
@@ -30,7 +32,12 @@ class ListDateEatView(generics.ListAPIView):
         return Eat.objects.filter(
             account=self.request.user,
             date=date,
-        )
+        ).annotate(custom_order=Case(
+            When(eat_timing='朝食', then=1),
+            When(eat_timing='昼食', then=2),
+            When(eat_timing='夕食', then=3),
+            When(eat_timing='間食', then=4),
+        )).order_by('custom_order')
 
 class CreateEatView(generics.CreateAPIView):
     """ Create Authentication Account's Body """
