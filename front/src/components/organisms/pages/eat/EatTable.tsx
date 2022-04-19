@@ -40,6 +40,32 @@ export const EatTable: VFC<Props> = memo((props) => {
   const { deleteEat } = useEatApi();
   const { successToast, errorToast } = useMessage();
 
+  const getEatTimingClassName = (eatTiming: string) => {
+    let eatTimingClassName = "";
+    if (eatTiming === "朝食") {
+      eatTimingClassName = "breakfast";
+    } else if (eatTiming === "昼食") {
+      eatTimingClassName = "lunch";
+    } else if (eatTiming === "夕食") {
+      eatTimingClassName = "dinner";
+    } else if (eatTiming === "間食") {
+      eatTimingClassName = "snack";
+    }
+    return eatTimingClassName;
+  };
+
+  const getEatTypeClassName = (eatType: string) => {
+    let eatTypeClassName = "";
+    if (eatType === "外食") {
+      eatTypeClassName = "eatTypeOut";
+    } else if (eatType === "中食") {
+      eatTypeClassName = "eatTypeHmr";
+    } else if (eatType === "自炊") {
+      eatTypeClassName = "eatTypeIn";
+    }
+    return eatTypeClassName;
+  };
+
   const onClickEatLink = (id: number) => {
     const index = eats.findIndex((e) => {
       return e.id === id;
@@ -77,7 +103,7 @@ export const EatTable: VFC<Props> = memo((props) => {
 
   return (
     <>
-      <Table size={size}>
+      <Table size={size} className="eatTable">
         <Thead>
           <Tr>
             <Th w="15%">名前</Th>
@@ -97,12 +123,23 @@ export const EatTable: VFC<Props> = memo((props) => {
             return (
               <Tr key={eat.id}>
                 <Td>
-                  <DefaultLink onClick={() => { onClickEatLink(eat.id); }}>
+                  <DefaultLink
+                    onClick={() => { onClickEatLink(eat.id); }}
+                    hoverText="食事編集"
+                  >
                     {eat.name}
                   </DefaultLink>
                 </Td>
-                <Td>{eat.eat_timing}</Td>
-                <Td>{eat.eat_type}</Td>
+                <Td
+                  className={getEatTimingClassName(eat.eat_timing)}
+                >
+                  {eat.eat_timing}
+                </Td>
+                <Td
+                  className={getEatTypeClassName(eat.eat_type)}
+                >
+                  {eat.eat_type}
+                </Td>
                 <Td>{`${eat.price}円`}</Td>
                 <Td>{`${eat.kcal}kcal`}</Td>
                 <Td>{`${eat.amount}${eat.unit || ""}`}</Td>
@@ -112,6 +149,7 @@ export const EatTable: VFC<Props> = memo((props) => {
                 <Td>
                   <DeleteButton
                     aria-label="食事データを削除"
+                    hoverText="食事データを削除"
                     size="xs"
                     className="secondary"
                     onClick={() => { onClickDeleteButton(eat.id); }}

@@ -43,7 +43,7 @@ export const DashboardPage: VFC = memo(() => {
   const [errorTextDate, setErrorTextDate] = useState("");
 
   const { getDashboard } = useDashboardApi();
-  const { errorToast } = useMessage();
+  const { successToast, errorToast } = useMessage();
 
   const {
     isOpen: todayEatListModalIsOpen,
@@ -66,10 +66,13 @@ export const DashboardPage: VFC = memo(() => {
     setErrorTextDate(tmpErrorText);
   };
 
-  const callGetDashboard = (getDate: string) => {
+  const callGetDashboard = (getDate: string, needSuccessToast?: boolean) => {
     getDashboard(getDate)
       .then((res) => {
         setDashboardData(res);
+        if (needSuccessToast) {
+          successToast("表示データを切り替えました");
+        }
       })
       .catch(() => {
         errorToast("データの取得に失敗しました");
@@ -78,7 +81,7 @@ export const DashboardPage: VFC = memo(() => {
 
   const onClickDateChangeButton = () => {
     setBtnLoading(true);
-    callGetDashboard(date);
+    callGetDashboard(date, true);
     setBtnLoading(false);
   };
 

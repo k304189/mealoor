@@ -295,6 +295,31 @@ export const systemTheme = extendTheme({
         paddingTop: "4px",
         paddingBottom: "4px",
       },
+      ".eatTable": {
+        td: {
+          "&.breakfast": {
+            backgroundColor: "#CCFFEC",
+          },
+          "&.lunch": {
+            backgroundColor: "#FDFDC4",
+          },
+          "&.dinner": {
+            backgroundColor: "#FFE8CF",
+          },
+          "&.snack": {
+            backgroundColor: "#FFDEDE",
+          },
+          "&.eatTypeOut": {
+            backgroundColor: "#FFA952",
+          },
+          "&.eatTypeHmr": {
+            backgroundColor: "#FFE79A",
+          },
+          "&.eatTypeIn": {
+            backgroundColor: "#FEFFDF",
+          },
+        },
+      },
       ".account": {
         backgroundColor: appAccountBgColor,
         borderLeftColor: appAccountBorderColor,
