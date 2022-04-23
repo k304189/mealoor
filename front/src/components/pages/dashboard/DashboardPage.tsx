@@ -12,6 +12,7 @@ import { BodyCompareTable } from "../../organisms/pages/dashboard/BodyCompareTab
 import { EatSummaryRadio } from "../../organisms/pages/dashboard/EatSummaryRadio";
 import { EatSummaryCompareTable } from "../../organisms/pages/dashboard/EatSummaryCompareTable";
 import { TodayEatListModal } from "../../organisms/pages/dashboard/TodayEatListModal";
+import { DashboardChart } from "../../organisms/pages/dashboard/DashboardChart";
 import { DefaultButton } from "../../atoms/button/DefaultButton";
 import { DefaultLink } from "../../atoms/button/DefaultLink";
 import { DefaultAlert } from "../../molecules/display/DefaultAlert";
@@ -22,7 +23,8 @@ import { HeaderLayout } from "../../templates/HeaderLayout";
 import { useDashboardApi } from "../../../hooks/dashboard/useDashboardApi";
 import { useMessage } from "../../../hooks/common/layout/useMessage";
 import { TBody } from "../../../types/api/TBody";
-import { TDashboard } from "../../../types/api/TDashboard";
+import { TDashboard } from "../../../types/api/dashboard/TDashboard";
+import { TDashboardEatSummary } from "../../../types/api/dashboard/TDashboardEatSummary";
 import { TEatSummary } from "../../../types/api/TEatSummary";
 
 export const DashboardPage: VFC = memo(() => {
@@ -109,24 +111,18 @@ export const DashboardPage: VFC = memo(() => {
       idx = -2;
     }
     if (dashboardData) {
-      let tempBreakfastArray: Array<number | null> = dashboardData.eat_summary.kcal.breakfast;
-      let tempLunchArray: Array<number | null> = dashboardData.eat_summary.kcal.lunch;
-      let tempDinnerArray: Array<number | null> = dashboardData.eat_summary.kcal.dinner;
-      let tempSnackArray: Array<number | null> = dashboardData.eat_summary.kcal.snack;
+      let dashboardEatSummary: TDashboardEatSummary = dashboardData.eat_summary.kcal;
 
       if (tableEatSummary === "価格") {
-        tempBreakfastArray = dashboardData.eat_summary.price.breakfast;
-        tempLunchArray = dashboardData.eat_summary.price.lunch;
-        tempDinnerArray = dashboardData.eat_summary.price.dinner;
-        tempSnackArray = dashboardData.eat_summary.price.snack;
+        dashboardEatSummary = dashboardData.eat_summary.price;
       }
 
       eatSummaryData = {
         date: dashboardData.label.slice(idx)[0],
-        breakfast: tempBreakfastArray.slice(idx)[0],
-        lunch: tempLunchArray.slice(idx)[0],
-        dinner: tempDinnerArray.slice(idx)[0],
-        snack: tempSnackArray.slice(idx)[0],
+        breakfast: dashboardEatSummary.breakfast.slice(idx)[0],
+        lunch: dashboardEatSummary.lunch.slice(idx)[0],
+        dinner: dashboardEatSummary.dinner.slice(idx)[0],
+        snack: dashboardEatSummary.snack.slice(idx)[0],
       };
     }
     return eatSummaryData;
@@ -163,7 +159,7 @@ export const DashboardPage: VFC = memo(() => {
   return (
     <HeaderLayout>
       <Box h="100%" py={1} px={2} className="bgMain">
-        <HStack my={1} gap={2}>
+        <HStack my={1} gap={2} h="15%">
           <Box w="20%">
             <TextForm
               label="表示日"
@@ -194,7 +190,7 @@ export const DashboardPage: VFC = memo(() => {
             <></>
           )}
         </HStack>
-        <Flex w="100%" mt={5}>
+        <Flex w="100%" h="80%" mt={2} justify="space-between">
           <VStack w="40%" gap={3}>
             <Box w="100%">
               <Flex>
@@ -239,6 +235,9 @@ export const DashboardPage: VFC = memo(() => {
               />
             </Box>
           </VStack>
+          <Box w="55%" h="100%">
+            <DashboardChart dashboardData={dashboardData} />
+          </Box>
         </Flex>
       </Box>
       <TodayEatListModal

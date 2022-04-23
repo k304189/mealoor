@@ -26,6 +26,27 @@ export const appStockBorderColor = "#FDBA77";
 export const appFavoriteStockBgColor = "#FF97C2";
 export const appFavoriteStockBorderColor = "#A791B2";
 
+export const eatSummaryKcalColor = "#F75959";
+export const eatSummaryPriceColor = "#FFD454";
+
+export const eatTimingBreakfastBgColor = "#CCFFEC";
+export const eatTimingLunchBgColor = "#FDFDC4";
+export const eatTimingDinnerBgColor = "#FFE8CF";
+export const eatTimingSnackBgColor = "#FFDEDE";
+
+export const eatTimingBreakfastChartColor = "#45D6A0";
+export const eatTimingLunchChartColor = "#EEEE65";
+export const eatTimingDinnerChartColor = "#FBC489";
+export const eatTimingSnackChartColor = "#F49797";
+
+export const eatTypeOutColor = "#FFA952";
+export const eatTypeHmrColor = "#FFE79A";
+export const eatTypeInColor = "#FEFFDF";
+
+export const bodyWeightColor = "#2ECFCA";
+export const bodyFatRateColor = "#009EE6";
+export const bodyFatWeightColor = "#6C7CD3";
+
 export const trLimitExpiredBgColor = "#CBD5E0";
 export const trLimitTodayBgColor = "#FEB2B2";
 export const trLimitWarningBgColor = "#FAF089";
@@ -298,25 +319,25 @@ export const systemTheme = extendTheme({
       ".eatTable": {
         td: {
           "&.breakfast": {
-            backgroundColor: "#CCFFEC",
+            backgroundColor: eatTimingBreakfastBgColor,
           },
           "&.lunch": {
-            backgroundColor: "#FDFDC4",
+            backgroundColor: eatTimingLunchBgColor,
           },
           "&.dinner": {
-            backgroundColor: "#FFE8CF",
+            backgroundColor: eatTimingDinnerBgColor,
           },
           "&.snack": {
-            backgroundColor: "#FFDEDE",
+            backgroundColor: eatTimingSnackBgColor,
           },
           "&.eatTypeOut": {
-            backgroundColor: "#FFA952",
+            backgroundColor: eatTypeOutColor,
           },
           "&.eatTypeHmr": {
-            backgroundColor: "#FFE79A",
+            backgroundColor: eatTypeHmrColor,
           },
           "&.eatTypeIn": {
-            backgroundColor: "#FEFFDF",
+            backgroundColor: eatTypeInColor,
           },
         },
       },
