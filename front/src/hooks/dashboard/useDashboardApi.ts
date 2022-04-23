@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import axios from "axios";
 
 import { useRequestHeader } from "../common/auth/useRequestHeader";
-import { TDashboard } from "../../types/api/TDashboard";
+import { TDashboard } from "../../types/api/dashboard/TDashboard";
 import {
   URL_DASHBOARD_LIST,
 } from "../../constants/urls";
