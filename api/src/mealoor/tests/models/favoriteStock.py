@@ -623,7 +623,7 @@ class FavoriteStockTestCase(TestCase):
         favorite_stock = FavoriteStockFactory()
 
         self.assertEqual(
-            FavoriteStock.objects.count(), 1, 'データが0件である'
+            FavoriteStock.objects.count(), 1, 'データが1件である'
         )
 
         favorite_stock.account.delete()

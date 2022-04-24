@@ -5,6 +5,7 @@ from django.db.utils import IntegrityError
 from django.db.utils import DataError
 
 from mealoor.models.body import Body
+from ..factories.body import BodyFactory
 from ..factories.account import AccountFactory
 
 class BodyModelTestCase(TestCase):
@@ -332,4 +333,24 @@ class BodyModelTestCase(TestCase):
             Body.objects.count(),
             1,
             '体重・体脂肪率の最小値が登録できる'
+        )
+
+    def test_delete_body_when_related_account_is_deleted(self):
+        """
+        アカウントデータが削除時に体調データ削除
+        """
+        self.assertEqual(
+            Body.objects.count(), 0, 'データが0件である'
+        )
+
+        body = BodyFactory()
+
+        self.assertEqual(
+            Body.objects.count(), 1, 'データが1件である'
+        )
+
+        body.account.delete()
+
+        self.assertEqual(
+            Body.objects.count(), 0, 'データが0件である'
         )

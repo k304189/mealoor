@@ -629,7 +629,7 @@ class EatModelTestCase(TestCase):
         favorite_eat = FavoriteEatFactory()
 
         self.assertEqual(
-            FavoriteEat.objects.count(), 1, 'データが0件である'
+            FavoriteEat.objects.count(), 1, 'データが1件である'
         )
 
         favorite_eat.account.delete()

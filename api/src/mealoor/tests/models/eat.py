@@ -698,7 +698,7 @@ class EatModelTestCase(TestCase):
         eat = EatFactory()
 
         self.assertEqual(
-            Eat.objects.count(), 1, 'データが0件である'
+            Eat.objects.count(), 1, 'データが1件である'
         )
 
         eat.account.delete()
