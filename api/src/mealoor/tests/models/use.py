@@ -389,9 +389,6 @@ class UseModelTestCase(TestCase):
         self.assertEqual(
             Use.objects.count(), 1, 'データが1件である'
         )
-        self.assertIsNotNone(
-            Use.objects.first().created_stock, '作成された食事がNoneでない'
-        )
 
         use.created_stock.delete()
 

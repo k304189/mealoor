@@ -740,7 +740,7 @@ class StockModelTestCase(TestCase):
         stock = StockFactory()
 
         self.assertEqual(
-            Stock.objects.count(), 1, 'データが0件である'
+            Stock.objects.count(), 1, 'データが1件である'
         )
 
         stock.account.delete()

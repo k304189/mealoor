@@ -4,6 +4,7 @@ from django.db.utils import DataError
 
 from mealoor.models.eatCategory import EatCategory
 from ..factories.eat import EatFactory
+from ..factories.eatCategory import EatCategoryFactory
 
 class EatModelTestCase(TestCase):
     """
@@ -180,3 +181,45 @@ class EatModelTestCase(TestCase):
                 unit="a" * 11,
             )
             eat_category.save()
+
+    def test_delete_eat_category_when_related_eat_is_deleted(self):
+        """
+        食事データが削除時に食事カテゴリーデータ削除
+        """
+
+        self.assertEqual(
+            EatCategory.objects.count(), 0, 'データが0件である'
+        )
+
+        eat_category = EatCategoryFactory()
+
+        self.assertEqual(
+            EatCategory.objects.count(), 1, 'データが1件である'
+        )
+
+        eat_category.eat.delete()
+
+        self.assertEqual(
+            EatCategory.objects.count(), 0, 'データが削除されていることを確認'
+        )
+
+    def test_delete_eat_category_when_related_account_is_deleted(self):
+        """
+        アカウントデータが削除時に食事カテゴリーデータ削除
+        """
+
+        self.assertEqual(
+            EatCategory.objects.count(), 0, 'データが0件である'
+        )
+
+        eat_category = EatCategoryFactory()
+
+        self.assertEqual(
+            EatCategory.objects.count(), 1, 'データが1件である'
+        )
+
+        eat_category.eat.account.delete()
+
+        self.assertEqual(
+            EatCategory.objects.count(), 0, 'データが削除されていることを確認'
+        )
