@@ -4,6 +4,7 @@ from django.db.utils import DataError
 
 from mealoor.models.stockCategory import StockCategory
 from ..factories.stock import StockFactory
+from ..factories.stockCategory import StockCategoryFactory
 
 class StockCategoryTestCase(TestCase):
     """
