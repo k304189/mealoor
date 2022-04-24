@@ -7,3 +7,4 @@ from .favoriteEatCategory import FavoriteEatCategoryFactory
 from .stock import StockFactory
 from .stockCategory import StockCategoryFactory
 from .favoriteStock import FavoriteStockFactory
+from .cookIngredient import CookIngredientFactory
