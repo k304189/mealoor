@@ -4,3 +4,4 @@ from .eat import *
 from .eatCategory import *
 from .favoriteEat import *
 from .favoriteEatCategory import *
+from .stock import *
