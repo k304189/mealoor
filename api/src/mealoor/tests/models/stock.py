@@ -6,6 +6,7 @@ from django.db.utils import DataError
 
 from mealoor.models.stock import Stock
 from ..factories.account import AccountFactory
+from ..factories.stock import StockFactory
 
 class StockModelTestCase(TestCase):
     """
@@ -57,6 +58,10 @@ class StockModelTestCase(TestCase):
 
         self.assertEqual(
             created_stock.eat_type, stock.eat_type, '食事タイプが登録されている'
+        )
+
+        self.assertEqual(
+            created_stock.food_type, stock.food_type, '食料タイプが登録されている'
         )
 
         self.assertEqual(
@@ -158,6 +163,11 @@ class StockModelTestCase(TestCase):
         self.assertEqual(
             created_stock.eat_type, stock.eat_type, '食事タイプが登録されている'
         )
+
+        self.assertEqual(
+            created_stock.food_type, stock.food_type, '食料タイプが登録されている'
+        )
+
 
         self.assertEqual(
             created_stock.limit, stock.limit, '賞味期限が登録されている'
@@ -271,7 +281,7 @@ class StockModelTestCase(TestCase):
             Stock.objects.count(), 1, 'データが登録されている'
         )
 
-    def test_create_eat_name_length_is_61(self):
+    def test_create_stock_name_length_is_61(self):
         """
         名前が61文字
         """
@@ -320,7 +330,7 @@ class StockModelTestCase(TestCase):
             Stock.objects.count(), 1, 'データが登録されている'
         )
 
-    def test_create_eat_eat_type_length_is_11(self):
+    def test_create_stock_eat_type_length_is_11(self):
         """
         食事タイプが11文字
         """
@@ -369,7 +379,7 @@ class StockModelTestCase(TestCase):
             Stock.objects.count(), 1, 'データが登録されている'
         )
 
-    def test_create_eat_food_type_length_is_11(self):
+    def test_create_stock_food_type_length_is_11(self):
         """
         食料タイプが11文字
         """
@@ -468,7 +478,7 @@ class StockModelTestCase(TestCase):
             Stock.objects.count(), 1, 'データが登録されている'
         )
 
-    def test_create_eat_shop_length_is_11(self):
+    def test_create_stock_shop_length_is_11(self):
         """
         店が61文字
         """
@@ -697,7 +707,7 @@ class StockModelTestCase(TestCase):
             Stock.objects.count(), 1, 'データが登録されている'
         )
 
-    def test_create_eat_stock_length_is_100(self):
+    def test_create_stock_note_length_is_100(self):
         """
         メモが100文字
         """
@@ -717,4 +727,24 @@ class StockModelTestCase(TestCase):
 
         self.assertEqual(
             Stock.objects.count(), 1, 'データが登録されている'
+        )
+
+    def test_delete_stock_when_related_account_is_deleted(self):
+        """
+        アカウントデータが削除時に食材データ削除
+        """
+        self.assertEqual(
+            Stock.objects.count(), 0, 'データが0件である'
+        )
+
+        stock = StockFactory()
+
+        self.assertEqual(
+            Stock.objects.count(), 1, 'データが0件である'
+        )
+
+        stock.account.delete()
+
+        self.assertEqual(
+            Stock.objects.count(), 0, 'データが0件である'
         )
