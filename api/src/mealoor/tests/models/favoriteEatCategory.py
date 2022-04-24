@@ -4,8 +4,9 @@ from django.db.utils import DataError
 
 from mealoor.models.favoriteEatCategory import FavoriteEatCategory
 from ..factories.favoriteEat import FavoriteEatFactory
+from ..factories.favoriteEatCategory import FavoriteEatCategoryFactory
 
-class EatModelTestCase(TestCase):
+class FavoriteEatModelTestCase(TestCase):
     """
     FavoriteEatCategoryモデルのテスト
     """
@@ -34,7 +35,7 @@ class EatModelTestCase(TestCase):
         created_favorite_eat_category = FavoriteEatCategory.objects.first()
 
         self.assertEqual(
-            created_favorite_eat_category.favorite_eat, favorite_eat_category.favorite_eat, '指定の食事データで登録されている'
+            created_favorite_eat_category.favorite_eat, favorite_eat_category.favorite_eat, '指定のお気に入り食事データで登録されている'
         )
 
         self.assertEqual(
@@ -53,12 +54,12 @@ class EatModelTestCase(TestCase):
 
         self.assertIsNotNone(created_favorite_eat_category.updated_at, 'データ更新日に値がセットされている')
 
-    def test_create_favorite_eat_category_eat_is_none(self):
+    def test_create_favorite_eat_category_favorite_eat_is_none(self):
         """
         お気に入り食事がセットされていない
         """
 
-        with self.assertRaises(IntegrityError, msg='食事データなしでは登録できない'):
+        with self.assertRaises(IntegrityError, msg='お気に入り食事データなしでは登録できない'):
             favorite_eat_category = FavoriteEatCategory(
                 category="米",
                 amount=200,
@@ -168,7 +169,7 @@ class EatModelTestCase(TestCase):
             FavoriteEatCategory.objects.count(), 1, 'データが登録されている'
         )
 
-    def test_create_favorite_eat_unit_length_is_11(self):
+    def test_create_favorite_eat_category_unit_length_is_11(self):
         """
         単位が11文字
         """
@@ -180,3 +181,45 @@ class EatModelTestCase(TestCase):
                 unit="a" * 11,
             )
             favorite_eat_category.save()
+
+    def test_delete_favorite_eat_category_when_related_favorite_eat_is_deleted(self):
+        """
+        お気に入り食事データが削除時にお気に入り食事カテゴリーデータ削除
+        """
+
+        self.assertEqual(
+            FavoriteEatCategory.objects.count(), 0, 'データが0件である'
+        )
+
+        favorite_eat_category = FavoriteEatCategoryFactory()
+
+        self.assertEqual(
+            FavoriteEatCategory.objects.count(), 1, 'データが1件である'
+        )
+
+        favorite_eat_category.favorite_eat.delete()
+
+        self.assertEqual(
+            FavoriteEatCategory.objects.count(), 0, 'データが削除されていることを確認'
+        )
+
+    def test_delete_stock_favorite_category_when_related_account_is_deleted(self):
+        """
+        アカウントデータが削除時にお気に入り食材カテゴリーデータ削除
+        """
+
+        self.assertEqual(
+            FavoriteEatCategory.objects.count(), 0, 'データが0件である'
+        )
+
+        favorite_eat_category = FavoriteEatCategoryFactory()
+
+        self.assertEqual(
+            FavoriteEatCategory.objects.count(), 1, 'データが1件である'
+        )
+
+        favorite_eat_category.favorite_eat.account.delete()
+
+        self.assertEqual(
+            FavoriteEatCategory.objects.count(), 0, 'データが削除されていることを確認'
+        )
