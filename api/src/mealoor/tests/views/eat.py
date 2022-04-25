@@ -1,4 +1,5 @@
 import datetime
+import math
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
@@ -19,12 +20,15 @@ class EatTests(APITestCase):
     """
 
     def test_daily_list_eat_api(self):
+        """
+        日別の食事データ取得
+        """
         test_account1 = AccountFactory(email='test_list1@test.com')
         test_account1_token = Token.objects.get(user=test_account1)
 
         test_account2 = AccountFactory(email='test_list2@test.com')
 
-        create_eat_num = 10
+        create_eat_num = 11
         today_str = datetime.date.today().strftime('%Y-%m-%d')
         eats = EatFactory.create_batch(create_eat_num, account=test_account1)
         yeasterday_eat = EatFactory(
@@ -47,7 +51,8 @@ class EatTests(APITestCase):
 
         response = eat_list_view(request, date=today_str)
         response_data = response.data
-        response_data_id = set(map(lambda data: data['id'], response_data))
+        response_data_results = response_data['results']
+        response_data_id = set(map(lambda data: data['id'], response_data_results))
 
         self.assertEqual(
             response.status_code,
@@ -56,9 +61,27 @@ class EatTests(APITestCase):
         )
 
         self.assertEqual(
-            len(response_data),
+            len(response_data_results),
+            10,
+            '取得データ件数が10件になることを確認'
+        )
+
+        self.assertEqual(
+            response_data['count'],
             create_eat_num,
-            '取得データ件数が一致することを確認'
+            'レスポンスのキーcountの値が取得対象データ件数になることを確認'
+        )
+
+        self.assertEqual(
+            response_data['total_pages'],
+            math.ceil(create_eat_num / 10.0),
+            'レスポンスのキーtotal_pagesの値が抽出対象のページ数になることを確認'
+        )
+
+        self.assertEqual(
+            response_data['page_size'],
+            10,
+            'レスポンスのキーpage_sizeの値が1ページあたりの件数になることを確認'
         )
 
         self.assertFalse(
@@ -70,6 +93,70 @@ class EatTests(APITestCase):
             test_account2_data.id in response_data_id,
             '別アカウントのデータは取得されないことを確認'
         )
+
+    def test_daily_list_eat_api(self):
+        """
+        日別の食事データ取得（並び順確認）
+        """
+        test_account1 = AccountFactory(email='test_list1@test.com')
+        test_account1_token = Token.objects.get(user=test_account1)
+
+        eat_snack = EatFactory(
+            account=test_account1,
+            date=datetime.date.today(),
+            eat_timing="間食"
+        )
+
+        eat_lunch = EatFactory(
+            account=test_account1,
+            date=datetime.date.today(),
+            eat_timing="昼食"
+        )
+
+        eat_breakfast = EatFactory(
+            account=test_account1,
+            date=datetime.date.today(),
+            eat_timing="朝食"
+        )
+
+        eat_dinner = EatFactory(
+            account=test_account1,
+            date=datetime.date.today(),
+            eat_timing="夕食"
+        )
+
+        assume_response_data_id = [
+            eat_breakfast.id,
+            eat_lunch.id,
+            eat_dinner.id,
+            eat_snack.id,
+        ]
+
+        today_str = datetime.date.today().strftime('%Y-%m-%d')
+        factory = APIRequestFactory()
+        eat_list_view = views.ListDateEatView.as_view()
+
+        request = factory.get(f'/api/eat/{today_str}')
+        force_authenticate(request, test_account1, test_account1_token)
+
+        response = eat_list_view(request, date=today_str)
+        response_data = response.data
+        response_data_results = response_data['results']
+
+        response_data_id = list(map(lambda data: data['id'], response_data_results))
+
+        self.assertEqual(
+            len(assume_response_data_id),
+            len(response_data_id),
+            '比較する配列の長さが同じになることを確認'
+        )
+
+        self.assertEqual(
+            assume_response_data_id,
+            response_data_id,
+            '食事タイミング順に並んで返ってくることを確認'
+        )
+
 
     def test_create_eat_api(self):
         """
