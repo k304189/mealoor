@@ -1,4 +1,5 @@
 import datetime
+import math
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
@@ -17,6 +18,72 @@ class FavoriteEatTests(APITestCase):
     """
     FavoriteEat APIのテスト
     """
+    def test_get_favorite_eat_api(self):
+        """
+        お気に入り食事データを取得
+        """
+        test_account1 = AccountFactory(email='test_list1@test.com')
+        test_account1_token = Token.objects.get(user=test_account1)
+
+        test_account2 = AccountFactory(email='test_list2@test.com')
+
+        create_favorite_eat_num = 11
+        today_str = datetime.date.today().strftime('%Y-%m-%d')
+        favorite_eats = FavoriteEatFactory.create_batch(create_favorite_eat_num, account=test_account1)
+        test_account2_data = FavoriteEatFactory(account=test_account2)
+
+        self.assertEqual(
+            FavoriteEat.objects.count(),
+            create_favorite_eat_num + 1,
+            'データ件数の事前チェック',
+        )
+
+        factory = APIRequestFactory()
+        eat_list_view = views.ListFavoriteEatView.as_view()
+
+        request = factory.get(f'/api/favoriteEat/')
+        force_authenticate(request, test_account1, test_account1_token)
+
+        response = eat_list_view(request)
+        response_data = response.data
+        response_data_results = response_data['results']
+        response_data_id = set(map(lambda data: data['id'], response_data_results))
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK,
+            'HTTPステータス200であること',
+        )
+
+        self.assertEqual(
+            len(response_data_results),
+            10,
+            '取得データ件数が10件になることを確認'
+        )
+
+        self.assertEqual(
+            response_data['count'],
+            create_favorite_eat_num,
+            'レスポンスのキーcountの値が取得対象データ件数になることを確認'
+        )
+
+        self.assertEqual(
+            response_data['total_pages'],
+            math.ceil(create_favorite_eat_num / 10.0),
+            'レスポンスのキーtotal_pagesの値が抽出対象のページ数になることを確認'
+        )
+
+        self.assertEqual(
+            response_data['page_size'],
+            10,
+            'レスポンスのキーpage_sizeの値が1ページあたりの件数になることを確認'
+        )
+
+        self.assertFalse(
+            test_account2_data.id in response_data_id,
+            '別アカウントのデータは取得されないことを確認'
+        )
+
     def test_create_favorite_eat_api(self):
         """
         お気に入り食事情報登録テスト
@@ -538,7 +605,7 @@ class FavoriteEatTests(APITestCase):
 
         factory = APIRequestFactory()
         favorite_eat_update_view = views.UpdateFavoriteEatView.as_view()
-        request = factory.patch(f'/api/eat/update/{target_eat.id}', data=update_json, format='json')
+        request = factory.patch(f'/api/favoriteEat/update/{target_eat.id}', data=update_json, format='json')
         force_authenticate(request, test_account, test_token)
         response = favorite_eat_update_view(request, id=target_eat.id)
         response_data = response.data
@@ -804,7 +871,13 @@ class FavoriteEatTests(APITestCase):
         target_eat_created_at = target_eat.created_at
         target_eat_updated_at = target_eat.updated_at
 
-        target_eat_category = FavoriteEatCategoryFactory(favorite_eat=target_eat)
+        target_eat_category = FavoriteEatCategory(
+            favorite_eat=target_eat,
+            category="肉",
+            amount=100,
+            unit="g",
+        )
+        target_eat_category.save()
         target_eat_category_created_at = target_eat_category.created_at
         target_eat_category_updated_at = target_eat_category.updated_at
 
@@ -851,7 +924,7 @@ class FavoriteEatTests(APITestCase):
 
         factory = APIRequestFactory()
         favorite_eat_update_view = views.UpdateFavoriteEatView.as_view()
-        request = factory.patch(f'/api/eat/update/{target_eat.id}', data=update_json, format='json')
+        request = factory.patch(f'/api/favoriteEat/update/{target_eat.id}', data=update_json, format='json')
         force_authenticate(request, test_account, test_token)
         response = favorite_eat_update_view(request, id=target_eat.id)
         response_data = response.data

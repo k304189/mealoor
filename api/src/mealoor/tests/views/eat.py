@@ -94,7 +94,7 @@ class EatTests(APITestCase):
             '別アカウントのデータは取得されないことを確認'
         )
 
-    def test_daily_list_eat_api(self):
+    def test_daily_list_eat_api_order_by_eat_timing(self):
         """
         日別の食事データ取得（並び順確認）
         """
@@ -156,7 +156,6 @@ class EatTests(APITestCase):
             response_data_id,
             '食事タイミング順に並んで返ってくることを確認'
         )
-
 
     def test_create_eat_api(self):
         """
@@ -969,7 +968,13 @@ class EatTests(APITestCase):
         target_eat_created_at = target_eat.created_at
         target_eat_updated_at = target_eat.updated_at
 
-        target_eat_category = EatCategoryFactory(eat=target_eat)
+        target_eat_category = EatCategory(
+            eat=target_eat,
+            category="肉",
+            amount=100,
+            unit="g",
+        )
+        target_eat_category.save()
         target_eat_category_created_at = target_eat_category.created_at
         target_eat_category_updated_at = target_eat_category.updated_at
 
@@ -1096,7 +1101,7 @@ class EatTests(APITestCase):
                 'カテゴリーの単位はJSONの食事カテゴリーの単位で更新されていることを確認',
             )
 
-    def test_update_eat_api_add_category(self):
+    def test_update_eat_api_delete_category(self):
         """
         食事情報更新テスト（カテゴリー削除）
         """
