@@ -1,5 +1,7 @@
 import datetime
 import math
+from decimal import Decimal
+from decimal import ROUND_HALF_UP
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
@@ -8,6 +10,8 @@ from rest_framework.authtoken.models import Token
 
 from mealoor import views
 from mealoor.models.account import Account
+from mealoor.models.eat import Eat
+from mealoor.models.eatCategory import EatCategory
 from mealoor.models.favoriteEat import FavoriteEat
 from mealoor.models.favoriteEatCategory import FavoriteEatCategory
 from mealoor.tests.factories.account import AccountFactory
@@ -108,7 +112,6 @@ class FavoriteEatTests(APITestCase):
             'categories': [
                 { 'id': -1, 'category': '米' },
             ],
-            'date': datetime.date.today(),
             'registered_name': 'テスト登録名',
             'amount_note': '分量メモ',
             'shop': 'テスト店',
@@ -525,7 +528,6 @@ class FavoriteEatTests(APITestCase):
             'categories': [
                 { 'id': -1, 'category': '米' },
             ],
-            'date': datetime.date.today(),
             'registered_name': 'テスト登録名',
             'amount_note': '分量メモ',
             'shop': 'テスト店',
@@ -1224,4 +1226,380 @@ class FavoriteEatTests(APITestCase):
             FavoriteEatCategory.objects.count(),
             1,
             'お気に入り食事カテゴリーデータが削除されていないことを確認'
+        )
+
+    def test_eat_favorite_eat_api(self):
+        """
+        お気に入り食事から食事データの登録
+        """
+        self.assertEqual(
+            FavoriteEat.objects.count(),
+            0,
+            'お気に入り食事データ事前データチェック',
+        )
+
+        self.assertEqual(
+            FavoriteEatCategory.objects.count(),
+            0,
+            'お気に入り食事カテゴリーデータ事前データチェック',
+        )
+
+        self.assertEqual(
+            Eat.objects.count(),
+            0,
+            '食事データ事前データチェック',
+        )
+
+        self.assertEqual(
+            EatCategory.objects.count(),
+            0,
+            '食事カテゴリーデータ事前データチェック',
+        )
+        test_account = AccountFactory()
+        test_token = Token.objects.get(user=test_account)
+
+        favorite_eat = FavoriteEatFactory(
+            account=test_account,
+            name='シーフードカレー',
+            eat_type='外食',
+            food_type='料理',
+            registered_name='カレー',
+            shop='',
+            price=160,
+            kcal=340,
+            amount=90,
+            unit='g',
+            protein=10.5,
+            lipid=25.5,
+            carbo=37.0,
+            note='FavoriteEatメモ',
+        )
+
+        favorite_eat_category1 = FavoriteEatCategoryFactory(
+            favorite_eat=favorite_eat,
+            category='米',
+            amount=50,
+            unit='g',
+        )
+
+        favorite_eat_category2 = FavoriteEatCategoryFactory(
+            favorite_eat=favorite_eat,
+            category='魚介',
+            amount=10,
+            unit='g',
+        )
+
+        favorite_eat_category3 = FavoriteEatCategoryFactory(
+            favorite_eat=favorite_eat,
+            category='緑黄色野菜',
+            amount=10,
+            unit='g',
+        )
+
+        eat_json = {
+            'date': datetime.date.today(),
+            'eat_timing': '昼食',
+            'rate': 50,
+            'name': 'カレーライス',
+            'price': 600,
+            'discounted': True,
+            'note': '食事メモ',
+        }
+
+        factory = APIRequestFactory()
+        favorite_eat_eat_view = views.CreateEatFromFavoriteEatView.as_view()
+        request = factory.post(f'favoriteEat/eat/{favorite_eat.id}', data=eat_json, format='json')
+        force_authenticate(request, test_account, test_token)
+        response = favorite_eat_eat_view(request, favorite_eat.id)
+        response_data = response.data
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED,
+            'HTTPステータス201であること',
+        )
+
+        self.assertIsNone(
+            response_data,
+            'レスポンスに作成Eatデータが含まれていないことを確認',
+        )
+
+        self.assertEqual(
+            Eat.objects.count(),
+            1,
+            '食事データが登録されていることを確認'
+        )
+
+        self.assertEqual(
+            EatCategory.objects.count(),
+            FavoriteEatCategory.objects.count(),
+            '食事カテゴリーデータがお気に入り食事カテゴリーと同じ件数分登録されていることを確認'
+        )
+
+        calced_rate = Decimal(str(eat_json['rate'] / 100))
+
+        # 作成された食事データの確認
+        created_eat = Eat.objects.first()
+
+        self.assertEqual(
+            created_eat.account,
+            favorite_eat.account,
+            '作成された食事データがFavoriteEatと同じアカウントであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.name,
+            eat_json['name'],
+            '作成された食事データの名前はリクエストのものであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.eat_type,
+            favorite_eat.eat_type,
+            '作成された食事データの食事タイプはFavoriteEatと同じであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.food_type,
+            favorite_eat.food_type,
+            '作成された食事データの食料タイプはFavoriteEatと同じであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.date,
+            eat_json['date'],
+            '作成された食事データの日付はリクエストのものであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.eat_timing,
+            eat_json['eat_timing'],
+            '作成された食事データの食事タイミングはリクエストのものであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.shop,
+            favorite_eat.shop,
+            '作成された食事データの店はFavoriteEatと同じであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.price,
+            eat_json['price'],
+            '作成された食事データの価格はリクエストのものであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.kcal,
+            favorite_eat.kcal * calced_rate,
+            '作成された食事データのカロリーはFavoriteEatの設定値とリクエストの割合で計算したものであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.amount,
+            favorite_eat.amount * calced_rate,
+            '作成された食事データの量はFavoriteEatの設定値とリクエストの割合で計算したものであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.unit,
+            favorite_eat.unit,
+            '作成された食事データの単位はFavoriteEatと同じであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.protein,
+            (Decimal(favorite_eat.protein) * calced_rate).quantize(Decimal('0.1'), rounding=ROUND_HALF_UP),
+            '作成された食事データのタンパク質はリクエストのものであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.lipid,
+            (Decimal(favorite_eat.lipid) * calced_rate).quantize(Decimal('0.1'), rounding=ROUND_HALF_UP),
+            '作成された食事データの脂質はFavoriteEatの設定値とリクエストの割合で計算したものであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.carbo,
+            (Decimal(favorite_eat.carbo) * calced_rate).quantize(Decimal('0.1'), rounding=ROUND_HALF_UP),
+            '作成された食事データの炭水化物はFavoriteEatの設定値とリクエストの割合で計算したものであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.discounted,
+            eat_json['discounted'],
+            '作成された食事データの割引フラグはリクエストのものであることを確認',
+        )
+
+        self.assertEqual(
+            created_eat.note,
+            eat_json['note'],
+            '作成された食事データのメモはリクエストのものであることを確認',
+        )
+
+        # 作成された食事カテゴリーデータの確認
+        eat_category1 = EatCategory.objects.filter(
+            category=favorite_eat_category1.category
+        )
+
+        self.assertEqual(
+            len(eat_category1),
+            1,
+            '食事カテゴリーが1件であることを確認',
+        )
+
+        self.assertEqual(
+            eat_category1[0].eat,
+            created_eat,
+            '作成された食事カテゴリーの食事が処理で作成されたものであるを確認',
+        )
+
+        self.assertEqual(
+            eat_category1[0].category,
+            favorite_eat_category1.category,
+            '作成された食事カテゴリーが一致していることを確認',
+        )
+
+        self.assertEqual(
+            eat_category1[0].amount,
+            (Decimal(favorite_eat_category1.amount) * calced_rate).quantize(Decimal('1'), rounding=ROUND_HALF_UP),
+            '作成された食事カテゴリーの量が計算されたものであることを確認',
+        )
+
+        self.assertEqual(
+            eat_category1[0].unit,
+            favorite_eat_category1.unit,
+            '作成された食事カテゴリーの単位が一致していることを確認',
+        )
+
+        eat_category2 = EatCategory.objects.filter(
+            category=favorite_eat_category2.category
+        )
+
+        self.assertEqual(
+            len(eat_category2),
+            1,
+            '食事カテゴリーが1件であることを確認',
+        )
+
+        self.assertEqual(
+            eat_category2[0].eat,
+            created_eat,
+            '作成された食事カテゴリーの食事が処理で作成されたものであるを確認',
+        )
+
+        self.assertEqual(
+            eat_category2[0].category,
+            favorite_eat_category2.category,
+            '作成された食事カテゴリーが一致していることを確認',
+        )
+
+        self.assertEqual(
+            eat_category2[0].amount,
+            (Decimal(favorite_eat_category2.amount) * calced_rate).quantize(Decimal('1'), rounding=ROUND_HALF_UP),
+            '作成された食事カテゴリーの量が計算されたものであることを確認',
+        )
+
+        self.assertEqual(
+            eat_category2[0].unit,
+            favorite_eat_category2.unit,
+            '作成された食事カテゴリーの単位が一致していることを確認',
+        )
+
+        eat_category3 = EatCategory.objects.filter(
+            category=favorite_eat_category3.category
+        )
+
+        self.assertEqual(
+            len(eat_category3),
+            1,
+            '食事カテゴリーが1件であることを確認',
+        )
+
+        self.assertEqual(
+            eat_category3[0].eat,
+            created_eat,
+            '作成された食事カテゴリーの食事が処理で作成されたものであるを確認',
+        )
+
+        self.assertEqual(
+            eat_category3[0].category,
+            favorite_eat_category3.category,
+            '作成された食事カテゴリーが一致していることを確認',
+        )
+
+        self.assertEqual(
+            eat_category3[0].amount,
+            (Decimal(favorite_eat_category3.amount) * calced_rate).quantize(Decimal('1'), rounding=ROUND_HALF_UP),
+            '作成された食事カテゴリーの量が計算されたものであることを確認',
+        )
+
+        self.assertEqual(
+            eat_category3[0].unit,
+            favorite_eat_category3.unit,
+            '作成された食事カテゴリーの単位が一致していることを確認',
+        )
+
+    def test_eat_favorite_eat_api_no_auth(self):
+        """
+        お気に入り食事から食事データの登録（認証情報なし）
+        """
+        favorite_eat = FavoriteEatFactory()
+        favorite_eat_category = FavoriteEatCategoryFactory(favorite_eat=favorite_eat)
+
+        self.assertEqual(
+            FavoriteEat.objects.count(),
+            1,
+            'お気に入り食事データ事前チェック'
+        )
+
+        self.assertEqual(
+            FavoriteEatCategory.objects.count(),
+            1,
+            'お気に入り食事カテゴリーデータ事前チェック'
+        )
+
+        self.assertEqual(
+            Eat.objects.count(),
+            0,
+            '食事データ事前データチェック',
+        )
+
+        self.assertEqual(
+            EatCategory.objects.count(),
+            0,
+            '食事カテゴリーデータ事前データチェック',
+        )
+
+        eat_json = {
+            'date': datetime.date.today(),
+            'eat_timing': '昼食',
+            'rate': 50,
+            'name': 'カレーライス',
+            'price': 600,
+            'discounted': True,
+            'note': '食事メモ',
+        }
+
+        factory = APIRequestFactory()
+        favorite_eat_eat_view = views.CreateEatFromFavoriteEatView.as_view()
+        request = factory.post(f'favoriteEat/eat/{favorite_eat.id}', data=eat_json, format='json')
+        response = favorite_eat_eat_view(request, favorite_eat.id)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_401_UNAUTHORIZED,
+            'HTTPステータス401であること',
+        )
+
+        self.assertEqual(
+            Eat.objects.count(),
+            0,
+            '食事データが登録されていないことを確認'
+        )
+
+        self.assertEqual(
+            EatCategory.objects.count(),
+            0,
+            '食事カテゴリーデータが登録されていないことを確認'
         )
