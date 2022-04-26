@@ -29,7 +29,7 @@ class ListFavoriteEatView(generics.ListAPIView):
     pagination_class = FavoriteEatPagination
 
     def get_queryset(self):
-        return FavoriteEat.objects.filter(account=self.request.user)
+        return FavoriteEat.objects.filter(account=self.request.user).order_by('id')
 
 class CreateFavoriteEatView(generics.CreateAPIView):
     """ Create Authentication Account's FavoriteEat """
