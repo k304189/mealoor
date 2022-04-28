@@ -4,11 +4,21 @@ import { useDisclosure } from "@chakra-ui/react";
 import { FavoriteEatModal } from "./FavoriteEatModal";
 import { FavoriteEatIconButton } from "../../../molecules/button/FavoriteEatIconButton";
 
-export const FavoriteEatModalButton: VFC = memo(() => {
+type Props = {
+  hoverText?: string;
+};
+
+export const FavoriteEatModalButton: VFC<Props> = memo((props) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const { hoverText = "" } = props;
+
   return (
     <>
-      <FavoriteEatIconButton onClick={onOpen} className="favoriteEat" />
+      <FavoriteEatIconButton
+        onClick={onOpen}
+        className="favoriteEat"
+        hoverText={hoverText}
+      />
       <FavoriteEatModal
         isOpen={isOpen}
         onClose={onClose}

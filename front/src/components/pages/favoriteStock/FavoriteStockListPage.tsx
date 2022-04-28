@@ -41,7 +41,9 @@ export const FavoriteStockListPage: VFC = memo(() => {
     <HeaderLayout title="よく買う食材" titleClass="favoriteStock">
       <Box p={1} className="bgMain" h="100%">
         <Flex>
-          <FavoriteStockModalButton />
+          <FavoriteStockModalButton
+            hoverText="よく買う食材登録"
+          />
           <Spacer />
           <DefaultPaginateButton totalPage={totalPage} onPageChange={onPageChange} />
         </Flex>

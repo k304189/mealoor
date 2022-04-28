@@ -198,7 +198,7 @@ export const DashboardPage: VFC = memo(() => {
                   体重
                 </Box>
                 <Spacer />
-                <BodyModalButton hoverText="体調データを登録します" />
+                <BodyModalButton hoverText="体調登録" />
               </Flex>
               <BodyCompareTable
                 beforeData={beforeBody}
@@ -215,7 +215,7 @@ export const DashboardPage: VFC = memo(() => {
                 <HStack gap={3}>
                   <DefaultLink
                     onClick={todayEatListModalOnOpen}
-                    hoverText="表示日の食事一覧を開きます"
+                    hoverText="表示日の食事一覧"
                   >
                     食事一覧
                   </DefaultLink>
@@ -224,7 +224,7 @@ export const DashboardPage: VFC = memo(() => {
                     onChange={setTableEatSummary}
                     size="sm"
                   />
-                  <EatModalButton hoverText="食事データを登録します" />
+                  <EatModalButton hoverText="食事登録" />
                 </HStack>
               </Flex>
               <EatSummaryCompareTable
