@@ -44,7 +44,7 @@ export const HavingStockListPage: VFC = memo(() => {
     <HeaderLayout title="家にある食材" titleClass="stock">
       <Box p={1} className="bgMain" h="100%">
         <Flex>
-          <StockModalButton />
+          <StockModalButton hoverText="家にある食材登録" />
           <Spacer />
           <DefaultPaginateButton totalPage={totalPage} onPageChange={onPageChange} />
         </Flex>
