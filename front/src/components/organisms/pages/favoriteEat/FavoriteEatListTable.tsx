@@ -130,6 +130,7 @@ export const FavoriteEatListTable: VFC<Props> = memo((props) => {
                     hoverText="お気に入り食事削除"
                     onClick={() => { onClickDeleteButton(fe.id); }}
                     aria-label="deleteFavoriteEat"
+                    className="secondary"
                     size="xs"
                   />
                 </Td>
