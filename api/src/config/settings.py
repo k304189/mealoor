@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-bqadeld(#vcmlv%=ny6_^zycn-lqtz^-%wy+xh%v&e24_09)0v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('API_DEBUG')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get('API_ALLOWED_HOSTS').split(',')
 
 
 # Application definition
@@ -82,15 +82,11 @@ TEMPLATES = [
     },
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://192.168.33.10:8080'
-]
+CSRF_TRUSTED_ORIGINS = os.environ.get('API_CSRF_TRUSTED_ORIGINS').split(',')
 
-CORS_ORIGIN_WHITELIST = [
-    'http://192.168.33.10:3000',
-]
+CORS_ORIGIN_WHITELIST = os.environ.get('API_CORS_ORIGIN_WHITELIST').split(',')
 
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = os.environ.get('API_CORS_ALLOW_CREDENTIALS')
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
